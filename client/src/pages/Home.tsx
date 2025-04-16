@@ -123,22 +123,94 @@ export default function Home() {
             </div>
           ) : templates && templates.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {templates.map((template) => (
-                <Card key={template.id} className="overflow-hidden">
-                  <div className="h-48 bg-gray-100 relative flex items-center justify-center">
-                    <Laptop className="h-12 w-12 text-gray-400" />
-                  </div>
-                  <CardHeader>
-                    <CardTitle>{template.name}</CardTitle>
-                    <CardDescription>{template.description}</CardDescription>
-                  </CardHeader>
-                  <CardFooter>
-                    <Link href={`/editor?template=${template.id}`}>
-                      <Button className="w-full">Use this template</Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              ))}
+              {templates.map((template) => {
+                // Generate a preview style based on the template name
+                let previewStyle: React.CSSProperties = { position: 'relative' };
+                let iconColor = "text-gray-400";
+                let tagColor = "bg-gray-100 text-gray-600";
+                let tagText = "General";
+                let previewIcon = <Laptop className={`h-12 w-12 ${iconColor}`} />;
+                
+                // Customize preview based on template type
+                if (template.name.includes("Business")) {
+                  previewStyle = { 
+                    background: 'linear-gradient(to bottom, #1e3a8a, #3b82f6)',
+                    position: 'relative'
+                  };
+                  iconColor = "text-white";
+                  tagColor = "bg-blue-700 text-white";
+                  tagText = "Business";
+                  previewIcon = <GanttChart className={`h-12 w-12 ${iconColor}`} />;
+                } else if (template.name.includes("Startup")) {
+                  previewStyle = { 
+                    background: 'linear-gradient(to right, #7c3aed, #ec4899)',
+                    position: 'relative'
+                  };
+                  iconColor = "text-white";
+                  tagColor = "bg-purple-700 text-white";
+                  tagText = "Startup";
+                  previewIcon = <Rocket className={`h-12 w-12 ${iconColor}`} />;
+                } else if (template.name.includes("Portfolio")) {
+                  previewStyle = { 
+                    background: '#f3f4f6',
+                    position: 'relative',
+                    fontFamily: 'Georgia, serif'
+                  };
+                  iconColor = "text-gray-700";
+                  tagColor = "bg-gray-700 text-white";
+                  tagText = "Portfolio";
+                  previewIcon = <Laptop className={`h-12 w-12 ${iconColor}`} />;
+                }
+                
+                return (
+                  <Card key={template.id} className="overflow-hidden group hover:shadow-lg transition-all">
+                    <div 
+                      className="h-60 flex items-center justify-center" 
+                      style={previewStyle}
+                    >
+                      <span className={`absolute top-3 left-3 px-2 py-1 text-xs font-medium rounded ${tagColor}`}>
+                        {tagText}
+                      </span>
+                      
+                      {/* Template preview */}
+                      <div className="flex flex-col items-center">
+                        <div className="h-16 mb-4 flex items-center justify-center">
+                          {previewIcon}
+                        </div>
+                        <div className={`text-center ${template.name.includes("Business") || template.name.includes("Startup") ? "text-white" : "text-gray-700"}`}>
+                          <p className="font-bold text-lg">{template.name.replace(" Template", "")}</p>
+                          <p className={`text-sm mt-2 px-6 opacity-80 ${template.name.includes("Business") || template.name.includes("Startup") ? "text-white/70" : "text-gray-500"}`}>
+                            {template.description.substring(0, 60)}...
+                          </p>
+                        </div>
+                      </div>
+                      
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="text-white text-center p-5">
+                          <p className="font-bold text-xl mb-2">{template.name}</p>
+                          <p className="text-sm mb-4 text-white/80">{template.description}</p>
+                          <Link href={`/editor?template=${template.id}`}>
+                            <Button variant="secondary" className="bg-white text-primary hover:bg-gray-100">
+                              Use Template
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                    <CardFooter className="flex justify-between items-center py-4">
+                      <div>
+                        <p className="font-semibold">{template.name}</p>
+                      </div>
+                      <Link href={`/editor?template=${template.id}`}>
+                        <Button variant="outline" size="sm">
+                          Use Template
+                        </Button>
+                      </Link>
+                    </CardFooter>
+                  </Card>
+                );
+              })}
             </div>
           ) : (
             <Card>

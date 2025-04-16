@@ -180,7 +180,7 @@ export class MemStorage implements IStorage {
       {
         userId: 0, // System templates have userId 0
         name: "Basic Landing Page",
-        description: "A simple landing page with header, hero, and call-to-action",
+        description: "A simple, clean landing page with essential sections for any product or service",
         thumbnail: "",
         components: [
           {
@@ -218,6 +218,126 @@ export class MemStorage implements IStorage {
             style: {
               backgroundColor: "#f9fafb",
               padding: "64px 16px"
+            }
+          },
+          {
+            id: "heading-features",
+            type: "heading",
+            content: {
+              text: "Key Features",
+              level: "h2"
+            },
+            style: {
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              margin: "64px 0 24px",
+              color: "#1f2937"
+            }
+          },
+          {
+            id: "text-features",
+            type: "text-block",
+            content: {
+              text: "Our platform offers everything you need to create effective landing pages quickly and easily."
+            },
+            style: {
+              textAlign: "center",
+              maxWidth: "720px",
+              margin: "0 auto 48px",
+              fontSize: "1.1rem",
+              lineHeight: "1.6",
+              color: "#4b5563"
+            }
+          },
+          {
+            id: "feature-1",
+            type: "text-block",
+            content: {
+              text: "<div class='grid md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4'><div class='text-center p-4'><div class='rounded-full bg-blue-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-edit-line text-2xl text-blue-600'></i></div><h3 class='text-lg font-semibold mb-2'>Easy Editor</h3><p class='text-gray-600'>Intuitive drag-and-drop interface makes building pages simple.</p></div><div class='text-center p-4'><div class='rounded-full bg-green-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-responsive-line text-2xl text-green-600'></i></div><h3 class='text-lg font-semibold mb-2'>Responsive Design</h3><p class='text-gray-600'>Pages look great on all devices, from mobile to desktop.</p></div><div class='text-center p-4'><div class='rounded-full bg-purple-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-bar-chart-line text-2xl text-purple-600'></i></div><h3 class='text-lg font-semibold mb-2'>Convert Visitors</h3><p class='text-gray-600'>Optimized for conversions with proven design patterns.</p></div></div>"
+            },
+            style: {
+              margin: "48px 0",
+              padding: "0"
+            }
+          },
+          {
+            id: "spacer-1",
+            type: "spacer",
+            content: {
+              height: 48
+            },
+            style: {}
+          },
+          {
+            id: "heading-pricing",
+            type: "heading",
+            content: {
+              text: "Simple Pricing",
+              level: "h2"
+            },
+            style: {
+              textAlign: "center",
+              fontSize: "2rem",
+              fontWeight: "bold",
+              margin: "64px 0 24px",
+              color: "#1f2937"
+            }
+          },
+          {
+            id: "text-pricing",
+            type: "text-block",
+            content: {
+              text: "Choose the plan that fits your needs. All plans include all features."
+            },
+            style: {
+              textAlign: "center",
+              maxWidth: "720px",
+              margin: "0 auto 48px",
+              fontSize: "1.1rem",
+              lineHeight: "1.6",
+              color: "#4b5563"
+            }
+          },
+          {
+            id: "pricing-table",
+            type: "text-block",
+            content: {
+              text: "<div class='grid md:grid-cols-3 gap-8 max-w-5xl mx-auto px-4'><div class='border border-gray-200 rounded-lg p-6 bg-white hover:shadow-lg transition-shadow'><h3 class='text-xl font-bold mb-2'>Starter</h3><p class='text-gray-500 mb-4'>For individuals and small projects</p><div class='text-3xl font-bold mb-4'>$9<span class='text-base font-normal text-gray-500'>/mo</span></div><ul class='space-y-2 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>1 landing page</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Basic analytics</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>24/7 support</li></ul><button class='w-full py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50'>Choose Plan</button></div><div class='border-2 border-blue-600 rounded-lg p-6 bg-white relative shadow-lg'><span class='absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium'>Popular</span><h3 class='text-xl font-bold mb-2'>Pro</h3><p class='text-gray-500 mb-4'>For growing businesses</p><div class='text-3xl font-bold mb-4'>$29<span class='text-base font-normal text-gray-500'>/mo</span></div><ul class='space-y-2 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>10 landing pages</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Advanced analytics</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Priority support</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Custom domains</li></ul><button class='w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'>Choose Plan</button></div><div class='border border-gray-200 rounded-lg p-6 bg-white hover:shadow-lg transition-shadow'><h3 class='text-xl font-bold mb-2'>Enterprise</h3><p class='text-gray-500 mb-4'>For large organizations</p><div class='text-3xl font-bold mb-4'>$99<span class='text-base font-normal text-gray-500'>/mo</span></div><ul class='space-y-2 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Unlimited pages</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Complete analytics suite</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Dedicated support</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Team collaboration</li></ul><button class='w-full py-2 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50'>Contact Sales</button></div></div>"
+            },
+            style: {
+              margin: "48px 0",
+              padding: "0"
+            }
+          },
+          {
+            id: "spacer-2",
+            type: "spacer",
+            content: {
+              height: 48
+            },
+            style: {}
+          },
+          {
+            id: "form-contact",
+            type: "form",
+            content: {
+              title: "Ready to Get Started?",
+              fields: [
+                { name: "name", label: "Your Name", type: "text", required: true },
+                { name: "email", label: "Email Address", type: "email", required: true },
+                { name: "message", label: "Message", type: "textarea", required: false }
+              ],
+              submitText: "Get Started"
+            },
+            style: {
+              backgroundColor: "#f9fafb",
+              padding: "48px 24px",
+              margin: "64px 0",
+              borderRadius: "8px",
+              maxWidth: "720px",
+              marginLeft: "auto",
+              marginRight: "auto"
             }
           }
         ],
