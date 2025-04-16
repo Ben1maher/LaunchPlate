@@ -97,13 +97,15 @@ export default function TutorialOverlay() {
   };
 
   // Track the swipe direction (1 for right, -1 for left)
-  const [[page, direction], setPage] = useState([0, 0]);
+  const [page, setPage] = useState(0);
+  const [direction, setDirection] = useState(0);
 
   // Update both the page and currentStep
   const paginate = (newDirection: number) => {
     const newPage = page + newDirection;
     if (newPage >= 0 && newPage < steps.length) {
-      setPage([newPage, newDirection]);
+      setPage(newPage);
+      setDirection(newDirection);
       setCurrentStep(newPage);
     }
   };
@@ -299,7 +301,8 @@ export default function TutorialOverlay() {
                       animate={index === page ? "active" : "inactive"}
                       onClick={() => {
                         const dir = index > page ? 1 : -1;
-                        setPage([index, dir]);
+                        setPage(index);
+                        setDirection(dir);
                         setCurrentStep(index);
                       }}
                       whileHover={{ scale: 1.2 }}

@@ -55,10 +55,8 @@ export default function Editor() {
   const templateId = searchParams.get('template');
   
   useEffect(() => {
-    // For demonstration, show tutorial if no project ID or template
-    if (!projectId && !templateId) {
-      setTutorialActive(true);
-    }
+    // Always show tutorial for testing
+    setTutorialActive(true);
     
     // Load project or template if ID is provided, or reset the editor
     const handleInitialLoad = async () => {
