@@ -157,7 +157,7 @@ export class MemStorage implements IStorage {
             id: "header-1",
             type: "header-1",
             content: {
-              logo: "Your Logo",
+              logo: "LaunchPlate",
               menuItems: [
                 { text: "Home", url: "#" },
                 { text: "Features", url: "#features" },
@@ -183,11 +183,351 @@ export class MemStorage implements IStorage {
               primaryButtonUrl: "#get-started",
               secondaryButtonText: "Learn More",
               secondaryButtonUrl: "#learn-more",
-              imageUrl: ""
+              imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
             },
             style: {
               backgroundColor: "#f9fafb",
               padding: "64px 16px"
+            }
+          }
+        ],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        userId: 0,
+        name: "Professional Business",
+        description: "A professional business template with clean layout and corporate styling",
+        thumbnail: "",
+        components: [
+          {
+            id: "header-2",
+            type: "header-2",
+            content: {
+              logo: "Acme Inc.",
+              menuItems: [
+                { text: "Home", url: "#" },
+                { text: "Services", url: "#services" },
+                { text: "About", url: "#about" },
+                { text: "Team", url: "#team" },
+                { text: "Contact", url: "#contact" }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              padding: "20px 24px",
+              borderBottom: "1px solid #e5e7eb",
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+            }
+          },
+          {
+            id: "hero-centered",
+            type: "hero-centered",
+            content: {
+              heading: "Trusted Business Solutions",
+              subheading: "We provide comprehensive business services to help your company grow and succeed in today's competitive market.",
+              buttonText: "Our Services",
+              buttonUrl: "#services"
+            },
+            style: {
+              backgroundColor: "#1e3a8a",
+              color: "#ffffff",
+              padding: "80px 24px",
+              textAlign: "center"
+            }
+          },
+          {
+            id: "heading-services",
+            type: "heading",
+            content: {
+              text: "Our Services",
+              level: "h2"
+            },
+            style: {
+              textAlign: "center",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+              margin: "64px 0 24px",
+              color: "#1f2937"
+            }
+          },
+          {
+            id: "text-services",
+            type: "text-block",
+            content: {
+              text: "We offer a range of professional services designed to help your business thrive. Our expert team provides tailored solutions to meet your specific needs."
+            },
+            style: {
+              textAlign: "center",
+              maxWidth: "800px",
+              margin: "0 auto 48px",
+              fontSize: "1.1rem",
+              lineHeight: "1.6",
+              color: "#4b5563"
+            }
+          },
+          {
+            id: "form-contact",
+            type: "form",
+            content: {
+              title: "Get in Touch",
+              fields: [
+                { name: "name", label: "Your Name", type: "text", required: true },
+                { name: "email", label: "Email Address", type: "email", required: true },
+                { name: "company", label: "Company Name", type: "text", required: false },
+                { name: "message", label: "Message", type: "textarea", required: true }
+              ],
+              submitText: "Send Message"
+            },
+            style: {
+              backgroundColor: "#f9fafb",
+              padding: "48px 24px",
+              margin: "64px 0",
+              borderRadius: "8px",
+              maxWidth: "720px",
+              marginLeft: "auto",
+              marginRight: "auto"
+            }
+          }
+        ],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        userId: 0,
+        name: "Startup Launch",
+        description: "A modern, vibrant template perfect for startup product launches",
+        thumbnail: "",
+        components: [
+          {
+            id: "header-1",
+            type: "header-1",
+            content: {
+              logo: "RocketStart",
+              menuItems: [
+                { text: "Home", url: "#" },
+                { text: "Product", url: "#product" },
+                { text: "Features", url: "#features" },
+                { text: "Testimonials", url: "#testimonials" }
+              ],
+              ctaText: "Early Access",
+              ctaUrl: "#signup"
+            },
+            style: {
+              backgroundColor: "#7c3aed",
+              color: "#ffffff",
+              padding: "16px 24px"
+            }
+          },
+          {
+            id: "hero-split",
+            type: "hero-split",
+            content: {
+              heading: "Launch Your Idea Faster",
+              subheading: "The all-in-one platform for modern startups. Build, launch, and grow with tools designed for today's entrepreneurs.",
+              primaryButtonText: "Get Early Access",
+              primaryButtonUrl: "#signup",
+              secondaryButtonText: "Watch Demo",
+              secondaryButtonUrl: "#demo",
+              imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab"
+            },
+            style: {
+              backgroundColor: "#8b5cf6",
+              color: "#ffffff",
+              padding: "80px 24px"
+            }
+          },
+          {
+            id: "spacer-1",
+            type: "spacer",
+            content: {
+              height: 80
+            },
+            style: {
+              backgroundColor: "#f9fafb"
+            }
+          },
+          {
+            id: "heading-features",
+            type: "heading",
+            content: {
+              text: "Revolutionary Features",
+              level: "h2"
+            },
+            style: {
+              textAlign: "center",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+              margin: "0 0 24px",
+              color: "#1f2937"
+            }
+          },
+          {
+            id: "text-features",
+            type: "text-block",
+            content: {
+              text: "Our platform provides everything you need to bring your vision to life quickly and efficiently."
+            },
+            style: {
+              textAlign: "center",
+              maxWidth: "720px",
+              margin: "0 auto 48px",
+              fontSize: "1.1rem",
+              lineHeight: "1.6",
+              color: "#4b5563"
+            }
+          },
+          {
+            id: "divider-1",
+            type: "divider",
+            content: {
+              style: "gradient"
+            },
+            style: {
+              margin: "64px auto",
+              maxWidth: "120px",
+              height: "4px",
+              background: "linear-gradient(to right, #7c3aed, #ec4899)"
+            }
+          },
+          {
+            id: "email-signup",
+            type: "email-signup",
+            content: {
+              title: "Join the Waitlist",
+              description: "Be the first to know when we launch. Get exclusive early access and special offers.",
+              buttonText: "Join Now"
+            },
+            style: {
+              backgroundColor: "#7c3aed",
+              color: "#ffffff",
+              padding: "64px 24px",
+              borderRadius: "12px",
+              maxWidth: "720px",
+              margin: "0 auto 80px"
+            }
+          }
+        ],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        userId: 0,
+        name: "Portfolio Showcase",
+        description: "A minimal, elegant template for personal portfolios and showcases",
+        thumbnail: "",
+        components: [
+          {
+            id: "header-2",
+            type: "header-2",
+            content: {
+              logo: "John Doe",
+              menuItems: [
+                { text: "Home", url: "#" },
+                { text: "Work", url: "#work" },
+                { text: "About", url: "#about" },
+                { text: "Contact", url: "#contact" }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              padding: "24px",
+              fontFamily: "Georgia, serif"
+            }
+          },
+          {
+            id: "hero-centered",
+            type: "hero-centered",
+            content: {
+              heading: "Creative Designer & Developer",
+              subheading: "I create beautiful, functional digital experiences that help businesses connect with their audience.",
+              buttonText: "View My Work",
+              buttonUrl: "#work"
+            },
+            style: {
+              backgroundColor: "#f3f4f6",
+              padding: "120px 24px",
+              textAlign: "center",
+              fontFamily: "Georgia, serif"
+            }
+          },
+          {
+            id: "spacer-1",
+            type: "spacer",
+            content: {
+              height: 80
+            },
+            style: {}
+          },
+          {
+            id: "heading-about",
+            type: "heading",
+            content: {
+              text: "About Me",
+              level: "h2"
+            },
+            style: {
+              fontSize: "2rem",
+              fontWeight: "normal",
+              margin: "0 0 24px",
+              color: "#1f2937",
+              fontFamily: "Georgia, serif",
+              borderBottom: "1px solid #e5e7eb",
+              paddingBottom: "8px"
+            }
+          },
+          {
+            id: "text-about",
+            type: "text-block",
+            content: {
+              text: "With over 10 years of experience in design and development, I've helped dozens of clients achieve their digital goals. My work focuses on clean, minimal aesthetics combined with intuitive functionality."
+            },
+            style: {
+              maxWidth: "720px",
+              margin: "0 0 48px",
+              fontSize: "1.1rem",
+              lineHeight: "1.8",
+              color: "#4b5563",
+              fontFamily: "Georgia, serif"
+            }
+          },
+          {
+            id: "image-portrait",
+            type: "image",
+            content: {
+              url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+              alt: "Portrait photo",
+              caption: "Photo by Mark Williams"
+            },
+            style: {
+              maxWidth: "400px",
+              margin: "0 auto 64px",
+              borderRadius: "4px",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+            }
+          },
+          {
+            id: "form-contact",
+            type: "form",
+            content: {
+              title: "Get In Touch",
+              fields: [
+                { name: "name", label: "Your Name", type: "text", required: true },
+                { name: "email", label: "Email Address", type: "email", required: true },
+                { name: "project", label: "Project Description", type: "textarea", required: true }
+              ],
+              submitText: "Send Message"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              padding: "48px 32px",
+              margin: "64px 0",
+              borderRadius: "4px",
+              maxWidth: "720px",
+              marginLeft: "auto",
+              marginRight: "auto",
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              border: "1px solid #e5e7eb"
             }
           }
         ],
@@ -198,7 +538,14 @@ export class MemStorage implements IStorage {
 
     defaultTemplates.forEach(template => {
       const id = this.templateId++;
-      this.templates.set(id, { ...template, id });
+      this.templates.set(id, { 
+        ...template, 
+        id,
+        userId: template.userId || 0,
+        description: template.description || null,
+        thumbnail: template.thumbnail || null,
+        isPublic: template.isPublic || false
+      });
     });
   }
 }
