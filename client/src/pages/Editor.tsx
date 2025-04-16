@@ -124,8 +124,8 @@ export default function Editor() {
             </Button>
           </Link>
           <div className="flex items-center space-x-2">
-            <i className="ri-layout-4-line text-primary-500 text-2xl"></i>
-            <h1 className="font-semibold text-xl">Landing Page Generator</h1>
+            <i className="ri-layout-4-line text-primary text-2xl"></i>
+            <h1 className="font-semibold text-xl">LaunchPlate</h1>
           </div>
         </div>
         

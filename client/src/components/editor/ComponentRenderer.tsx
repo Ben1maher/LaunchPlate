@@ -88,7 +88,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   return (
     <div 
-      className={`relative component-wrapper ${isSelected ? 'outline outline-2 outline-primary-500' : ''}`} 
+      className={`relative component-wrapper ${isSelected ? 'outline outline-2 outline-primary' : ''}`} 
       onClick={onClick}
     >
       {renderComponent()}

@@ -252,13 +252,15 @@ export default function Canvas() {
         </div>
       </div>
       
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         .bg-grid-pattern {
           background-image: linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
                           linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
           background-size: 20px 20px;
         }
-      `}</style>
+        `
+      }} />
     </div>
   );
 }

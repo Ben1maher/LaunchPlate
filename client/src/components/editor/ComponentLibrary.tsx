@@ -32,19 +32,19 @@ export default function ComponentLibrary() {
           <TabsList className="grid grid-cols-3 h-auto p-0 bg-gray-100">
             <TabsTrigger
               value="elements"
-              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
+              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
             >
               Elements
             </TabsTrigger>
             <TabsTrigger
               value="sections"
-              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
+              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
             >
               Sections
             </TabsTrigger>
             <TabsTrigger
               value="templates"
-              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary-500 data-[state=active]:text-primary-600 data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
+              className="py-1.5 text-xs font-medium data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:text-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none"
             >
               Templates
             </TabsTrigger>
