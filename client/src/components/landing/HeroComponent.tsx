@@ -10,14 +10,29 @@ export default function HeroComponent({ component }: HeroComponentProps) {
   // Extract component data
   const { type, content, style } = component;
   
-  // Generate inline style object
-  const styleObj = {
-    backgroundColor: style.backgroundColor || '#f9fafb',
+  // Generate inline style object based on background type
+  let styleObj: React.CSSProperties = {
     padding: style.padding || '64px 16px',
     fontFamily: style.fontFamily,
     color: style.color,
-    ...style
+    position: 'relative',
+    overflow: 'hidden'
   };
+
+  // Apply the appropriate background styling based on the type
+  if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
+    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+  } else if (style.backgroundType === 'image' && style.backgroundImage) {
+    styleObj.backgroundImage = `url(${style.backgroundImage})`;
+    styleObj.backgroundSize = style.backgroundSize || 'cover';
+    styleObj.backgroundPosition = style.backgroundPosition || 'center';
+    styleObj.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+  } else {
+    styleObj.backgroundColor = style.backgroundColor || '#f9fafb';
+  }
+
+  // Add any other style properties
+  Object.assign(styleObj, style);
 
   // Heading styles
   const headingStyle = {

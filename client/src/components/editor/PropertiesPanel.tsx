@@ -107,8 +107,8 @@ export default function PropertiesPanel() {
       </div>
       
       {/* Properties Tabs */}
-      <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
-        <div className="px-3 pt-3 border-b border-gray-200">
+      <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+        <div className="px-3 pt-3 border-b border-gray-200 flex-shrink-0">
           <TabsList className="grid grid-cols-3 h-9">
             <TabsTrigger value="general" className="text-xs">General</TabsTrigger>
             <TabsTrigger value="style" className="text-xs">Style</TabsTrigger>
@@ -116,14 +116,14 @@ export default function PropertiesPanel() {
           </TabsList>
         </div>
         
-        <div className="overflow-y-auto flex-1">
+        <div className="flex-1 min-h-0 overflow-hidden">
           {/* General Tab */}
-          <TabsContent value="general" className="p-0 m-0">
+          <TabsContent value="general" className="p-0 m-0 h-full overflow-y-auto">
             <RenderGeneralProperties component={selectedComponent} updateComponent={updateComponent} />
           </TabsContent>
           
           {/* Style Tab */}
-          <TabsContent value="style" className="p-0 m-0">
+          <TabsContent value="style" className="p-0 m-0 h-full overflow-y-auto">
             <RenderStyleProperties component={selectedComponent} updateComponent={updateComponent} />
           </TabsContent>
           
@@ -816,22 +816,213 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
             </Select>
           </div>
           
-          <div>
-            <label className="text-xs text-gray-600 block mb-1">Color</label>
-            <div className="flex">
-              <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+          {/* Show relevant background options based on type */}
+          {(component.style.backgroundType === 'color' || !component.style.backgroundType) && (
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Color</label>
+              <div className="flex">
+                <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                  <div 
+                    className="w-6 h-6 rounded-full border border-gray-300"
+                    style={{ backgroundColor: component.style.backgroundColor || '#F9FAFB' }}
+                  ></div>
+                </div>
+                <Input
+                  value={component.style.backgroundColor || '#F9FAFB'}
+                  onChange={(e) => updateStyle('backgroundColor', e.target.value)}
+                  className="rounded-l-none flex-1"
+                />
+              </div>
+            </div>
+          )}
+          
+          {component.style.backgroundType === 'gradient' && (
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Gradient Direction</label>
+                <Select
+                  value={component.style.gradientDirection || 'to right'}
+                  onValueChange={(value) => updateStyle('gradientDirection', value)}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Direction" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="to right">Horizontal (Left to Right)</SelectItem>
+                    <SelectItem value="to left">Horizontal (Right to Left)</SelectItem>
+                    <SelectItem value="to bottom">Vertical (Top to Bottom)</SelectItem>
+                    <SelectItem value="to top">Vertical (Bottom to Top)</SelectItem>
+                    <SelectItem value="to bottom right">Diagonal (Top-Left to Bottom-Right)</SelectItem>
+                    <SelectItem value="to bottom left">Diagonal (Top-Right to Bottom-Left)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Start Color</label>
+                <div className="flex">
+                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                    <div 
+                      className="w-6 h-6 rounded-full border border-gray-300"
+                      style={{ backgroundColor: component.style.gradientStartColor || '#4F46E5' }}
+                    ></div>
+                  </div>
+                  <Input
+                    value={component.style.gradientStartColor || '#4F46E5'}
+                    onChange={(e) => updateStyle('gradientStartColor', e.target.value)}
+                    className="rounded-l-none flex-1"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">End Color</label>
+                <div className="flex">
+                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                    <div 
+                      className="w-6 h-6 rounded-full border border-gray-300"
+                      style={{ backgroundColor: component.style.gradientEndColor || '#0EA5E9' }}
+                    ></div>
+                  </div>
+                  <Input
+                    value={component.style.gradientEndColor || '#0EA5E9'}
+                    onChange={(e) => updateStyle('gradientEndColor', e.target.value)}
+                    className="rounded-l-none flex-1"
+                  />
+                </div>
+              </div>
+              
+              {/* Gradient Preview */}
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Preview</label>
                 <div 
-                  className="w-6 h-6 rounded-full border border-gray-300"
-                  style={{ backgroundColor: component.style.backgroundColor || '#F9FAFB' }}
+                  className="h-12 rounded-md border border-gray-200" 
+                  style={{ 
+                    background: `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor || '#4F46E5'}, ${component.style.gradientEndColor || '#0EA5E9'})` 
+                  }}
                 ></div>
               </div>
-              <Input
-                value={component.style.backgroundColor || '#F9FAFB'}
-                onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-                className="rounded-l-none flex-1"
-              />
             </div>
-          </div>
+          )}
+          
+          {component.style.backgroundType === 'image' && (
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+                <Input
+                  value={component.style.backgroundImage || ''}
+                  onChange={(e) => {
+                    const url = e.target.value;
+                    // Remove 'url()' if the user pastes a CSS background-image value
+                    const cleanUrl = url.replace(/^url\(['"]?|['"]?\)$/g, '');
+                    updateStyle('backgroundImage', cleanUrl);
+                  }}
+                  placeholder="https://example.com/image.jpg"
+                  className="text-sm"
+                />
+                <div className="mt-2 text-xs text-gray-500 flex items-center">
+                  <i className="ri-information-line mr-1"></i>
+                  <span>Paste a direct URL to an image</span>
+                </div>
+                
+                {component.style.backgroundImage && (
+                  <div className="mt-3 p-2 border rounded-md bg-gray-50">
+                    <div className="aspect-video relative rounded-sm overflow-hidden border bg-white">
+                      <div 
+                        className="absolute inset-0 w-full h-full" 
+                        style={{ 
+                          backgroundImage: `url(${component.style.backgroundImage})`,
+                          backgroundSize: component.style.backgroundSize || 'cover',
+                          backgroundPosition: component.style.backgroundPosition || 'center',
+                          backgroundRepeat: component.style.backgroundRepeat || 'no-repeat'
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Size</label>
+                <Select
+                  value={component.style.backgroundSize || 'cover'}
+                  onValueChange={(value) => updateStyle('backgroundSize', value)}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Size" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cover">Cover (Fill Container)</SelectItem>
+                    <SelectItem value="contain">Contain (Show Full Image)</SelectItem>
+                    <SelectItem value="auto">Original Size</SelectItem>
+                    <SelectItem value="100% 100%">Stretch to Fit</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Position</label>
+                <Select
+                  value={component.style.backgroundPosition || 'center'}
+                  onValueChange={(value) => updateStyle('backgroundPosition', value)}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Position" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="center">Center</SelectItem>
+                    <SelectItem value="top">Top</SelectItem>
+                    <SelectItem value="bottom">Bottom</SelectItem>
+                    <SelectItem value="left">Left</SelectItem>
+                    <SelectItem value="right">Right</SelectItem>
+                    <SelectItem value="top left">Top Left</SelectItem>
+                    <SelectItem value="top right">Top Right</SelectItem>
+                    <SelectItem value="bottom left">Bottom Left</SelectItem>
+                    <SelectItem value="bottom right">Bottom Right</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Repeat</label>
+                <Select
+                  value={component.style.backgroundRepeat || 'no-repeat'}
+                  onValueChange={(value) => updateStyle('backgroundRepeat', value)}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Repeat" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="no-repeat">No Repeat</SelectItem>
+                    <SelectItem value="repeat">Repeat (Tile)</SelectItem>
+                    <SelectItem value="repeat-x">Repeat Horizontally</SelectItem>
+                    <SelectItem value="repeat-y">Repeat Vertically</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Overlay Color</label>
+                <div className="flex">
+                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                    <div 
+                      className="w-6 h-6 rounded-full border border-gray-300"
+                      style={{ backgroundColor: component.style.overlayColor || 'rgba(0,0,0,0)' }}
+                    ></div>
+                  </div>
+                  <Input
+                    value={component.style.overlayColor || 'rgba(0,0,0,0)'}
+                    onChange={(e) => updateStyle('overlayColor', e.target.value)}
+                    className="rounded-l-none flex-1"
+                    placeholder="rgba(0,0,0,0.5)"
+                  />
+                </div>
+                <div className="mt-1 text-xs text-gray-500">
+                  Use rgba format for transparency (e.g., rgba(0,0,0,0.5))
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       
