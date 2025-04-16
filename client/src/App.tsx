@@ -8,6 +8,7 @@ import Editor from "@/pages/Editor";
 import Preview from "@/pages/Preview";
 import Guide from "@/pages/Guide";
 import Layout from "@/components/Layout";
+import { EditorProvider } from "./context/EditorContext";
 
 function Router() {
   return (
@@ -24,12 +25,14 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Router />
-      </Layout>
-      <Toaster />
-    </QueryClientProvider>
+    <EditorProvider>
+      <QueryClientProvider client={queryClient}>
+        <Layout>
+          <Router />
+        </Layout>
+        <Toaster />
+      </QueryClientProvider>
+    </EditorProvider>
   );
 }
 

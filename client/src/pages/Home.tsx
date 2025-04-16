@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Home() {
-  const { data: templates, isLoading } = useQuery({
+  const { data: templates, isLoading } = useQuery<Template[]>({
     queryKey: ['/api/templates'],
   });
 
@@ -24,10 +24,10 @@ export default function Home() {
       <section className="py-12 md:py-20">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Create Beautiful Landing Pages <span className="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">Without Code</span>
+            <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">LaunchPlate</span>: Create Landing Pages Without Code
           </h1>
           <p className="text-xl text-gray-600 mb-8">
-            Build, customize, and publish high-converting landing pages with our easy-to-use drag and drop editor.
+            Build, customize, and publish high-converting landing pages with our intuitive drag and drop editor. Perfect for marketing campaigns and lead generation.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/editor">
@@ -52,8 +52,8 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                  <Layout className="h-6 w-6 text-primary-500" />
+                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                  <Layout className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>Drag & Drop Editor</CardTitle>
               </CardHeader>
@@ -65,8 +65,8 @@ export default function Home() {
             </Card>
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                  <GanttChart className="h-6 w-6 text-primary-500" />
+                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                  <GanttChart className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>Customizable Templates</CardTitle>
               </CardHeader>
@@ -78,8 +78,8 @@ export default function Home() {
             </Card>
             <Card>
               <CardHeader>
-                <div className="h-12 w-12 bg-primary-100 rounded-lg flex items-center justify-center mb-4">
-                  <Rocket className="h-6 w-6 text-primary-500" />
+                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
+                  <Rocket className="h-6 w-6 text-primary" />
                 </div>
                 <CardTitle>Lead Generation Tools</CardTitle>
               </CardHeader>
@@ -121,9 +121,9 @@ export default function Home() {
                 </Card>
               ))}
             </div>
-          ) : templates?.length > 0 ? (
+          ) : templates && templates.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {templates.map((template: Template) => (
+              {templates.map((template) => (
                 <Card key={template.id} className="overflow-hidden">
                   <div className="h-48 bg-gray-100 relative flex items-center justify-center">
                     <Laptop className="h-12 w-12 text-gray-400" />
@@ -159,14 +159,14 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 my-12 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl text-white">
+      <section className="py-12 my-12 bg-gradient-to-r from-primary to-blue-600 rounded-xl text-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to create your landing page?</h2>
           <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
             Start building your professional landing page today and convert more visitors into customers.
           </p>
           <Link href="/editor">
-            <Button size="lg" variant="secondary" className="bg-white text-primary-600 hover:bg-gray-100">
+            <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
               Build Your Landing Page
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
