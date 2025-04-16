@@ -54,23 +54,28 @@ export default function Editor() {
     if (!projectId) {
       setTutorialActive(true);
     }
-  }, [projectId, setTutorialActive]);
-
-  // Load project if ID is provided
-  useEffect(() => {
-    if (projectId) {
-      loadProject(projectId).catch(error => {
-        toast({
-          title: "Error loading project",
-          description: "Could not load the project. It may have been deleted or you don't have access.",
-          variant: "destructive",
-        });
-        setLocation("/editor");
-      });
-    } else {
-      resetEditor();
-    }
-  }, [projectId, loadProject, resetEditor, setLocation, toast]);
+    
+    // Load project if ID is provided or reset the editor
+    const handleInitialLoad = async () => {
+      if (projectId) {
+        try {
+          await loadProject(projectId);
+        } catch (error) {
+          toast({
+            title: "Error loading project",
+            description: "Could not load the project. It may have been deleted or you don't have access.",
+            variant: "destructive",
+          });
+          setLocation("/editor");
+        }
+      } else {
+        resetEditor();
+      }
+    };
+    
+    handleInitialLoad();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
 
   const handleSave = async () => {
     if (!projectName.trim()) {

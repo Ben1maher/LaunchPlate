@@ -30,19 +30,38 @@ export default function Canvas() {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
     setActiveDropzone("mainDropzone");
+    
+    // Add a highlight class to show where the component can be dropped
+    e.currentTarget.classList.add("dropzone-active");
   };
 
-  const handleDragLeave = () => {
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
     setActiveDropzone(null);
+    e.currentTarget.classList.remove("dropzone-active");
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    setActiveDropzone(null);
+    console.log("Drop event triggered");
     
-    const componentType = e.dataTransfer.getData("componentType");
+    // Remove active states
+    setActiveDropzone(null);
+    e.currentTarget.classList.remove("dropzone-active");
+    
+    // Get drag data - try both methods for compatibility
+    const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
+    console.log("Dropped component type:", componentType);
+    
     if (componentType) {
+      // Add the component
       addComponent(componentType as any);
+      
+      // Show toast for user feedback
+      toast({
+        title: "Component Added",
+        description: `Added ${componentType} component to your page.`,
+      });
       
       // Scroll to the bottom of the canvas to show the new component
       if (canvasRef.current) {
@@ -188,10 +207,12 @@ export default function Canvas() {
             {/* Page Canvas */}
             <div 
               className={`min-h-[80vh] border-4 ${
-                activeDropzone === "mainDropzone" 
-                  ? "border-primary dropzone-active" 
+                isDragging 
+                  ? "border-primary border-dashed" 
                   : "border-transparent"
-              } dropzone ${showGridLines ? 'bg-grid-pattern' : ''}`}
+              } dropzone ${showGridLines ? 'bg-grid-pattern' : ''} ${
+                activeDropzone === "mainDropzone" ? "dropzone-active" : ""
+              }`}
               id="mainDropzone"
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -207,7 +228,35 @@ export default function Canvas() {
                     <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Landing Page</h3>
                     <p className="text-gray-500 max-w-md mb-6">Drag and drop components from the library on the left to begin creating your page.</p>
                     <div className="flex flex-wrap justify-center gap-4">
-                      <Button variant="outline" className="gap-2">
+                      <Button 
+                        variant="outline" 
+                        className="gap-2" 
+                        onClick={async () => {
+                          try {
+                            // Fetch the default template from the API
+                            const response = await fetch('/api/templates/1');
+                            if (!response.ok) throw new Error('Failed to fetch template');
+                            
+                            const template = await response.json();
+                            
+                            // Apply template components to the canvas
+                            if (template && template.components) {
+                              setComponents(template.components);
+                              toast({
+                                title: "Template applied",
+                                description: "Template has been loaded successfully!",
+                              });
+                            }
+                          } catch (error) {
+                            console.error("Error loading template:", error);
+                            toast({
+                              title: "Error loading template",
+                              description: "Failed to load the template. Please try again.",
+                              variant: "destructive",
+                            });
+                          }
+                        }}
+                      >
                         <i className="ri-file-copy-line"></i>
                         Start with Template
                       </Button>

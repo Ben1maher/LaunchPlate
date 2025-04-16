@@ -14,19 +14,28 @@
 
 @layer components {
   .component-draggable {
-    @apply cursor-grab transition-colors;
+    @apply cursor-grab transition-all duration-200 hover:shadow-md hover:-translate-y-0.5;
   }
   
   .component-draggable:active {
-    @apply cursor-grabbing;
+    @apply cursor-grabbing scale-95;
+  }
+  
+  .component-draggable.opacity-50 {
+    @apply shadow-lg scale-95;
   }
   
   .dropzone {
-    @apply min-h-[50px] transition-all duration-200;
+    @apply min-h-[50px] transition-all duration-200 relative;
   }
   
   .dropzone-active {
     @apply bg-primary/10 border-2 border-dashed border-primary;
+  }
+  
+  .dropzone-active::before {
+    content: 'Drop component here';
+    @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary/70 font-medium bg-white/80 px-4 py-2 rounded-lg shadow-sm pointer-events-none;
   }
   
   .tutorial-highlight {

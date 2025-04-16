@@ -9,12 +9,27 @@ export default function ComponentLibrary() {
   const [activeTab, setActiveTab] = useState("elements");
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, componentType: string) => {
+    console.log("Drag started with component type:", componentType);
+    e.dataTransfer.effectAllowed = "copy";
+    e.dataTransfer.setData("text/plain", componentType);
     e.dataTransfer.setData("componentType", componentType);
     e.currentTarget.classList.add("opacity-50");
     setIsDragging(true);
+    
+    // Create a custom drag image
+    const dragPreview = document.createElement("div");
+    dragPreview.className = "bg-white p-2 shadow-lg rounded border border-primary text-sm";
+    dragPreview.textContent = `Add ${componentType} component`;
+    document.body.appendChild(dragPreview);
+    e.dataTransfer.setDragImage(dragPreview, 0, 0);
+    
+    setTimeout(() => {
+      document.body.removeChild(dragPreview);
+    }, 0);
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
+    console.log("Drag ended");
     e.currentTarget.classList.remove("opacity-50");
     setIsDragging(false);
   };
