@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Template } from "@shared/schema";
+import { motion } from "framer-motion";
 import { 
   ArrowRight, 
   PlusCircle, 
@@ -18,77 +19,193 @@ export default function Home() {
     queryKey: ['/api/templates'],
   });
 
+  // Animation variants for swipe effect
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { x: -100, opacity: 0 },
+    visible: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15
+      }
+    }
+  };
+
+  const buttonVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 150,
+        damping: 15,
+        delay: 0.8
+      }
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">LaunchPlate</span>: Create Landing Pages Without Code
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
+      <section className="py-12 md:py-20 overflow-hidden">
+        <motion.div 
+          className="max-w-3xl mx-auto text-center"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          <motion.h1 
+            className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight"
+            variants={itemVariants}
+          >
+            <motion.span 
+              className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent inline-block"
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              LaunchPlate
+            </motion.span>: Create Landing Pages Without Code
+          </motion.h1>
+          
+          <motion.p 
+            className="text-xl text-gray-600 mb-8"
+            variants={itemVariants}
+          >
             Build, customize, and publish high-converting landing pages with our intuitive drag and drop editor. Perfect for marketing campaigns and lead generation.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
+          </motion.p>
+          
+          <motion.div 
+            className="flex flex-wrap gap-4 justify-center"
+            variants={buttonVariants}
+          >
             <Link href="/editor">
-              <Button size="lg" className="text-base">
-                Get Started
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button size="lg" className="text-base relative overflow-hidden group">
+                <span className="relative z-10">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5 inline-block group-hover:translate-x-1 transition-transform" />
+                </span>
+                <motion.span 
+                  className="absolute inset-0 bg-blue-600 z-0"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: 0 }}
+                  transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+                />
               </Button>
             </Link>
             <Link href="/guide">
-              <Button variant="outline" size="lg" className="text-base">
+              <Button variant="outline" size="lg" className="text-base hover:bg-primary/10">
                 View Guides
               </Button>
             </Link>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Features Section */}
       <section className="py-12 bg-white rounded-xl shadow-sm mb-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our Landing Page Generator</h2>
+          <motion.h2 
+            className="text-3xl font-bold text-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6 }}
+          >
+            Why Choose Our Landing Page Generator
+          </motion.h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                  <Layout className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Drag & Drop Editor</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Easily build your landing page by dragging and dropping pre-designed components. No coding required.
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                  <GanttChart className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Customizable Templates</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Choose from a variety of professional templates and customize them to match your brand.
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <div className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                  <Rocket className="h-6 w-6 text-primary" />
-                </div>
-                <CardTitle>Lead Generation Tools</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-600">
-                  Built-in forms and conversion elements to help you capture leads effectively.
-                </p>
-              </CardContent>
-            </Card>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <Card className="h-full hover:shadow-lg transition-all">
+                <CardHeader>
+                  <motion.div 
+                    className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4"
+                    whileHover={{ 
+                      scale: 1.1, 
+                      backgroundColor: "rgba(var(--primary), 0.2)"
+                    }}
+                  >
+                    <Layout className="h-6 w-6 text-primary" />
+                  </motion.div>
+                  <CardTitle>Drag & Drop Editor</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Easily build your landing page by dragging and dropping pre-designed components. No coding required.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Card className="h-full hover:shadow-lg transition-all">
+                <CardHeader>
+                  <motion.div 
+                    className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4"
+                    whileHover={{ 
+                      scale: 1.1, 
+                      backgroundColor: "rgba(var(--primary), 0.2)"
+                    }}
+                  >
+                    <GanttChart className="h-6 w-6 text-primary" />
+                  </motion.div>
+                  <CardTitle>Customizable Templates</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Choose from a variety of professional templates and customize them to match your brand.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              <Card className="h-full hover:shadow-lg transition-all">
+                <CardHeader>
+                  <motion.div 
+                    className="h-12 w-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4"
+                    whileHover={{ 
+                      scale: 1.1, 
+                      backgroundColor: "rgba(var(--primary), 0.2)"
+                    }}
+                  >
+                    <Rocket className="h-6 w-6 text-primary" />
+                  </motion.div>
+                  <CardTitle>Lead Generation Tools</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-600">
+                    Built-in forms and conversion elements to help you capture leads effectively.
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -231,20 +348,95 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 my-12 bg-gradient-to-r from-primary to-blue-600 rounded-xl text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to create your landing page?</h2>
-          <p className="text-white/80 text-lg mb-8 max-w-2xl mx-auto">
+      <motion.section 
+        className="py-12 my-12 bg-gradient-to-r from-primary to-blue-600 rounded-xl text-white overflow-hidden"
+        initial={{ opacity: 0, scale: 0.95 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto px-4 text-center relative z-10">
+          {/* Animated background elements */}
+          <motion.div 
+            className="absolute top-0 left-0 w-64 h-64 rounded-full bg-blue-400 opacity-20 z-0" 
+            style={{ filter: "blur(80px)" }}
+            animate={{ 
+              x: [0, 30, 0], 
+              y: [0, 20, 0] 
+            }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: 8,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-indigo-500 opacity-20 z-0" 
+            style={{ filter: "blur(80px)" }}
+            animate={{ 
+              x: [0, -40, 0], 
+              y: [0, -20, 0] 
+            }}
+            transition={{ 
+              repeat: Infinity, 
+              duration: 10,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          />
+          
+          <motion.h2 
+            className="text-3xl font-bold mb-4 relative z-10"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            Ready to create your landing page?
+          </motion.h2>
+          <motion.p 
+            className="text-white/80 text-lg mb-8 max-w-2xl mx-auto relative z-10"
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
             Start building your professional landing page today and convert more visitors into customers.
-          </p>
-          <Link href="/editor">
-            <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-gray-100">
-              Build Your Landing Page
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          </motion.p>
+          <motion.div
+            initial={{ y: 30, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Link href="/editor">
+              <Button 
+                size="lg" 
+                variant="secondary" 
+                className="bg-white text-primary hover:bg-gray-100 relative overflow-hidden group"
+              >
+                <span className="relative z-10 flex items-center">
+                  Build Your Landing Page
+                  <motion.span 
+                    className="ml-2 flex items-center"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ 
+                      repeat: Infinity, 
+                      duration: 1.5,
+                      repeatType: "reverse",
+                      ease: "easeInOut"
+                    }}
+                  >
+                    <ArrowRight className="h-5 w-5" />
+                  </motion.span>
+                </span>
+              </Button>
+            </Link>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
     </div>
   );
 }
