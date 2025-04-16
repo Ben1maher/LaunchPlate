@@ -22,8 +22,8 @@ export default function SiteHeader() {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <LayoutGrid className="h-6 w-6 text-primary-500" />
-          <span className="font-semibold text-xl">Landing Page Generator</span>
+          <LayoutGrid className="h-6 w-6 text-primary" />
+          <span className="font-semibold text-xl">LaunchPlate</span>
         </div>
         
         {/* Mobile menu button */}
@@ -44,18 +44,18 @@ export default function SiteHeader() {
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-4">
           <Link href="/">
-            <a className={`px-3 py-2 rounded-md text-sm font-medium ${
-              location === '/' ? 'text-primary-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            <Button variant="ghost" className={`px-3 py-2 h-auto ${
+              location === '/' ? 'text-primary font-medium' : 'text-gray-600 hover:text-gray-900'
             }`}>
               Home
-            </a>
+            </Button>
           </Link>
           <Link href="/guide">
-            <a className={`px-3 py-2 rounded-md text-sm font-medium ${
-              location === '/guide' ? 'text-primary-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+            <Button variant="ghost" className={`px-3 py-2 h-auto ${
+              location === '/guide' ? 'text-primary font-medium' : 'text-gray-600 hover:text-gray-900'
             }`}>
               Guides
-            </a>
+            </Button>
           </Link>
           <Link href="/editor">
             <Button className="ml-4">
@@ -71,18 +71,18 @@ export default function SiteHeader() {
         <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3">
           <nav className="flex flex-col space-y-2">
             <Link href="/">
-              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
-                location === '/' ? 'text-primary-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              <Button variant="ghost" className={`justify-start px-3 py-2 h-auto w-full ${
+                location === '/' ? 'text-primary font-medium' : 'text-gray-600 hover:text-gray-900'
               }`}>
                 Home
-              </a>
+              </Button>
             </Link>
             <Link href="/guide">
-              <a className={`px-3 py-2 rounded-md text-sm font-medium ${
-                location === '/guide' ? 'text-primary-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              <Button variant="ghost" className={`justify-start px-3 py-2 h-auto w-full ${
+                location === '/guide' ? 'text-primary font-medium' : 'text-gray-600 hover:text-gray-900'
               }`}>
                 Guides
-              </a>
+              </Button>
             </Link>
             <Link href="/editor">
               <Button className="w-full justify-center mt-2">

@@ -189,7 +189,7 @@ export default function Canvas() {
             <div 
               className={`min-h-[80vh] border-4 ${
                 activeDropzone === "mainDropzone" 
-                  ? "border-primary-500 dropzone-active" 
+                  ? "border-primary dropzone-active" 
                   : "border-transparent"
               } dropzone ${showGridLines ? 'bg-grid-pattern' : ''}`}
               id="mainDropzone"
