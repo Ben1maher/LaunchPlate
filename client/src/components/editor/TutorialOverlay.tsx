@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEditor } from "../../context/EditorContext";
 import { Button } from "@/components/ui/button";
-import { X, Play, Rocket } from "lucide-react";
+import { X, Play, Rocket, ArrowLeft, ArrowRight, Check, Image, Palette, Users } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function TutorialOverlay() {
@@ -145,10 +145,10 @@ export default function TutorialOverlay() {
                     transition={{ delay: 0.2 }}
                   >
                     {steps[page].image === "rocket" && <Rocket className="h-10 w-10 text-primary-500" />}
-                    {steps[page].image === "drag" && <i className="ri-drag-drop-line text-4xl text-primary-500"></i>}
-                    {steps[page].image === "customize" && <i className="ri-palette-line text-4xl text-primary-500"></i>}
-                    {steps[page].image === "leads" && <i className="ri-user-follow-line text-4xl text-primary-500"></i>}
-                    {steps[page].image === "publish" && <i className="ri-rocket-line text-4xl text-primary-500"></i>}
+                    {steps[page].image === "drag" && <ArrowRight className="h-10 w-10 text-primary-500" />}
+                    {steps[page].image === "customize" && <Palette className="h-10 w-10 text-primary-500" />}
+                    {steps[page].image === "leads" && <Users className="h-10 w-10 text-primary-500" />}
+                    {steps[page].image === "publish" && <Rocket className="h-10 w-10 text-primary-500" />}
                   </motion.div>
                   <motion.h3 
                     className="text-2xl font-semibold text-gray-800 mb-2"
