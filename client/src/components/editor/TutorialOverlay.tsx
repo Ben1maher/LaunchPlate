@@ -201,7 +201,7 @@ export default function TutorialOverlay() {
                         </div>
                       </div>
                       <div className="mt-4 p-3 bg-gray-100 rounded-md flex items-center justify-center h-32">
-                        <i className="ri-drag-drop-line text-5xl text-gray-400"></i>
+                        <ArrowRight className="h-10 w-10 text-gray-400" />
                       </div>
                     </div>
                   )}
@@ -212,19 +212,19 @@ export default function TutorialOverlay() {
                       <div className="grid grid-cols-1 gap-3">
                         <div className="flex items-center p-3 bg-white rounded border border-gray-200">
                           <div className="w-8 h-8 flex items-center justify-center mr-3 text-primary-500">
-                            <i className="ri-palette-line text-xl"></i>
+                            <Palette className="h-5 w-5" />
                           </div>
                           <p className="text-sm text-gray-600">Change colors, fonts, and styles in the properties panel</p>
                         </div>
                         <div className="flex items-center p-3 bg-white rounded border border-gray-200">
                           <div className="w-8 h-8 flex items-center justify-center mr-3 text-primary-500">
-                            <i className="ri-text"></i>
+                            <span className="text-xl font-bold">T</span>
                           </div>
                           <p className="text-sm text-gray-600">Edit text directly on the canvas</p>
                         </div>
                         <div className="flex items-center p-3 bg-white rounded border border-gray-200">
                           <div className="w-8 h-8 flex items-center justify-center mr-3 text-primary-500">
-                            <i className="ri-image-2-line text-xl"></i>
+                            <Image className="h-5 w-5" />
                           </div>
                           <p className="text-sm text-gray-600">Upload your own images or use our stock photos</p>
                         </div>
@@ -238,25 +238,25 @@ export default function TutorialOverlay() {
                       <ul className="space-y-3">
                         <li className="flex items-start">
                           <div className="mt-0.5 mr-2 text-green-500">
-                            <i className="ri-check-line text-lg"></i>
+                            <Check className="h-4 w-4" />
                           </div>
                           <p className="text-sm text-gray-600">Use compelling headlines that address your visitor's pain points</p>
                         </li>
                         <li className="flex items-start">
                           <div className="mt-0.5 mr-2 text-green-500">
-                            <i className="ri-check-line text-lg"></i>
+                            <Check className="h-4 w-4" />
                           </div>
                           <p className="text-sm text-gray-600">Add forms with minimal fields to maximize completion rates</p>
                         </li>
                         <li className="flex items-start">
                           <div className="mt-0.5 mr-2 text-green-500">
-                            <i className="ri-check-line text-lg"></i>
+                            <Check className="h-4 w-4" />
                           </div>
                           <p className="text-sm text-gray-600">Include clear and compelling call-to-action buttons</p>
                         </li>
                         <li className="flex items-start">
                           <div className="mt-0.5 mr-2 text-green-500">
-                            <i className="ri-check-line text-lg"></i>
+                            <Check className="h-4 w-4" />
                           </div>
                           <p className="text-sm text-gray-600">Add social proof elements like testimonials or logos</p>
                         </li>
@@ -334,7 +334,7 @@ export default function TutorialOverlay() {
                   Watch Video
                 </Button>
                 <Button variant="default" className="gap-2" onClick={handleStartBuilding}>
-                  <i className="ri-rocket-line mr-1"></i>
+                  <Rocket className="h-4 w-4 mr-1" />
                   Start Building
                 </Button>
               </div>
