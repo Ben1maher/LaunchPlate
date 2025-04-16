@@ -30,6 +30,7 @@ export default function Editor() {
   
   const { 
     components, 
+    setComponents,
     tutorialActive, 
     setTutorialActive, 
     resetEditor, 
@@ -49,17 +50,25 @@ export default function Editor() {
   const { toast } = useToast();
 
   // Check if this is a new user (no projects yet) to show tutorial
+  // Parse URL parameters to check for template ID
+  const searchParams = new URLSearchParams(window.location.search);
+  const templateId = searchParams.get('template');
+  
   useEffect(() => {
-    // For demonstration, show tutorial if no project ID
-    if (!projectId) {
+    // For demonstration, show tutorial if no project ID or template
+    if (!projectId && !templateId) {
       setTutorialActive(true);
     }
     
-    // Load project if ID is provided or reset the editor
+    // Load project or template if ID is provided, or reset the editor
     const handleInitialLoad = async () => {
       if (projectId) {
         try {
           await loadProject(projectId);
+          toast({
+            title: "Project loaded",
+            description: "Your project has been loaded successfully.",
+          });
         } catch (error) {
           toast({
             title: "Error loading project",
@@ -68,6 +77,38 @@ export default function Editor() {
           });
           setLocation("/editor");
         }
+      } else if (templateId) {
+        try {
+          // Fetch template from API
+          const response = await fetch(`/api/templates/${templateId}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch template (${response.status})`);
+          }
+          
+          const template = await response.json();
+          
+          // Set components from template
+          if (template?.components) {
+            resetEditor(); // Clear any existing components
+            setComponents(template.components);
+            toast({
+              title: "Template loaded",
+              description: `Template "${template.name}" loaded successfully. Customize it to fit your needs.`,
+            });
+            setProjectName(template.name ? `My ${template.name}` : "My Landing Page");
+            setProjectDescription(template.description || "");
+          } else {
+            throw new Error("Invalid template data");
+          }
+        } catch (error) {
+          console.error("Failed to load template:", error);
+          toast({
+            title: "Error loading template",
+            description: "Could not load the selected template. Please try another one.",
+            variant: "destructive",
+          });
+          resetEditor();
+        }
       } else {
         resetEditor();
       }
@@ -75,7 +116,7 @@ export default function Editor() {
     
     handleInitialLoad();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projectId]);
+  }, [projectId, templateId]);
 
   const handleSave = async () => {
     if (!projectName.trim()) {

@@ -180,7 +180,7 @@ export default function Home() {
                         <div className={`text-center ${template.name.includes("Business") || template.name.includes("Startup") ? "text-white" : "text-gray-700"}`}>
                           <p className="font-bold text-lg">{template.name.replace(" Template", "")}</p>
                           <p className={`text-sm mt-2 px-6 opacity-80 ${template.name.includes("Business") || template.name.includes("Startup") ? "text-white/70" : "text-gray-500"}`}>
-                            {template.description.substring(0, 60)}...
+                            {template.description ? template.description.substring(0, 60) + '...' : 'A customizable template for your landing page'}
                           </p>
                         </div>
                       </div>
@@ -189,7 +189,7 @@ export default function Home() {
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="text-white text-center p-5">
                           <p className="font-bold text-xl mb-2">{template.name}</p>
-                          <p className="text-sm mb-4 text-white/80">{template.description}</p>
+                          <p className="text-sm mb-4 text-white/80">{template.description || 'A customizable template for your landing page'}</p>
                           <Link href={`/editor?template=${template.id}`}>
                             <Button variant="secondary" className="bg-white text-primary hover:bg-gray-100">
                               Use Template
