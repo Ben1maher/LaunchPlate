@@ -62,11 +62,28 @@ export default function HeroComponent({ component }: HeroComponentProps) {
     color: style.secondaryButtonTextColor || '#374151'
   };
 
+  // Create overlay element if needed (for background images)
+  const Overlay = () => {
+    if (style.backgroundType === 'image' && style.overlayColor) {
+      return (
+        <div 
+          className="absolute inset-0 w-full h-full z-0" 
+          style={{ backgroundColor: style.overlayColor }}
+        ></div>
+      );
+    }
+    return null;
+  };
+
   // Split hero (text and image side by side)
   if (type === 'hero-split') {
     return (
       <section style={styleObj} className="py-16">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
+        {/* Background overlay if needed */}
+        <Overlay />
+        
+        {/* Content - with higher z-index to appear above overlay */}
+        <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8 relative z-10">
           <div className="md:w-1/2 space-y-6">
             <h1 style={headingStyle}>
               {content.heading || 'Create Landing Pages That Convert'}
@@ -117,7 +134,11 @@ export default function HeroComponent({ component }: HeroComponentProps) {
   // Centered hero
   return (
     <section style={styleObj} className="py-16 text-center">
-      <div className="max-w-3xl mx-auto px-4 space-y-6">
+      {/* Background overlay if needed */}
+      <Overlay />
+      
+      {/* Content - with higher z-index to appear above overlay */}
+      <div className="max-w-3xl mx-auto px-4 space-y-6 relative z-10">
         <h1 style={headingStyle}>
           {content.heading || 'Create Landing Pages That Convert'}
         </h1>
