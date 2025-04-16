@@ -450,16 +450,57 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
               placeholder="https://example.com/image.jpg"
               className="text-sm"
             />
+            <div className="mt-2 text-xs text-gray-500 flex items-center">
+              <i className="ri-information-line mr-1"></i>
+              <span>Paste a direct URL to an image (JPG, PNG, SVG, etc.)</span>
+            </div>
+            
+            {component.content.url && (
+              <div className="mt-3 p-2 border rounded-md bg-gray-50">
+                <div className="aspect-video relative bg-white rounded-sm overflow-hidden border">
+                  <img 
+                    src={component.content.url} 
+                    alt="Preview" 
+                    className="absolute inset-0 w-full h-full object-contain"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                      const nextElement = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                      if (nextElement) {
+                        nextElement.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div 
+                    className="absolute inset-0 w-full h-full flex-col items-center justify-center bg-gray-100 hidden" 
+                    style={{ display: 'none' }}
+                  >
+                    <i className="ri-error-warning-line text-amber-500 text-xl mb-1"></i>
+                    <span className="text-xs text-gray-600">Image failed to load</span>
+                  </div>
+                </div>
+                <div className="mt-1 text-xs text-right">
+                  <button 
+                    className="text-destructive hover:text-destructive-foreground"
+                    onClick={() => updateContent('url', '')}
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           
           <div>
-            <label className="text-xs text-gray-600 block mb-1">Alt Text</label>
+            <label className="text-xs text-gray-600 block mb-1">Alt Text <span className="text-amber-500">*</span></label>
             <Input
               value={component.content.alt || ''}
               onChange={(e) => updateContent('alt', e.target.value)}
-              placeholder="Image description"
+              placeholder="Image description for accessibility"
               className="text-sm"
             />
+            <div className="mt-1 text-xs text-gray-500">
+              Describe the image for screen readers and SEO
+            </div>
           </div>
           
           <div>
@@ -470,6 +511,61 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
               placeholder="Image caption"
               className="text-sm"
             />
+          </div>
+
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Image Size</label>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <Select
+                  value={component.style.maxWidth || '100%'}
+                  onValueChange={(value) => {
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        maxWidth: value
+                      }
+                    });
+                  }}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Select width" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="100%">Full width</SelectItem>
+                    <SelectItem value="75%">75% width</SelectItem>
+                    <SelectItem value="50%">50% width</SelectItem>
+                    <SelectItem value="400px">Small (400px)</SelectItem>
+                    <SelectItem value="600px">Medium (600px)</SelectItem>
+                    <SelectItem value="800px">Large (800px)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Select
+                  value={component.style.borderRadius || '0.5rem'}
+                  onValueChange={(value) => {
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        borderRadius: value
+                      }
+                    });
+                  }}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Select radius" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">No rounding</SelectItem>
+                    <SelectItem value="0.25rem">Slight rounding</SelectItem>
+                    <SelectItem value="0.5rem">Medium rounding</SelectItem>
+                    <SelectItem value="1rem">Heavy rounding</SelectItem>
+                    <SelectItem value="9999px">Full circle</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </div>
         </div>
       );

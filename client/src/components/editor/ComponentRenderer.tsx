@@ -88,43 +88,54 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   return (
     <div 
-      className={`relative component-wrapper ${isSelected ? 'outline outline-2 outline-primary' : ''}`} 
+      className={`relative component-wrapper group hover:bg-gray-50/50 hover:outline hover:outline-1 hover:outline-gray-200 ${
+        isSelected ? 'outline outline-2 outline-primary bg-blue-50/20' : ''
+      }`} 
       onClick={onClick}
+      data-component-id={component.id}
+      data-component-type={component.type}
     >
+      {isSelected && (
+        <div className="absolute -top-3 left-3 bg-primary text-white px-2 py-0.5 text-xs rounded z-10 flex items-center gap-1 shadow-sm">
+          <i className="ri-edit-line text-[10px]"></i>
+          {component.type.replace(/-/g, ' ')}
+        </div>
+      )}
+      
       {renderComponent()}
       
       {/* Component Controls - visible on hover or when selected */}
-      <div className={`absolute top-0 right-0 m-2 flex space-x-1 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-opacity`}>
+      <div 
+        className={`absolute top-2 right-2 flex items-center gap-1 p-1 bg-white/90 rounded-md shadow-sm border border-gray-100 backdrop-blur-sm ${
+          isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+        } transition-opacity duration-200`}
+      >
         <Button 
           size="icon" 
-          variant="secondary" 
-          className="h-8 w-8 bg-white shadow-sm text-gray-500 hover:text-gray-700"
-        >
-          <Move className="h-4 w-4" />
-        </Button>
-        <Button 
-          size="icon" 
-          variant="secondary" 
-          className="h-8 w-8 bg-white shadow-sm text-gray-500 hover:text-gray-700"
+          variant="ghost" 
+          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+          title="Edit properties"
           onClick={handleSettingsClick}
         >
-          <Settings className="h-4 w-4" />
+          <Settings className="h-3.5 w-3.5" />
         </Button>
         <Button 
           size="icon" 
-          variant="secondary" 
-          className="h-8 w-8 bg-white shadow-sm text-gray-500 hover:text-gray-700"
+          variant="ghost" 
+          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+          title="Duplicate component"
           onClick={handleDuplicate}
         >
-          <Copy className="h-4 w-4" />
+          <Copy className="h-3.5 w-3.5" />
         </Button>
         <Button 
           size="icon" 
-          variant="secondary" 
-          className="h-8 w-8 bg-white shadow-sm text-red-500 hover:text-red-700"
+          variant="ghost" 
+          className="h-7 w-7 text-red-500 hover:text-red-700 hover:bg-red-50"
+          title="Delete component"
           onClick={handleDelete}
         >
-          <Trash className="h-4 w-4" />
+          <Trash className="h-3.5 w-3.5" />
         </Button>
       </div>
     </div>

@@ -91,7 +91,14 @@ export class MemStorage implements IStorage {
 
   async createTemplate(insertTemplate: InsertTemplate): Promise<Template> {
     const id = this.templateId++;
-    const template: Template = { ...insertTemplate, id };
+    const template: Template = { 
+      ...insertTemplate, 
+      id,
+      userId: insertTemplate.userId || 0,
+      description: insertTemplate.description || null,
+      thumbnail: insertTemplate.thumbnail || null,
+      isPublic: insertTemplate.isPublic ?? false
+    };
     this.templates.set(id, template);
     return template;
   }
@@ -100,7 +107,14 @@ export class MemStorage implements IStorage {
     const existingTemplate = this.templates.get(id);
     if (!existingTemplate) return undefined;
 
-    const updatedTemplate = { ...existingTemplate, ...templateUpdate };
+    const updatedTemplate: Template = { 
+      ...existingTemplate, 
+      ...templateUpdate,
+      userId: templateUpdate.userId ?? existingTemplate.userId,
+      description: templateUpdate.description ?? existingTemplate.description,
+      thumbnail: templateUpdate.thumbnail ?? existingTemplate.thumbnail,
+      isPublic: templateUpdate.isPublic ?? existingTemplate.isPublic
+    };
     this.templates.set(id, updatedTemplate);
     return updatedTemplate;
   }
@@ -126,7 +140,15 @@ export class MemStorage implements IStorage {
 
   async createProject(insertProject: InsertProject): Promise<Project> {
     const id = this.projectId++;
-    const project: Project = { ...insertProject, id };
+    const project: Project = { 
+      ...insertProject, 
+      id,
+      userId: insertProject.userId || 0,
+      description: insertProject.description || null,
+      updatedAt: new Date().toISOString(),
+      published: insertProject.published ?? false,
+      publishedUrl: insertProject.publishedUrl || null
+    };
     this.projects.set(id, project);
     return project;
   }
@@ -135,7 +157,15 @@ export class MemStorage implements IStorage {
     const existingProject = this.projects.get(id);
     if (!existingProject) return undefined;
 
-    const updatedProject = { ...existingProject, ...projectUpdate };
+    const updatedProject: Project = { 
+      ...existingProject, 
+      ...projectUpdate,
+      userId: projectUpdate.userId ?? existingProject.userId,
+      description: projectUpdate.description ?? existingProject.description,
+      updatedAt: new Date().toISOString(),
+      published: projectUpdate.published ?? existingProject.published,
+      publishedUrl: projectUpdate.publishedUrl ?? existingProject.publishedUrl
+    };
     this.projects.set(id, updatedProject);
     return updatedProject;
   }
