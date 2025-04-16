@@ -1,0 +1,888 @@
+import { useState, useEffect } from "react";
+import { useEditor } from "../../context/EditorContext";
+import { Component, ComponentType } from "@shared/schema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getComponentData } from "./componentData";
+import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move } from "lucide-react";
+
+export default function PropertiesPanel() {
+  const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
+  const [activeTab, setActiveTab] = useState("general");
+
+  // Get the index of the selected component in the components array
+  const selectedIndex = selectedComponent 
+    ? components.findIndex(comp => comp.id === selectedComponent.id) 
+    : -1;
+
+  // Reset active tab when selected component changes
+  useEffect(() => {
+    setActiveTab("general");
+  }, [selectedComponent?.id]);
+
+  if (!selectedComponent) {
+    return (
+      <div className="w-72 bg-white border-l border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="font-semibold text-sm uppercase text-gray-600">Properties</h2>
+          <div className="flex space-x-1">
+            <Button variant="ghost" size="icon" className="h-7 w-7">
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
+        {/* No Selection State */}
+        <div className="flex-1 p-4 flex flex-col items-center justify-center text-center" id="noSelectionState">
+          <div className="bg-gray-100 p-6 rounded-full mb-4">
+            <i className="ri-cursor-line text-3xl text-gray-400"></i>
+          </div>
+          <h3 className="text-gray-700 font-medium mb-1">No Element Selected</h3>
+          <p className="text-gray-500 text-sm mb-6">Select an element on the canvas to edit its properties</p>
+          <Button variant="link" className="text-primary-500 gap-1">
+            <i className="ri-information-line"></i>
+            Learn how to edit properties
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const componentData = getComponentData(selectedComponent.type);
+
+  // Move component up
+  const handleMoveUp = () => {
+    if (selectedIndex > 0) {
+      moveComponent(selectedIndex, selectedIndex - 1);
+    }
+  };
+
+  // Move component down
+  const handleMoveDown = () => {
+    if (selectedIndex < components.length - 1) {
+      moveComponent(selectedIndex, selectedIndex + 1);
+    }
+  };
+
+  // Duplicate component
+  const handleDuplicate = () => {
+    const duplicatedComponent: Component = {
+      ...selectedComponent,
+      id: `${selectedComponent.id}-copy-${Date.now()}`
+    };
+    
+    const newComponents = [...components];
+    newComponents.splice(selectedIndex + 1, 0, duplicatedComponent);
+    updateComponent(duplicatedComponent.id, duplicatedComponent);
+  };
+
+  return (
+    <div className="w-72 bg-white border-l border-gray-200 flex flex-col">
+      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+        <h2 className="font-semibold text-sm uppercase text-gray-600">Properties</h2>
+        <div className="flex space-x-1">
+          <Button variant="ghost" size="icon" className="h-7 w-7">
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      
+      {/* Component Type Header */}
+      <div className="bg-gray-50 p-3 flex items-center justify-between">
+        <div className="flex items-center">
+          <i className={`${componentData?.icon || 'ri-layout-3-line'} text-gray-500 mr-2`}></i>
+          <span className="font-medium text-gray-800">{componentData?.label || 'Component'}</span>
+        </div>
+        <div className="flex space-x-1">
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleMoveUp} disabled={selectedIndex <= 0}>
+            <ArrowUp className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleMoveDown} disabled={selectedIndex >= components.length - 1}>
+            <ArrowDown className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      
+      {/* Properties Tabs */}
+      <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden">
+        <div className="px-3 pt-3 border-b border-gray-200">
+          <TabsList className="grid grid-cols-3 h-9">
+            <TabsTrigger value="general" className="text-xs">General</TabsTrigger>
+            <TabsTrigger value="style" className="text-xs">Style</TabsTrigger>
+            <TabsTrigger value="advanced" className="text-xs">Advanced</TabsTrigger>
+          </TabsList>
+        </div>
+        
+        <div className="overflow-y-auto flex-1">
+          {/* General Tab */}
+          <TabsContent value="general" className="p-0 m-0">
+            <RenderGeneralProperties component={selectedComponent} updateComponent={updateComponent} />
+          </TabsContent>
+          
+          {/* Style Tab */}
+          <TabsContent value="style" className="p-0 m-0">
+            <RenderStyleProperties component={selectedComponent} updateComponent={updateComponent} />
+          </TabsContent>
+          
+          {/* Advanced Tab */}
+          <TabsContent value="advanced" className="p-0 m-0">
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Element ID</label>
+                <Input
+                  value={selectedComponent.id}
+                  readOnly
+                  className="text-sm text-gray-500"
+                />
+              </div>
+              
+              <div className="pt-2 flex flex-col gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full justify-start gap-2"
+                  onClick={handleDuplicate}
+                >
+                  <Copy className="h-4 w-4" />
+                  Duplicate Component
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full justify-start gap-2 text-destructive hover:text-destructive"
+                  onClick={() => removeComponent(selectedComponent.id)}
+                >
+                  <Trash className="h-4 w-4" />
+                  Delete Component
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+        </div>
+      </Tabs>
+    </div>
+  );
+}
+
+// Component-specific properties
+function RenderGeneralProperties({ component, updateComponent }: { component: Component, updateComponent: (id: string, updates: Partial<Component>) => void }) {
+  const updateContent = (key: string, value: any) => {
+    updateComponent(component.id, {
+      content: {
+        ...component.content,
+        [key]: value
+      }
+    });
+  };
+
+  switch (component.type) {
+    case 'header-1':
+    case 'header-2':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Logo Text</label>
+            <Input
+              value={component.content.logo || ''}
+              onChange={(e) => updateContent('logo', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Menu Items</label>
+            <div className="space-y-2">
+              {component.content.menuItems?.map((item: any, index: number) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={item.text}
+                    onChange={(e) => {
+                      const newMenuItems = [...component.content.menuItems];
+                      newMenuItems[index] = { ...item, text: e.target.value };
+                      updateContent('menuItems', newMenuItems);
+                    }}
+                    placeholder="Menu text"
+                    className="text-sm flex-1"
+                  />
+                  <Input
+                    value={item.url}
+                    onChange={(e) => {
+                      const newMenuItems = [...component.content.menuItems];
+                      newMenuItems[index] = { ...item, url: e.target.value };
+                      updateContent('menuItems', newMenuItems);
+                    }}
+                    placeholder="URL"
+                    className="text-sm flex-1"
+                  />
+                  <Button
+                    variant="ghost" 
+                    size="icon"
+                    className="h-9 w-9"
+                    onClick={() => {
+                      const newMenuItems = component.content.menuItems.filter((_: any, i: number) => i !== index);
+                      updateContent('menuItems', newMenuItems);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  const newMenuItems = [...(component.content.menuItems || []), { text: 'New Item', url: '#' }];
+                  updateContent('menuItems', newMenuItems);
+                }}
+              >
+                Add Menu Item
+              </Button>
+            </div>
+          </div>
+          
+          {component.type === 'header-1' && (
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">CTA Button</label>
+              <div className="grid grid-cols-2 gap-2">
+                <Input
+                  value={component.content.ctaText || ''}
+                  onChange={(e) => updateContent('ctaText', e.target.value)}
+                  placeholder="Button text"
+                  className="text-sm"
+                />
+                <Input
+                  value={component.content.ctaUrl || ''}
+                  onChange={(e) => updateContent('ctaUrl', e.target.value)}
+                  placeholder="URL"
+                  className="text-sm"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    
+    case 'hero-split':
+    case 'hero-centered':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Heading</label>
+            <Input
+              value={component.content.heading || ''}
+              onChange={(e) => updateContent('heading', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Subheading</label>
+            <Textarea
+              value={component.content.subheading || ''}
+              onChange={(e) => updateContent('subheading', e.target.value)}
+              className="text-sm resize-none"
+              rows={2}
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">
+              {component.type === 'hero-split' ? 'Primary Button' : 'Button'}
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                value={component.type === 'hero-split' ? component.content.primaryButtonText || '' : component.content.buttonText || ''}
+                onChange={(e) => updateContent(
+                  component.type === 'hero-split' ? 'primaryButtonText' : 'buttonText', 
+                  e.target.value
+                )}
+                placeholder="Button text"
+                className="text-sm"
+              />
+              <Input
+                value={component.type === 'hero-split' ? component.content.primaryButtonUrl || '' : component.content.buttonUrl || ''}
+                onChange={(e) => updateContent(
+                  component.type === 'hero-split' ? 'primaryButtonUrl' : 'buttonUrl', 
+                  e.target.value
+                )}
+                placeholder="URL"
+                className="text-sm"
+              />
+            </div>
+          </div>
+          
+          {component.type === 'hero-split' && (
+            <>
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Secondary Button</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <Input
+                    value={component.content.secondaryButtonText || ''}
+                    onChange={(e) => updateContent('secondaryButtonText', e.target.value)}
+                    placeholder="Button text"
+                    className="text-sm"
+                  />
+                  <Input
+                    value={component.content.secondaryButtonUrl || ''}
+                    onChange={(e) => updateContent('secondaryButtonUrl', e.target.value)}
+                    placeholder="URL"
+                    className="text-sm"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+                <Input
+                  value={component.content.imageUrl || ''}
+                  onChange={(e) => updateContent('imageUrl', e.target.value)}
+                  placeholder="https://example.com/image.jpg"
+                  className="text-sm"
+                />
+              </div>
+            </>
+          )}
+        </div>
+      );
+    
+    case 'heading':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Heading Text</label>
+            <Input
+              value={component.content.text || ''}
+              onChange={(e) => updateContent('text', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Heading Level</label>
+            <Select
+              value={component.content.level || 'h2'}
+              onValueChange={(value) => updateContent('level', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Select level" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="h1">H1 - Main Heading</SelectItem>
+                <SelectItem value="h2">H2 - Section Heading</SelectItem>
+                <SelectItem value="h3">H3 - Subsection Heading</SelectItem>
+                <SelectItem value="h4">H4 - Small Heading</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      );
+    
+    case 'text-block':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Text Content</label>
+            <Textarea
+              value={component.content.text || ''}
+              onChange={(e) => updateContent('text', e.target.value)}
+              className="text-sm resize-none"
+              rows={6}
+            />
+          </div>
+        </div>
+      );
+    
+    case 'button':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Button Text</label>
+            <Input
+              value={component.content.text || ''}
+              onChange={(e) => updateContent('text', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">URL</label>
+            <Input
+              value={component.content.url || ''}
+              onChange={(e) => updateContent('url', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Button Type</label>
+            <Select
+              value={component.content.type || 'primary'}
+              onValueChange={(value) => updateContent('type', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Select type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="primary">Primary</SelectItem>
+                <SelectItem value="secondary">Secondary</SelectItem>
+                <SelectItem value="outline">Outline</SelectItem>
+                <SelectItem value="ghost">Ghost</SelectItem>
+                <SelectItem value="link">Link</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      );
+    
+    case 'image':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+            <Input
+              value={component.content.url || ''}
+              onChange={(e) => updateContent('url', e.target.value)}
+              placeholder="https://example.com/image.jpg"
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Alt Text</label>
+            <Input
+              value={component.content.alt || ''}
+              onChange={(e) => updateContent('alt', e.target.value)}
+              placeholder="Image description"
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Caption (optional)</label>
+            <Input
+              value={component.content.caption || ''}
+              onChange={(e) => updateContent('caption', e.target.value)}
+              placeholder="Image caption"
+              className="text-sm"
+            />
+          </div>
+        </div>
+      );
+    
+    case 'spacer':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Height (px)</label>
+            <Input
+              type="number"
+              value={component.content.height || 50}
+              onChange={(e) => updateContent('height', parseInt(e.target.value))}
+              className="text-sm"
+              min={10}
+              max={200}
+            />
+          </div>
+        </div>
+      );
+    
+    case 'divider':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Divider Style</label>
+            <Select
+              value={component.content.style || 'solid'}
+              onValueChange={(value) => updateContent('style', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Select style" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="solid">Solid</SelectItem>
+                <SelectItem value="dashed">Dashed</SelectItem>
+                <SelectItem value="dotted">Dotted</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      );
+    
+    case 'form':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Form Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Submit Button Text</label>
+            <Input
+              value={component.content.submitText || ''}
+              onChange={(e) => updateContent('submitText', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Form Fields</label>
+            <div className="space-y-2 mt-2">
+              {component.content.fields?.map((field: any, index: number) => (
+                <div key={index} className="border border-gray-200 rounded p-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-xs font-medium">{field.label || `Field ${index + 1}`}</span>
+                    <Button
+                      variant="ghost" 
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => {
+                        const newFields = component.content.fields.filter((_: any, i: number) => i !== index);
+                        updateContent('fields', newFields);
+                      }}
+                    >
+                      <X className="h-3 w-3" />
+                    </Button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2 mb-1">
+                    <div>
+                      <label className="text-xs text-gray-500 block">Label</label>
+                      <Input
+                        value={field.label || ''}
+                        onChange={(e) => {
+                          const newFields = [...component.content.fields];
+                          newFields[index] = { ...field, label: e.target.value };
+                          updateContent('fields', newFields);
+                        }}
+                        className="text-xs h-7"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs text-gray-500 block">Name</label>
+                      <Input
+                        value={field.name || ''}
+                        onChange={(e) => {
+                          const newFields = [...component.content.fields];
+                          newFields[index] = { ...field, name: e.target.value };
+                          updateContent('fields', newFields);
+                        }}
+                        className="text-xs h-7"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-xs text-gray-500 block">Type</label>
+                      <Select
+                        value={field.type || 'text'}
+                        onValueChange={(value) => {
+                          const newFields = [...component.content.fields];
+                          newFields[index] = { ...field, type: value };
+                          updateContent('fields', newFields);
+                        }}
+                      >
+                        <SelectTrigger className="text-xs h-7">
+                          <SelectValue placeholder="Type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="text">Text</SelectItem>
+                          <SelectItem value="email">Email</SelectItem>
+                          <SelectItem value="number">Number</SelectItem>
+                          <SelectItem value="tel">Phone</SelectItem>
+                          <SelectItem value="textarea">Textarea</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex items-center">
+                      <label className="text-xs text-gray-500 flex items-center gap-1">
+                        <input
+                          type="checkbox"
+                          checked={field.required || false}
+                          onChange={(e) => {
+                            const newFields = [...component.content.fields];
+                            newFields[index] = { ...field, required: e.target.checked };
+                            updateContent('fields', newFields);
+                          }}
+                          className="rounded"
+                        />
+                        Required
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => {
+                  const newFields = [...(component.content.fields || []), { 
+                    name: `field${component.content.fields?.length || 0 + 1}`, 
+                    label: 'New Field', 
+                    type: 'text', 
+                    required: false 
+                  }];
+                  updateContent('fields', newFields);
+                }}
+              >
+                Add Field
+              </Button>
+            </div>
+          </div>
+        </div>
+      );
+    
+    case 'email-signup':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Description</label>
+            <Textarea
+              value={component.content.description || ''}
+              onChange={(e) => updateContent('description', e.target.value)}
+              className="text-sm resize-none"
+              rows={2}
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Button Text</label>
+            <Input
+              value={component.content.buttonText || ''}
+              onChange={(e) => updateContent('buttonText', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+        </div>
+      );
+    
+    default:
+      return (
+        <div className="p-4">
+          <p className="text-sm text-gray-500">No properties available for this component type.</p>
+        </div>
+      );
+  }
+}
+
+// Style properties for components
+function RenderStyleProperties({ component, updateComponent }: { component: Component, updateComponent: (id: string, updates: Partial<Component>) => void }) {
+  const updateStyle = (key: string, value: any) => {
+    updateComponent(component.id, {
+      style: {
+        ...component.style,
+        [key]: value
+      }
+    });
+  };
+
+  // Common style properties for most components
+  return (
+    <div className="p-4 space-y-4">
+      {/* Background */}
+      <div>
+        <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Background</h3>
+        <div className="space-y-3">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Type</label>
+            <Select
+              value={component.style.backgroundType || 'color'}
+              onValueChange={(value) => updateStyle('backgroundType', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Background type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="color">Solid Color</SelectItem>
+                <SelectItem value="gradient">Gradient</SelectItem>
+                <SelectItem value="image">Image</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Color</label>
+            <div className="flex">
+              <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                <div 
+                  className="w-6 h-6 rounded-full border border-gray-300"
+                  style={{ backgroundColor: component.style.backgroundColor || '#F9FAFB' }}
+                ></div>
+              </div>
+              <Input
+                value={component.style.backgroundColor || '#F9FAFB'}
+                onChange={(e) => updateStyle('backgroundColor', e.target.value)}
+                className="rounded-l-none flex-1"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Spacing */}
+      <div>
+        <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Spacing</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Padding</label>
+            <Input
+              value={component.style.padding || '16px'}
+              onChange={(e) => updateStyle('padding', e.target.value)}
+              className="text-sm"
+              placeholder="16px"
+            />
+          </div>
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Margin</label>
+            <Input
+              value={component.style.margin || '0px'}
+              onChange={(e) => updateStyle('margin', e.target.value)}
+              className="text-sm"
+              placeholder="0px"
+            />
+          </div>
+        </div>
+      </div>
+      
+      {/* Border */}
+      <div>
+        <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Border</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Border Width</label>
+            <Select
+              value={component.style.borderWidth || '0px'}
+              onValueChange={(value) => updateStyle('borderWidth', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Width" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0px">None</SelectItem>
+                <SelectItem value="1px">1px</SelectItem>
+                <SelectItem value="2px">2px</SelectItem>
+                <SelectItem value="4px">4px</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Border Radius</label>
+            <Select
+              value={component.style.borderRadius || '0px'}
+              onValueChange={(value) => updateStyle('borderRadius', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Radius" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0px">Square</SelectItem>
+                <SelectItem value="4px">Slight (4px)</SelectItem>
+                <SelectItem value="8px">Rounded (8px)</SelectItem>
+                <SelectItem value="16px">Very Rounded (16px)</SelectItem>
+                <SelectItem value="9999px">Pill</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+      
+      {/* Typography (for text-based components) */}
+      {['heading', 'text-block', 'button', 'form', 'email-signup', 'header-1', 'header-2', 'hero-split', 'hero-centered'].includes(component.type) && (
+        <div>
+          <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Typography</h3>
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Font Family</label>
+              <Select
+                value={component.style.fontFamily || 'Inter, sans-serif'}
+                onValueChange={(value) => updateStyle('fontFamily', value)}
+              >
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Font" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Inter, sans-serif">Inter</SelectItem>
+                  <SelectItem value="Roboto, sans-serif">Roboto</SelectItem>
+                  <SelectItem value="Poppins, sans-serif">Poppins</SelectItem>
+                  <SelectItem value="'Playfair Display', serif">Playfair Display</SelectItem>
+                  <SelectItem value="'Montserrat', sans-serif">Montserrat</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Font Weight</label>
+              <Select
+                value={component.style.fontWeight || 'normal'}
+                onValueChange={(value) => updateStyle('fontWeight', value)}
+              >
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Weight" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="normal">Regular</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="bold">Bold</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Text Color</label>
+              <div className="flex">
+                <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
+                  <div 
+                    className="w-6 h-6 rounded-full border border-gray-300"
+                    style={{ backgroundColor: component.style.color || '#111827' }}
+                  ></div>
+                </div>
+                <Input
+                  value={component.style.color || '#111827'}
+                  onChange={(e) => updateStyle('color', e.target.value)}
+                  className="rounded-l-none flex-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Text Align</label>
+              <Select
+                value={component.style.textAlign || 'left'}
+                onValueChange={(value) => updateStyle('textAlign', value)}
+              >
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Align" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="left">Left</SelectItem>
+                  <SelectItem value="center">Center</SelectItem>
+                  <SelectItem value="right">Right</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
