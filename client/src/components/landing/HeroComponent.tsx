@@ -34,20 +34,24 @@ export default function HeroComponent({ component }: HeroComponentProps) {
   // Add any other style properties
   Object.assign(styleObj, style);
 
-  // Heading styles
+  // Heading styles with mobile responsiveness
   const headingStyle = {
-    fontSize: style.headingFontSize || '2.5rem',
+    fontSize: style.headingFontSize || 'clamp(1.75rem, 5vw, 2.5rem)',
     fontWeight: style.headingFontWeight || 'bold',
     color: style.headingColor || style.color || '#111827',
     lineHeight: '1.2',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    wordWrap: 'break-word' as 'break-word', // Prevents text overflow on small screens
+    hyphens: 'auto' as 'auto'
   };
 
-  // Subheading styles
+  // Subheading styles with mobile responsiveness
   const subheadingStyle = {
-    fontSize: style.subheadingFontSize || '1.25rem',
+    fontSize: style.subheadingFontSize || 'clamp(1rem, 3vw, 1.25rem)',
     color: style.subheadingColor || style.color || '#4b5563',
-    marginBottom: '2rem'
+    marginBottom: '2rem',
+    wordWrap: 'break-word' as 'break-word',
+    maxWidth: '100%'
   };
 
   // Button styles
@@ -91,10 +95,10 @@ export default function HeroComponent({ component }: HeroComponentProps) {
             <p style={subheadingStyle}>
               {content.subheading || 'Build beautiful, responsive landing pages without any coding skills required.'}
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
               <Button 
                 style={primaryButtonStyle}
-                className="px-6 py-3 rounded-md font-medium"
+                className="px-4 sm:px-6 py-2 sm:py-3 rounded-md font-medium text-sm sm:text-base"
                 asChild
               >
                 <a href={content.primaryButtonUrl || '#'}>
@@ -104,7 +108,7 @@ export default function HeroComponent({ component }: HeroComponentProps) {
               <Button 
                 variant="outline" 
                 style={secondaryButtonStyle}
-                className="px-6 py-3 rounded-md font-medium"
+                className="px-4 sm:px-6 py-2 sm:py-3 rounded-md font-medium text-sm sm:text-base"
                 asChild
               >
                 <a href={content.secondaryButtonUrl || '#'}>
@@ -148,7 +152,7 @@ export default function HeroComponent({ component }: HeroComponentProps) {
         <div className="flex justify-center">
           <Button 
             style={primaryButtonStyle}
-            className="px-6 py-3 rounded-md font-medium"
+            className="px-4 sm:px-6 py-2 sm:py-3 rounded-md font-medium text-sm sm:text-base"
             asChild
           >
             <a href={content.buttonUrl || '#'}>
