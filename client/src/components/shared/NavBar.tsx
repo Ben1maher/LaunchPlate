@@ -15,12 +15,21 @@ interface NavBarProps {
     url: string;
     className?: string;
     style?: React.CSSProperties;
+    icon?: React.ReactNode;
   };
   style?: React.CSSProperties;
   className?: string;
+  activeUrl?: string;
 }
 
-export default function NavBar({ logo, items, ctaButton, style, className = '' }: NavBarProps) {
+export default function NavBar({ 
+  logo, 
+  items, 
+  ctaButton, 
+  style, 
+  className = '',
+  activeUrl 
+}: NavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   
@@ -78,7 +87,9 @@ export default function NavBar({ logo, items, ctaButton, style, className = '' }
             <a 
               key={index} 
               href={item.url}
-              className="font-medium text-gray-600 hover:text-gray-900"
+              className={`font-medium hover:text-gray-900 ${
+                activeUrl === item.url ? 'text-primary font-medium' : 'text-gray-600'
+              }`}
             >
               {item.text}
             </a>
@@ -93,7 +104,10 @@ export default function NavBar({ logo, items, ctaButton, style, className = '' }
               style={ctaButton.style}
               asChild
             >
-              <a href={ctaButton.url}>{ctaButton.text}</a>
+              <a href={ctaButton.url} className="flex items-center">
+                {ctaButton.icon && <span className="mr-2">{ctaButton.icon}</span>}
+                {ctaButton.text}
+              </a>
             </Button>
           </div>
         )}
@@ -127,7 +141,8 @@ export default function NavBar({ logo, items, ctaButton, style, className = '' }
             <a 
               key={index} 
               href={item.url} 
-              className="block font-medium hover:bg-gray-50 rounded-md py-3 px-3 transition-colors text-base"
+              className={`block font-medium hover:bg-gray-50 rounded-md py-3 px-3 transition-colors text-base
+                ${activeUrl === item.url ? 'text-primary font-medium bg-gray-50' : 'text-gray-700'}`}
               onClick={() => setIsMenuOpen(false)}
             >
               {item.text}
@@ -141,7 +156,10 @@ export default function NavBar({ logo, items, ctaButton, style, className = '' }
                 style={ctaButton.style}
                 asChild
               >
-                <a href={ctaButton.url}>{ctaButton.text}</a>
+                <a href={ctaButton.url} className="flex items-center justify-center">
+                  {ctaButton.icon && <span className="mr-2">{ctaButton.icon}</span>}
+                  {ctaButton.text}
+                </a>
               </Button>
             </div>
           )}
