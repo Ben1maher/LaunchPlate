@@ -92,7 +92,10 @@ export default function Home() {
             className="flex flex-wrap gap-4 justify-center"
             variants={buttonVariants}
           >
-            <Link href="/editor">
+            <a href="#templates-section" onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('templates-section')?.scrollIntoView({ behavior: 'smooth' });
+            }}>
               <Button size="lg" className="text-base relative overflow-hidden group">
                 <span className="relative z-10">
                   Get Started
@@ -105,7 +108,7 @@ export default function Home() {
                   transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
                 />
               </Button>
-            </Link>
+            </a>
             <Link href="/guide">
               <Button variant="outline" size="lg" className="text-base hover:bg-primary/10">
                 View Guides
@@ -211,7 +214,7 @@ export default function Home() {
       </section>
 
       {/* Templates Section */}
-      <section className="py-12">
+      <section id="templates-section" className="py-12 scroll-mt-16">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Start with a Template</h2>

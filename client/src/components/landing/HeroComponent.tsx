@@ -36,13 +36,14 @@ export default function HeroComponent({ component }: HeroComponentProps) {
 
   // Heading styles with mobile responsiveness
   const headingStyle = {
-    fontSize: style.headingFontSize || 'clamp(1.75rem, 5vw, 2.5rem)',
+    fontSize: style.headingFontSize || 'clamp(1.75rem, 5vw, 2.5rem)', 
     fontWeight: style.headingFontWeight || 'bold',
     color: style.headingColor || style.color || '#111827',
     lineHeight: '1.2',
     marginBottom: '1rem',
-    wordWrap: 'break-word' as 'break-word', // Prevents text overflow on small screens
-    hyphens: 'auto' as 'auto'
+    wordBreak: 'normal' as 'normal',
+    hyphens: 'none' as 'none',
+    whiteSpace: 'normal' as 'normal'
   };
 
   // Subheading styles with mobile responsiveness
