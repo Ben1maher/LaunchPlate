@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEditor } from "../../context/EditorContext";
 import { Component, ComponentType } from "@shared/schema";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getComponentData } from "./componentData";
-import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move } from "lucide-react";
+import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function PropertiesPanel() {
   const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
