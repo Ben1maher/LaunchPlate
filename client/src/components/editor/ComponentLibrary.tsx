@@ -3,10 +3,12 @@ import { useEditor } from "../../context/EditorContext";
 import { componentCategories, ComponentData } from "./componentData";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Layout, LayoutTemplate, FileText, Laptop } from "lucide-react";
 
 export default function ComponentLibrary() {
   const { addComponent, isDragging, setIsDragging } = useEditor();
   const [activeTab, setActiveTab] = useState("elements");
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, componentType: string) => {
     console.log("Drag started with component type:", componentType);
@@ -37,7 +39,18 @@ export default function ComponentLibrary() {
   return (
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200">
-        <h2 className="font-semibold text-sm uppercase text-gray-600">Components</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="font-semibold text-sm uppercase text-gray-600">Components</h2>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="text-xs flex items-center gap-1"
+            onClick={() => setIsTemplateModalOpen(true)}
+          >
+            <LayoutTemplate className="h-3.5 w-3.5" />
+            Templates
+          </Button>
+        </div>
         <Tabs
           defaultValue="elements"
           value={activeTab}
