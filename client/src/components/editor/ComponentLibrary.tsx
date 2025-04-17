@@ -135,6 +135,12 @@ export default function ComponentLibrary() {
           </div>
         )}
       </div>
+      
+      {/* Template Selection Modal */}
+      <TemplateModal 
+        open={isTemplateModalOpen} 
+        onOpenChange={setIsTemplateModalOpen} 
+      />
     </div>
   );
 }
