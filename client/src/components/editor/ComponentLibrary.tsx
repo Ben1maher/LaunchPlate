@@ -3,7 +3,10 @@ import { useEditor } from "../../context/EditorContext";
 import { componentCategories, ComponentData } from "./componentData";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Layout, LayoutTemplate, FileText, Laptop } from "lucide-react";
+import { LayoutTemplate } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Template } from "@shared/schema";
+import TemplateModal from "./TemplateModal";
 
 export default function ComponentLibrary() {
   const { addComponent, isDragging, setIsDragging } = useEditor();
