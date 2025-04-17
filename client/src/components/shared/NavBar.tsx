@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Button } from "@/components/ui/button";
+import { X, Menu } from "lucide-react";
 
 interface NavItem {
   text: string;
@@ -27,42 +27,46 @@ export default function NavBar({
   items, 
   ctaButton, 
   style, 
-  className = '',
-  activeUrl 
+  className = "", 
+  activeUrl = ""
 }: NavBarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
   
-  // Handle click outside to close the menu
+  // Close the menu when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && isMenuOpen) {
         setIsMenuOpen(false);
       }
     };
     
-    if (isMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
     
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isMenuOpen]);
   
-  // Handle keyboard accessibility - close menu on ESC
+  // Handle screen resize
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && isMenuOpen) {
         setIsMenuOpen(false);
       }
     };
     
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isMenuOpen]);
   
   // Toggle mobile menu
   const toggleMenu = () => {
@@ -71,72 +75,76 @@ export default function NavBar({
   
   return (
     <header 
-      className={`bg-white border-b border-gray-200 py-4 px-4 relative z-10 ${className}`}
+      className={`bg-white border-b border-gray-200 py-4 px-4 relative z-20 ${className}`}
       style={style}
       ref={menuRef}
     >
-      <div className="max-w-6xl mx-auto flex justify-between items-center">
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl sm:text-2xl font-bold truncate max-w-[200px] sm:max-w-none">
+        <div className="text-xl sm:text-2xl font-bold truncate max-w-[150px] sm:max-w-none flex-shrink-0 z-10">
           {typeof logo === 'string' ? logo : logo}
         </div>
         
-        {/* Desktop navigation */}
-        <nav className="hidden md:flex space-x-6">
-          {items.map((item, index) => (
-            <a 
-              key={index} 
-              href={item.url}
-              className={`font-medium hover:text-gray-900 ${
-                activeUrl === item.url ? 'text-primary font-medium' : 'text-gray-600'
-              }`}
-            >
-              {item.text}
-            </a>
-          ))}
-        </nav>
-        
-        {/* Desktop CTA Button */}
-        {ctaButton && (
-          <div className="hidden md:block">
-            <Button 
-              className={ctaButton.className || "bg-primary text-white"}
-              style={ctaButton.style}
-              asChild
-            >
-              <a href={ctaButton.url} className="flex items-center">
-                {ctaButton.icon && <span className="mr-2">{ctaButton.icon}</span>}
-                {ctaButton.text}
+        {/* Desktop and Mobile Navigation Section */}
+        <div className="flex items-center">
+          {/* Desktop navigation */}
+          <nav className="hidden md:flex space-x-6">
+            {items.map((item, index) => (
+              <a 
+                key={index} 
+                href={item.url}
+                className={`font-medium hover:text-gray-900 ${
+                  activeUrl === item.url ? 'text-primary font-medium' : 'text-gray-600'
+                }`}
+              >
+                {item.text}
               </a>
-            </Button>
-          </div>
-        )}
-        
-        {/* Mobile menu button */}
-        <Button
-          variant="outline"
-          size="icon"
-          className="md:hidden flex"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-          aria-expanded={isMenuOpen}
-        >
-          {isMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
+            ))}
+          </nav>
+          
+          {/* Desktop CTA Button */}
+          {ctaButton && (
+            <div className="hidden md:block ml-6">
+              <Button 
+                className={ctaButton.className || "bg-primary text-white"}
+                style={ctaButton.style}
+                asChild
+              >
+                <a href={ctaButton.url} className="flex items-center">
+                  {ctaButton.icon && <span className="mr-2">{ctaButton.icon}</span>}
+                  {ctaButton.text}
+                </a>
+              </Button>
+            </div>
           )}
-        </Button>
+          
+          {/* Mobile menu button */}
+          <Button
+            variant="outline"
+            size="icon"
+            className="md:hidden flex ml-4"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </Button>
+        </div>
       </div>
       
       {/* Mobile dropdown menu */}
       <div 
         className={`${isMenuOpen ? 'block' : 'hidden'} 
-          md:hidden absolute top-full left-0 right-0 w-full z-50 shadow-md 
+          md:hidden fixed top-[60px] left-0 right-0 w-full z-50 shadow-md 
           bg-white border-t border-gray-100 transition-all duration-300 ease-in-out
           animate-in fade-in slide-in-from-top-5`}
+        style={{ maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }}
       >
-        <div className="px-5 py-4 space-y-3 max-h-[80vh] overflow-auto">
+        <div className="px-5 py-4 space-y-3">
           {items.map((item, index) => (
             <a 
               key={index} 
