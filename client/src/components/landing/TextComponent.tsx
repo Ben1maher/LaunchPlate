@@ -27,6 +27,9 @@ export default function TextComponent({ component }: TextComponentProps) {
       fontWeight: style.fontWeight || 'bold',
       color: style.color || '#111827',
       lineHeight: style.lineHeight || '1.2',
+      wordWrap: 'break-word' as 'break-word',
+      hyphens: 'auto' as 'auto',
+      maxWidth: '100%',
       ...containerStyle
     };
 
@@ -44,12 +47,15 @@ export default function TextComponent({ component }: TextComponentProps) {
     }
   }
   
-  // For text block component
+  // For text block component with mobile optimization
   const textStyle = {
-    fontSize: style.fontSize || '1rem',
+    fontSize: style.fontSize || 'clamp(0.875rem, 2vw, 1rem)',
     fontWeight: style.fontWeight || 'normal',
     color: style.color || '#4b5563',
     lineHeight: style.lineHeight || '1.5',
+    wordWrap: 'break-word' as 'break-word',
+    hyphens: 'auto' as 'auto',
+    maxWidth: '100%',
     ...containerStyle
   };
   
@@ -60,18 +66,18 @@ export default function TextComponent({ component }: TextComponentProps) {
   );
 }
 
-// Helper function to get default font size for different heading levels
+// Helper function to get default font size for different heading levels with responsive sizes
 function getDefaultHeadingSize(level: string): string {
   switch (level) {
     case 'h1':
-      return '2.5rem';
+      return 'clamp(2rem, 5vw, 2.5rem)';
     case 'h2':
-      return '2rem';
+      return 'clamp(1.5rem, 4vw, 2rem)';
     case 'h3':
-      return '1.5rem';
+      return 'clamp(1.25rem, 3vw, 1.5rem)';
     case 'h4':
-      return '1.25rem';
+      return 'clamp(1rem, 2vw, 1.25rem)';
     default:
-      return '2rem';
+      return 'clamp(1.5rem, 4vw, 2rem)';
   }
 }

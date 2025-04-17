@@ -144,7 +144,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
   return (
     <header style={styleObj} className="py-4 px-4 bg-white relative z-10">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
-        <div className="text-2xl font-bold">{logo}</div>
+        <div className="text-xl sm:text-2xl font-bold truncate max-w-[200px] sm:max-w-none">{logo}</div>
         
         <nav className="hidden md:flex space-x-8">
           {menuItems.map((item: any, index: number) => (

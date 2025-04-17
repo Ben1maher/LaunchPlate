@@ -12,10 +12,10 @@ interface FormComponentProps {
 export default function FormComponent({ component }: FormComponentProps) {
   const { type, content, style } = component;
   
-  // Generate inline style object
+  // Generate inline style object with mobile-responsive padding
   const containerStyle = {
     backgroundColor: style.backgroundColor || '#ffffff',
-    padding: style.padding || '32px',
+    padding: style.padding || 'clamp(16px, 5vw, 32px)',
     borderRadius: style.borderRadius || '0.5rem',
     boxShadow: style.boxShadow || '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
     fontFamily: style.fontFamily,
@@ -23,20 +23,26 @@ export default function FormComponent({ component }: FormComponentProps) {
     textAlign: style.textAlign || 'left',
     margin: style.margin || '1rem 0',
     border: style.border || 'none',
+    width: '100%',
+    maxWidth: '100%',
     ...style
   };
 
   const headingStyle = {
-    fontSize: style.headingFontSize || '1.5rem',
+    fontSize: style.headingFontSize || 'clamp(1.25rem, 3vw, 1.5rem)',
     fontWeight: style.headingFontWeight || 'bold',
     color: style.headingColor || style.color || '#111827',
-    marginBottom: '1rem'
+    marginBottom: '1rem',
+    wordWrap: 'break-word' as 'break-word',
+    maxWidth: '100%'
   };
 
   const descriptionStyle = {
-    fontSize: style.descriptionFontSize || '1rem',
+    fontSize: style.descriptionFontSize || 'clamp(0.875rem, 2vw, 1rem)',
     color: style.descriptionColor || style.color || '#4b5563',
-    marginBottom: '1.5rem'
+    marginBottom: '1.5rem',
+    wordWrap: 'break-word' as 'break-word',
+    maxWidth: '100%'
   };
 
   const labelStyle = {
