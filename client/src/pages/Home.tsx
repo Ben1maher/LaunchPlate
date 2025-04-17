@@ -13,11 +13,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 export default function Home() {
   const { data: templates, isLoading } = useQuery<Template[]>({
     queryKey: ['/api/templates'],
   });
+  
+  // State for template selection modal
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
 
   // Animation variants for swipe effect
   const containerVariants = {
@@ -218,12 +222,22 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-bold">Start with a Template</h2>
-            <Link href="/editor">
-              <Button variant="outline" className="flex items-center gap-2">
-                <PlusCircle className="h-4 w-4" />
-                Create from Scratch
+            <div className="flex gap-2">
+              <Button 
+                variant="default" 
+                onClick={() => setIsTemplateModalOpen(true)}
+                className="flex items-center gap-2"
+              >
+                <Laptop className="h-4 w-4" />
+                Browse Templates
               </Button>
-            </Link>
+              <Link href="/editor">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <PlusCircle className="h-4 w-4" />
+                  Create from Scratch
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {isLoading ? (
