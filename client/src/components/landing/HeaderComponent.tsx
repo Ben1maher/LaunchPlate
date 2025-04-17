@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Component } from '@shared/schema';
-import { Button } from '@/components/ui/button';
+import NavBar from '../shared/NavBar';
 
 interface HeaderComponentProps {
   component: Component;
 }
 
 export default function HeaderComponent({ component }: HeaderComponentProps) {
-  // State for mobile menu toggle
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
   // Extract component data
   const { type, content, style } = component;
   
@@ -29,147 +26,29 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
     ...style
   };
   
-  // Toggle mobile menu
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  // Mobile menu component - shared between header types
-  const MobileMenu = () => (
-    <div 
-      className={`${mobileMenuOpen ? 'block' : 'hidden'} 
-        md:hidden absolute top-full left-0 right-0 w-full z-50 shadow-md transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-top-5`}
-      style={{ 
-        backgroundColor: style.backgroundColor || '#ffffff',
-        borderTop: '1px solid rgba(0,0,0,0.05)' 
-      }}
-    >
-      <div className="px-5 py-4 space-y-3 max-h-[80vh] overflow-auto">
-        {menuItems.map((item: any, index: number) => (
-          <a 
-            key={index} 
-            href={item.url} 
-            className="block font-medium hover:bg-gray-50 rounded-md py-3 px-3 transition-colors text-base"
-            style={{ color: style.color || '#4b5563' }}
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            {item.text}
-          </a>
-        ))}
-        {type === 'header-1' && (
-          <div className="pt-4 pb-2">
-            <Button 
-              className="w-full"
-              style={{ 
-                backgroundColor: style.buttonColor || '#3b82f6',
-                color: style.buttonTextColor || '#ffffff'
-              }}
-              asChild
-            >
-              <a href={ctaUrl}>{ctaText}</a>
-            </Button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Hamburger button component
-  const HamburgerButton = () => (
-    <button 
-      className="md:hidden flex flex-col justify-center items-center w-10 h-10 rounded-md focus:outline-none"
-      onClick={toggleMobileMenu}
-      aria-label="Toggle menu"
-      style={{ color: style.color }}
-    >
-      <div className="w-6 h-6 relative">
-        <span 
-          className={`absolute block w-6 h-0.5 transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'top-3 rotate-45' : 'top-1'}`} 
-          style={{ backgroundColor: style.color || "#374151" }}
-        ></span>
-        <span 
-          className={`absolute block w-6 h-0.5 top-3 transition-all duration-200 ease-in-out ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`} 
-          style={{ backgroundColor: style.color || "#374151" }}
-        ></span>
-        <span 
-          className={`absolute block w-6 h-0.5 transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'top-3 -rotate-45' : 'top-5'}`} 
-          style={{ backgroundColor: style.color || "#374151" }}
-        ></span>
-      </div>
-    </button>
-  );
-
-  // Render header type 1 (with CTA button)
-  if (type === 'header-1') {
-    return (
-      <header style={styleObj} className="py-4 px-4 bg-white relative z-10 border-b border-gray-100">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <div className="text-xl sm:text-2xl font-bold truncate max-w-[200px] sm:max-w-none">{logo}</div>
-          
-          {/* Desktop navigation */}
-          <nav className="hidden md:flex space-x-8">
-            {menuItems.map((item: any, index: number) => (
-              <a 
-                key={index} 
-                href={item.url} 
-                className="font-medium text-gray-600 hover:text-gray-900"
-                style={{ color: style.color }}
-              >
-                {item.text}
-              </a>
-            ))}
-          </nav>
-          
-          {/* Desktop CTA Button */}
-          <div className="hidden md:block">
-            <Button 
-              className="bg-primary-500 text-white"
-              style={{ 
-                backgroundColor: style.buttonColor || '#3b82f6',
-                color: style.buttonTextColor || '#ffffff'
-              }}
-              asChild
-            >
-              <a href={ctaUrl}>{ctaText}</a>
-            </Button>
-          </div>
-          
-          {/* Mobile menu button */}
-          <HamburgerButton />
-        </div>
-        
-        {/* Mobile dropdown menu */}
-        <MobileMenu />
-      </header>
-    );
-  }
+  // Create nav items from menu items
+  const navItems = menuItems.map((item: any) => ({
+    text: item.text,
+    url: item.url
+  }));
   
-  // Render header type 2 (without CTA button)
+  // CTA button config for header type 1
+  const ctaButtonConfig = type === 'header-1' ? {
+    text: ctaText,
+    url: ctaUrl,
+    style: {
+      backgroundColor: style.buttonColor || '#3b82f6',
+      color: style.buttonTextColor || '#ffffff'
+    }
+  } : undefined;
+  
   return (
-    <header style={styleObj} className="py-4 px-4 bg-white relative z-10 border-b border-gray-100">
-      <div className="max-w-6xl mx-auto flex justify-between items-center">
-        <div className="text-xl sm:text-2xl font-bold truncate max-w-[200px] sm:max-w-none">{logo}</div>
-        
-        {/* Desktop navigation */}
-        <nav className="hidden md:flex space-x-8">
-          {menuItems.map((item: any, index: number) => (
-            <a 
-              key={index} 
-              href={item.url} 
-              className="font-medium text-gray-600 hover:text-gray-900"
-              style={{ color: style.color }}
-            >
-              {item.text}
-            </a>
-          ))}
-        </nav>
-        
-        {/* Mobile menu button */}
-        <HamburgerButton />
-      </div>
-      
-      {/* Mobile dropdown menu */}
-      <MobileMenu />
-    </header>
+    <NavBar
+      logo={logo}
+      items={navItems}
+      ctaButton={ctaButtonConfig}
+      style={styleObj}
+      className="border-b border-gray-100"
+    />
   );
 }
