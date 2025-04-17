@@ -65,6 +65,75 @@ export default function Editor() {
   const searchParams = new URLSearchParams(window.location.search);
   const templateId = searchParams.get('template');
   
+  // Function to handle template loading with content preservation
+  const loadTemplateWithContentPreservation = async (templateId: string) => {
+    try {
+      // Fetch template from API
+      const response = await fetch(`/api/templates/${templateId}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch template (${response.status})`);
+      }
+      
+      const template = await response.json();
+      
+      // Check if there are existing components to preserve content from
+      if (template?.components) {
+        if (components.length > 0) {
+          // Create a mapping of existing components by type for content preservation
+          const existingContentMap = new Map();
+          components.forEach(component => {
+            existingContentMap.set(component.type, component.content);
+          });
+          
+          // Create new components array with preserved content where possible
+          const newComponents = template.components.map(templateComponent => {
+            const existingContent = existingContentMap.get(templateComponent.type);
+            
+            // If we have existing content for this component type, preserve it
+            if (existingContent) {
+              return {
+                ...templateComponent,
+                content: {
+                  ...templateComponent.content, // Get template structure
+                  ...existingContent // Override with user content
+                }
+              };
+            }
+            return templateComponent;
+          });
+          
+          setComponents(newComponents);
+          toast({
+            title: "Template applied",
+            description: `Template "${template.name}" applied with your content preserved.`,
+          });
+        } else {
+          // If no existing components, just load the template normally
+          setComponents(template.components);
+          toast({
+            title: "Template loaded",
+            description: `Template "${template.name}" loaded successfully. Customize it to fit your needs.`,
+          });
+        }
+        
+        setProjectName(template.name ? `My ${template.name}` : "My Landing Page");
+        setProjectDescription(template.description || "");
+      } else {
+        throw new Error("Invalid template data");
+      }
+    } catch (error) {
+      console.error("Failed to load template:", error);
+      toast({
+        title: "Error loading template",
+        description: "Could not load the selected template. Please try another one.",
+        variant: "destructive",
+      });
+      if (components.length === 0) {
+        resetEditor();
+      }
+    }
+  };
+  
   useEffect(() => {
     // Always show tutorial for testing
     setTutorialActive(true);
@@ -87,37 +156,11 @@ export default function Editor() {
           setLocation("/editor");
         }
       } else if (templateId) {
-        try {
-          // Fetch template from API
-          const response = await fetch(`/api/templates/${templateId}`);
-          if (!response.ok) {
-            throw new Error(`Failed to fetch template (${response.status})`);
-          }
-          
-          const template = await response.json();
-          
-          // Set components from template
-          if (template?.components) {
-            resetEditor(); // Clear any existing components
-            setComponents(template.components);
-            toast({
-              title: "Template loaded",
-              description: `Template "${template.name}" loaded successfully. Customize it to fit your needs.`,
-            });
-            setProjectName(template.name ? `My ${template.name}` : "My Landing Page");
-            setProjectDescription(template.description || "");
-          } else {
-            throw new Error("Invalid template data");
-          }
-        } catch (error) {
-          console.error("Failed to load template:", error);
-          toast({
-            title: "Error loading template",
-            description: "Could not load the selected template. Please try another one.",
-            variant: "destructive",
-          });
+        if (components.length === 0) {
+          // For initial load with empty canvas
           resetEditor();
         }
+        await loadTemplateWithContentPreservation(templateId);
       } else {
         resetEditor();
       }
