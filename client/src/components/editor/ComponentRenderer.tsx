@@ -1,5 +1,5 @@
 import React from 'react';
-import { Component } from '@shared/schema';
+import { Component } from '../../../shared/schema';
 import HeaderComponent from '../landing/HeaderComponent';
 import HeroComponent from '../landing/HeroComponent';
 import TextComponent from '../landing/TextComponent';
