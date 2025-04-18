@@ -2,8 +2,8 @@ import {
   users, type User, type InsertUser,
   templates, type Template, type InsertTemplate,
   projects, type Project, type InsertProject,
-  type Component
-} from "../client/src/components/shared/schema";
+  type PageComponent, type Component
+} from "@shared/schema";
 
 // Storage interface for CRUD operations
 export interface IStorage {
