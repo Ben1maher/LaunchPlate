@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Component } from '@shared/schema';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ interface HeaderComponentProps {
 
 export default function HeaderComponent({ component }: HeaderComponentProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   
   // Extract component data
   const { type, content, style } = component;
@@ -18,6 +19,23 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
   const menuItems = content.menuItems || [];
   const ctaText = content.ctaText || 'Sign Up';
   const ctaUrl = content.ctaUrl || '#';
+
+  // Set mounted state on initial render
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // Close menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(false);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Generate inline style object
   const styleObj = {
@@ -41,6 +59,9 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
     setIsOpen(!isOpen);
   };
 
+  // If component isn't mounted yet, return null
+  if (!isMounted) return null;
+
   return (
     <nav className="shadow-sm" style={styleObj}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,7 +72,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
           </div>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex space-x-6">
+          <div className="hidden md:flex items-center space-x-6">
             {menuItems.map((item: any, index: number) => (
               <a
                 key={index}
@@ -65,7 +86,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             {/* Desktop CTA button */}
             {showCta && (
               <Button 
-                className="bg-primary text-white"
+                className="bg-primary text-white ml-2"
                 style={ctaButtonStyle}
                 asChild
               >
@@ -74,11 +95,11 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             )}
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu button - ALWAYS show on mobile */}
+          <div className="block md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-gray-700 focus:outline-none"
+              className="text-gray-700 p-2 focus:outline-none"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
@@ -87,9 +108,12 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      {isOpen && (
-        <div className="md:hidden px-4 pt-2 pb-4 space-y-3 border-t border-gray-100">
+      {/* Mobile Nav - controlled by isOpen state */}
+      <div 
+        className={`${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} 
+        md:hidden overflow-hidden transition-all duration-300 ease-in-out`}
+      >
+        <div className="px-4 py-2 space-y-3 border-t border-gray-100">
           {menuItems.map((item: any, index: number) => (
             <a
               key={index}
@@ -103,7 +127,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
           
           {/* Mobile CTA button */}
           {showCta && (
-            <div className="pt-2">
+            <div className="pt-2 pb-3">
               <Button 
                 className="w-full bg-primary text-white"
                 style={ctaButtonStyle}
@@ -114,7 +138,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             </div>
           )}
         </div>
-      )}
+      </div>
     </nav>
   );
 }
