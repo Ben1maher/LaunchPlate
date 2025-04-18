@@ -37,25 +37,24 @@ export default function SiteHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link href="/">
-            <a className="flex-shrink-0 cursor-pointer">
+          <div className="flex-shrink-0 cursor-pointer">
+            <Link href="/">
               {Logo}
-            </a>
-          </Link>
+            </Link>
+          </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, index) => (
-              <Link 
-                key={index} 
-                href={item.url}
-              >
-                <a className={`font-medium hover:text-primary ${
-                  location === item.url ? 'text-primary' : 'text-gray-700'
-                }`}>
-                  {item.text}
-                </a>
-              </Link>
+              <div key={index} className="inline-block">
+                <Link href={item.url}>
+                  <span className={`font-medium hover:text-primary cursor-pointer ${
+                    location === item.url ? 'text-primary' : 'text-gray-700'
+                  }`}>
+                    {item.text}
+                  </span>
+                </Link>
+              </div>
             ))}
             
             {/* Desktop CTA button */}
@@ -84,19 +83,18 @@ export default function SiteHeader() {
       {isOpen && (
         <div className="md:hidden px-4 pt-2 pb-4 space-y-3 border-t border-gray-100">
           {navItems.map((item, index) => (
-            <Link 
-              key={index} 
-              href={item.url}
-            >
-              <a 
-                className={`block py-2 font-medium hover:text-primary ${
-                  location === item.url ? 'text-primary' : 'text-gray-700'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.text}
-              </a>
-            </Link>
+            <div key={index} className="block">
+              <Link href={item.url}>
+                <span 
+                  className={`block py-2 font-medium hover:text-primary cursor-pointer ${
+                    location === item.url ? 'text-primary' : 'text-gray-700'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.text}
+                </span>
+              </Link>
+            </div>
           ))}
           
           {/* Mobile CTA button */}
