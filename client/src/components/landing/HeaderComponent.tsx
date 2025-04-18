@@ -12,35 +12,39 @@ interface HeaderComponentProps {
 }
 
 export default function HeaderComponent({ component }: HeaderComponentProps) {
-  const { type, content, style } = component;
+  // Log content to debug what's passed in from the template editor
+  console.log("🔍 HeaderComponent content:", component.content);
 
-  const logo = content.logo || "Your Logo";
-  const menuItems = content.menuItems || [];
+  const { content = {}, style = {}, type } = component;
 
-  const ctaButton =
-    type === "header-1" && content.ctaText
-      ? {
-          text: content.ctaText,
-          url: content.ctaUrl || "#",
-          className: "bg-primary text-white",
-          style: {
-            backgroundColor: style?.buttonColor,
-            color: style?.buttonTextColor,
-          },
-        }
-      : undefined;
+  // Safe defaults for debugging
+  const logo = content.logo || "LaunchPlate";
+  const menuItems = Array.isArray(content.menuItems)
+    ? content.menuItems
+    : [
+        { text: "Home", url: "#" },
+        { text: "Features", url: "#" },
+        { text: "Pricing", url: "#" },
+      ];
+
+  const ctaText = content.ctaText || "Sign Up";
+  const ctaUrl = content.ctaUrl || "#";
+  const showCta = type === "header-1";
 
   return (
     <NavBar
       logo={logo}
       items={menuItems}
-      ctaButton={ctaButton}
-      style={{
-        backgroundColor: style?.backgroundColor || "#ffffff",
-        borderBottom: style?.borderBottom || "1px solid #e5e7eb",
-        fontFamily: style?.fontFamily,
-        color: style?.color || "#000000",
-      }}
+      ctaButton={
+        showCta
+          ? {
+              text: ctaText,
+              url: ctaUrl,
+              className: "bg-primary text-white",
+            }
+          : undefined
+      }
+      style={style}
     />
   );
 }
