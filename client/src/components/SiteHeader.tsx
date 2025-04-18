@@ -37,10 +37,8 @@ export default function SiteHeader() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
-          <Link href="/">
-            <a className="flex-shrink-0 cursor-pointer">
-              {Logo}
-            </a>
+          <Link href="/" className="flex-shrink-0 cursor-pointer">
+            {Logo}
           </Link>
 
           {/* Desktop Nav */}
@@ -49,12 +47,11 @@ export default function SiteHeader() {
               <Link 
                 key={index} 
                 href={item.url}
-              >
-                <a className={`font-medium hover:text-primary ${
+                className={`font-medium hover:text-primary ${
                   location === item.url ? 'text-primary' : 'text-gray-700'
-                }`}>
-                  {item.text}
-                </a>
+                }`}
+              >
+                {item.text}
               </Link>
             ))}
             
@@ -87,15 +84,12 @@ export default function SiteHeader() {
             <Link 
               key={index} 
               href={item.url}
+              className={`block py-2 font-medium hover:text-primary ${
+                location === item.url ? 'text-primary' : 'text-gray-700'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
-              <a 
-                className={`block py-2 font-medium hover:text-primary ${
-                  location === item.url ? 'text-primary' : 'text-gray-700'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.text}
-              </a>
+              {item.text}
             </Link>
           ))}
           
