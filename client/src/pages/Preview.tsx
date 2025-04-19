@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "wouter";
-import { Project } from "@shared/schema";
+import { Project, Component } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import ComponentRenderer from "../components/editor/ComponentRenderer";
-import { ArrowLeft, Pencil, Download } from "lucide-react";
+import { ArrowLeft, Pencil, Download, Monitor, Tablet, Smartphone } from "lucide-react";
 import { Link } from "wouter";
 
 export default function Preview() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
   const projectId = params?.id ? parseInt(params.id) : undefined;
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewportSize, setViewportSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -95,6 +96,34 @@ export default function Preview() {
         </div>
         
         <div className="flex items-center space-x-2">
+          {/* Viewport Controls */}
+          <div className="flex items-center bg-gray-800 rounded overflow-hidden mr-3">
+            <Button
+              variant={viewportSize === 'desktop' ? 'default' : 'ghost'}
+              size="icon"
+              className="h-8 w-8 rounded-none"
+              onClick={() => setViewportSize('desktop')}
+            >
+              <Monitor className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewportSize === 'tablet' ? 'default' : 'ghost'}
+              size="icon"
+              className="h-8 w-8 rounded-none"
+              onClick={() => setViewportSize('tablet')}
+            >
+              <Tablet className="h-4 w-4" />
+            </Button>
+            <Button
+              variant={viewportSize === 'mobile' ? 'default' : 'ghost'}
+              size="icon"
+              className="h-8 w-8 rounded-none"
+              onClick={() => setViewportSize('mobile')}
+            >
+              <Smartphone className="h-4 w-4" />
+            </Button>
+          </div>
+          
           <Button 
             variant="outline" 
             size="sm" 
@@ -112,14 +141,22 @@ export default function Preview() {
       </header>
       
       {/* Preview Content */}
-      <div className="flex-1 overflow-y-auto bg-gray-200">
-        <div className="max-w-screen-lg mx-auto bg-white shadow-md my-8">
-          {project.components.length > 0 ? (
-            project.components.map((component, index) => (
+      <div className="flex-1 overflow-y-auto bg-gray-200 p-8">
+        <div 
+          data-viewport={viewportSize}
+          className={`mx-auto bg-white shadow-md transition-all duration-300 ${
+            viewportSize === 'tablet' ? 'max-w-xl' : 
+            viewportSize === 'mobile' ? 'max-w-sm' : 
+            'max-w-screen-lg'
+          }`}
+        >
+          {project.components && Array.isArray(project.components) && project.components.length > 0 ? (
+            (project.components as Component[]).map((component: Component, index: number) => (
               <ComponentRenderer 
                 key={component.id || index}
                 component={component}
                 inEditor={false}
+                viewportMode={viewportSize}
               />
             ))
           ) : (

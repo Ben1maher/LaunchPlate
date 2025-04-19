@@ -105,10 +105,20 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
           {isMobile && (
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 p-2 focus:outline-none border border-gray-200 rounded-md hover:bg-gray-100"
+              className={`text-gray-700 p-2 focus:outline-none border ${isOpen ? 'border-gray-400 bg-gray-100' : 'border-gray-200'} rounded-md hover:bg-gray-100 transition-colors flex items-center gap-2`}
               aria-label="Toggle menu"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? (
+                <>
+                  <X size={20} /> 
+                  <span className="text-sm">Close</span>
+                </>
+              ) : (
+                <>
+                  <Menu size={20} />
+                  <span className="text-sm">Menu</span>
+                </>
+              )}
             </button>
           )}
         </div>
@@ -116,12 +126,15 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
 
       {/* Mobile Nav */}
       {isMobile && isOpen && (
-        <div className="px-4 pt-2 pb-4 space-y-2 border-t border-gray-100 bg-white absolute w-full z-50">
+        <div 
+          className="px-4 pt-2 pb-4 space-y-2 border-t border-gray-100 bg-white absolute w-full z-50 shadow-lg animate-in fade-in slide-in-from-top-5 duration-200"
+          style={{ left: 0, right: 0 }}
+        >
           {menuItems.map((item: any, index: number) => (
             <a
               key={index}
               href={item.url}
-              className="block py-2 text-gray-700 hover:text-primary font-medium"
+              className="block py-3 px-2 text-gray-700 hover:text-primary hover:bg-gray-50 font-medium rounded-md transition-colors"
               onClick={() => setIsOpen(false)}
             >
               {item.text}
@@ -130,9 +143,9 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
           
           {/* Mobile CTA button */}
           {showCta && (
-            <div className="pt-2">
+            <div className="pt-3 mt-2 border-t border-gray-100">
               <Button 
-                className="w-full bg-primary text-white"
+                className="w-full bg-primary text-white py-5"
                 style={ctaButtonStyle}
                 asChild
               >
