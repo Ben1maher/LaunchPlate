@@ -889,6 +889,11 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
 
 // Style properties for components
 function RenderStyleProperties({ component, updateComponent }: { component: Component, updateComponent: (id: string, updates: Partial<Component>) => void }) {
+  const [bgUploading, setBgUploading] = useState(false);
+  const [bgUploadError, setBgUploadError] = useState<string | null>(null);
+  const bgFileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
+
   const updateStyle = (key: string, value: any) => {
     updateComponent(component.id, {
       style: {
@@ -896,6 +901,60 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
         [key]: value
       }
     });
+  };
+  
+  // Handle background image upload
+  const handleBgImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    
+    const file = files[0];
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setBgUploadError("Please select an image file (JPG, PNG, GIF, etc.)");
+      return;
+    }
+    
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      setBgUploadError("Image size exceeds 5MB limit");
+      return;
+    }
+    
+    setBgUploading(true);
+    setBgUploadError(null);
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch('/api/upload/image', {
+        method: 'POST',
+        body: formData
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to upload image');
+      }
+      
+      const data = await response.json();
+      updateStyle('backgroundImage', data.url);
+      toast({
+        title: "Background image uploaded",
+        description: "Your background image has been uploaded and applied.",
+        duration: 3000
+      });
+    } catch (error) {
+      console.error('Background image upload error:', error);
+      setBgUploadError("Failed to upload image. Please try again.");
+    } finally {
+      setBgUploading(false);
+      // Clear the file input
+      if (bgFileInputRef.current) {
+        bgFileInputRef.current.value = '';
+      }
+    }
   };
 
   // Common style properties for most components
@@ -1014,7 +1073,49 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
           {component.style.backgroundType === 'image' && (
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+                {/* Background Image upload section */}
+                <div className="mb-4 border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+                  <div className="text-center">
+                    <Image className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                    <div className="text-xs text-gray-600 mb-2">
+                      Upload a background image
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      ref={bgFileInputRef}
+                      onChange={handleBgImageUpload}
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="w-full"
+                      onClick={() => bgFileInputRef.current?.click()}
+                      disabled={bgUploading}
+                    >
+                      {bgUploading ? (
+                        <div className="flex items-center">
+                          <div className="animate-spin mr-2 h-4 w-4 border-2 border-gray-500 border-t-transparent rounded-full"></div>
+                          Uploading...
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center gap-2">
+                          <Upload className="h-4 w-4" />
+                          Choose Background Image
+                        </div>
+                      )}
+                    </Button>
+                    
+                    {bgUploadError && (
+                      <Alert variant="destructive" className="mt-2 py-2">
+                        <AlertDescription className="text-xs">{bgUploadError}</AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+                </div>
+              
+                <label className="text-xs text-gray-600 block mb-1">Or enter image URL</label>
                 <Input
                   value={component.style.backgroundImage || ''}
                   onChange={(e) => {
@@ -1043,6 +1144,14 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                           backgroundRepeat: component.style.backgroundRepeat || 'no-repeat'
                         }}
                       ></div>
+                    </div>
+                    <div className="mt-1 text-xs text-right">
+                      <button 
+                        className="text-destructive hover:text-destructive-foreground"
+                        onClick={() => updateStyle('backgroundImage', '')}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 )}
