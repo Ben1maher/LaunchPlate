@@ -198,6 +198,7 @@ export default function Canvas() {
         >
           {/* Actual canvas with responsive preview */}
           <div 
+            data-viewport={viewportSize}
             className={`bg-white shadow-sm rounded-lg overflow-hidden transition-all duration-300 ${
               viewportSize === 'tablet' ? 'max-w-xl mx-auto' : 
               viewportSize === 'mobile' ? 'max-w-sm mx-auto' : 
