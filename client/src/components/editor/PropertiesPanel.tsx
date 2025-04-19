@@ -940,7 +940,21 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
       }
       
       const data = await response.json();
+      // Update both backgroundImage and backgroundType to ensure proper rendering
       updateStyle('backgroundImage', data.url);
+      updateStyle('backgroundType', 'image');
+      
+      // Set default background properties if not already set
+      if (!component.style.backgroundSize) {
+        updateStyle('backgroundSize', 'cover');
+      }
+      if (!component.style.backgroundPosition) {
+        updateStyle('backgroundPosition', 'center');
+      }
+      if (!component.style.backgroundRepeat) {
+        updateStyle('backgroundRepeat', 'no-repeat');
+      }
+      
       toast({
         title: "Background image uploaded",
         description: "Your background image has been uploaded and applied.",
@@ -1124,6 +1138,11 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     // Remove 'url()' if the user pastes a CSS background-image value
                     const cleanUrl = url.replace(/^url\(['"]?|['"]?\)$/g, '');
                     updateStyle('backgroundImage', cleanUrl);
+                    
+                    // If adding a URL, make sure backgroundType is set to 'image'
+                    if (cleanUrl && component.style.backgroundType !== 'image') {
+                      updateStyle('backgroundType', 'image');
+                    }
                   }}
                   placeholder="https://example.com/image.jpg"
                   className="text-sm"
@@ -1149,7 +1168,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     <div className="mt-1 text-xs text-right">
                       <button 
                         className="text-destructive hover:text-destructive-foreground"
-                        onClick={() => updateStyle('backgroundImage', '')}
+                        onClick={() => {
+                          updateStyle('backgroundImage', '');
+                          updateStyle('backgroundType', 'color'); // Reset to color background type
+                        }}
                       >
                         Remove
                       </button>
