@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Component } from '@shared/schema';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,9 +8,6 @@ interface HeaderComponentProps {
 }
 
 export default function HeaderComponent({ component }: HeaderComponentProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-  
   // Extract component data
   const { type, content, style } = component;
   
@@ -19,30 +16,12 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
   const menuItems = content.menuItems || [];
   const ctaText = content.ctaText || 'Sign Up';
   const ctaUrl = content.ctaUrl || '#';
-
-  // Set mounted state on initial render
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Close menu on window resize
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsOpen(false);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+  const showCta = type === 'header-1';
+  
   // Generate inline style object
   const styleObj = {
     backgroundColor: style.backgroundColor || '#ffffff',
     borderBottom: style.borderBottom || '1px solid #e5e7eb',
-    fontFamily: style.fontFamily,
-    color: style.color || '#000000',
     ...style
   };
   
@@ -52,18 +31,11 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
     color: style.buttonTextColor || '#ffffff',
   };
   
-  const showCta = type === 'header-1';
+  // State for mobile menu
+  const [isOpen, setIsOpen] = useState(false);
   
-  // Handle menu toggle
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  // If component isn't mounted yet, return null
-  if (!isMounted) return null;
-
   return (
-    <nav className="shadow-sm" style={styleObj}>
+    <nav className="bg-white shadow-sm" style={styleObj}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
@@ -86,7 +58,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             {/* Desktop CTA button */}
             {showCta && (
               <Button 
-                className="bg-primary text-white ml-2"
+                className="bg-primary text-white"
                 style={ctaButtonStyle}
                 asChild
               >
@@ -95,12 +67,11 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             )}
           </div>
 
-          {/* Mobile menu button - ALWAYS show on mobile */}
-          <div className="block md:hidden">
+          {/* Mobile menu button */}
+          <div className="md:hidden">
             <button
-              onClick={toggleMenu}
-              className="text-gray-700 p-2 focus:outline-none"
-              aria-label="Toggle menu"
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-gray-700 focus:outline-none"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -108,12 +79,9 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
         </div>
       </div>
 
-      {/* Mobile Nav - controlled by isOpen state */}
-      <div 
-        className={`${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'} 
-        md:hidden overflow-hidden transition-all duration-300 ease-in-out`}
-      >
-        <div className="px-4 py-2 space-y-3 border-t border-gray-100">
+      {/* Mobile Nav */}
+      {isOpen && (
+        <div className="md:hidden px-4 pt-2 pb-4 space-y-2 border-t border-gray-100">
           {menuItems.map((item: any, index: number) => (
             <a
               key={index}
@@ -127,7 +95,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
           
           {/* Mobile CTA button */}
           {showCta && (
-            <div className="pt-2 pb-3">
+            <div className="pt-2">
               <Button 
                 className="w-full bg-primary text-white"
                 style={ctaButtonStyle}
@@ -138,7 +106,7 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
             </div>
           )}
         </div>
-      </div>
+      )}
     </nav>
   );
 }
