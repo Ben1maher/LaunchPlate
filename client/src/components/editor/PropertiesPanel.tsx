@@ -889,6 +889,7 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
 
 // Style properties for components
 function RenderStyleProperties({ component, updateComponent }: { component: Component, updateComponent: (id: string, updates: Partial<Component>) => void }) {
+  // State for background image upload
   const [bgUploading, setBgUploading] = useState(false);
   const [bgUploadError, setBgUploadError] = useState<string | null>(null);
   const bgFileInputRef = useRef<HTMLInputElement>(null);
