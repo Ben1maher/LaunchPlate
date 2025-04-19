@@ -17,9 +17,10 @@ interface ComponentRendererProps {
   isSelected?: boolean;
   onClick?: () => void;
   inEditor: boolean;
+  viewportMode?: 'desktop' | 'tablet' | 'mobile';
 }
 
-export default function ComponentRenderer({ component, isSelected = false, onClick, inEditor }: ComponentRendererProps) {
+export default function ComponentRenderer({ component, isSelected = false, onClick, inEditor, viewportMode = 'desktop' }: ComponentRendererProps) {
   const { removeComponent, updateComponent } = useEditor();
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -46,7 +47,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
     switch (component.type) {
       case 'header-1':
       case 'header-2':
-        return <HeaderComponent component={component} />;
+        return <HeaderComponent component={component} viewportMode={viewportMode} />;
       
       case 'hero-split':
       case 'hero-centered':

@@ -292,6 +292,7 @@ export default function Canvas() {
                         isSelected={selectedComponent?.id === component.id}
                         onClick={() => setSelectedComponent(component)}
                         inEditor={true}
+                        viewportMode={viewportSize}
                       />
                     </div>
                   ))}

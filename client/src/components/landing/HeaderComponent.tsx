@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 
 interface HeaderComponentProps {
   component: Component;
+  viewportMode?: 'desktop' | 'tablet' | 'mobile';
 }
 
-export default function HeaderComponent({ component }: HeaderComponentProps) {
+export default function HeaderComponent({ component, viewportMode }: HeaderComponentProps) {
   // Extract component data
   const { type, content, style } = component;
   
@@ -37,43 +38,28 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
   
   // Check for mobile viewport size
   useEffect(() => {
-    // Check if we're in the editor preview 
+    // If viewportMode is provided from the editor context, use it directly
+    if (viewportMode) {
+      setIsMobile(viewportMode === 'mobile');
+      return;
+    }
+
+    // Otherwise use our own detection method for non-editor views
     const checkMobileView = () => {
-      // Find the closest viewport container (for editor)
-      const viewportContainer = document.querySelector('[data-viewport]');
-      
-      if (viewportContainer) {
-        // We're in the editor - use the data attribute
-        const viewport = viewportContainer.getAttribute('data-viewport');
-        setIsMobile(viewport === 'mobile');
-      } else {
-        // We're in a regular view - use media query
-        setIsMobile(window.innerWidth < 768);
-      }
+      setIsMobile(window.innerWidth < 768);
     };
     
     // Initial check
     checkMobileView();
-    
-    // Set up mutation observer to detect viewport changes in the editor
-    const observer = new MutationObserver(checkMobileView);
-    const container = document.body;
-    
-    observer.observe(container, { 
-      attributes: true,
-      subtree: true,
-      attributeFilter: ['data-viewport']
-    });
     
     // Add resize event listener for regular views
     window.addEventListener('resize', checkMobileView);
     
     // Clean up
     return () => {
-      observer.disconnect();
       window.removeEventListener('resize', checkMobileView);
     };
-  }, []);
+  }, [viewportMode]);
   
   return (
     <nav className="bg-white shadow-sm relative" style={styleObj}>
@@ -85,8 +71,8 @@ export default function HeaderComponent({ component }: HeaderComponentProps) {
           </div>
           
           {/* For debugging in the editor */}
-          <span className="hidden absolute top-0 right-0 text-xs bg-red-100 px-1">
-            {isMobile ? 'Mobile' : 'Desktop'}
+          <span className="absolute top-0 right-0 text-xs bg-red-100 px-1 opacity-50 z-50">
+            {isMobile ? 'Mobile' : 'Desktop'} {viewportMode && `(${viewportMode})`}
           </span>
 
           {/* Desktop Nav */}
