@@ -32,32 +32,39 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
     color: style.buttonTextColor || '#ffffff',
   };
   
-  // State for mobile menu
+  // State for mobile/tablet menu
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   
-  // Check for mobile viewport size
+  // Helper to determine if we should show mobile menu
+  const showMobileMenu = isMobile || isTablet;
+  
+  // Check for mobile and tablet viewport sizes
   useEffect(() => {
     // If viewportMode is provided from the editor context, use it directly
     if (viewportMode) {
       setIsMobile(viewportMode === 'mobile');
+      setIsTablet(viewportMode === 'tablet');
       return;
     }
 
     // Otherwise use our own detection method for non-editor views
-    const checkMobileView = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkResponsiveView = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1024);
     };
     
     // Initial check
-    checkMobileView();
+    checkResponsiveView();
     
     // Add resize event listener for regular views
-    window.addEventListener('resize', checkMobileView);
+    window.addEventListener('resize', checkResponsiveView);
     
     // Clean up
     return () => {
-      window.removeEventListener('resize', checkMobileView);
+      window.removeEventListener('resize', checkResponsiveView);
     };
   }, [viewportMode]);
   
@@ -72,11 +79,11 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
           
           {/* For debugging in the editor */}
           <span className="absolute top-0 right-0 text-xs bg-red-100 px-1 opacity-50 z-50">
-            {isMobile ? 'Mobile' : 'Desktop'} {viewportMode && `(${viewportMode})`}
+            {isMobile ? 'Mobile' : isTablet ? 'Tablet' : 'Desktop'} {viewportMode && `(${viewportMode})`}
           </span>
 
-          {/* Desktop Nav */}
-          {!isMobile && (
+          {/* Desktop Nav - only visible on desktop */}
+          {!showMobileMenu && (
             <div className="flex items-center space-x-6">
               {menuItems.map((item: any, index: number) => (
                 <a
@@ -101,8 +108,8 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
             </div>
           )}
 
-          {/* Mobile menu button */}
-          {isMobile && (
+          {/* Mobile/Tablet menu button */}
+          {showMobileMenu && (
             <button
               onClick={() => setIsOpen(!isOpen)}
               className={`text-gray-700 p-2 focus:outline-none border ${isOpen ? 'border-gray-400 bg-gray-100' : 'border-gray-200'} rounded-md hover:bg-gray-100 transition-colors flex items-center gap-2`}
@@ -124,8 +131,8 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
         </div>
       </div>
 
-      {/* Mobile Nav */}
-      {isMobile && isOpen && (
+      {/* Mobile/Tablet Nav */}
+      {showMobileMenu && isOpen && (
         <div 
           className="px-4 pt-2 pb-4 space-y-2 border-t border-gray-100 bg-white absolute w-full z-50 shadow-lg animate-in fade-in slide-in-from-top-5 duration-200"
           style={{ left: 0, right: 0 }}
@@ -141,7 +148,7 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
             </a>
           ))}
           
-          {/* Mobile CTA button */}
+          {/* Mobile/Tablet CTA button */}
           {showCta && (
             <div className="pt-3 mt-2 border-t border-gray-100">
               <Button 
