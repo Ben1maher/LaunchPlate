@@ -10,29 +10,52 @@ export default function HeroComponent({ component }: HeroComponentProps) {
   // Extract component data
   const { type, content, style } = component;
   
-  // Generate inline style object based on background type
-  let styleObj: React.CSSProperties = {
-    padding: style.padding || '64px 16px',
-    fontFamily: style.fontFamily,
-    color: style.color,
-    position: 'relative',
-    overflow: 'hidden'
+  // Start with a clean style object
+  const baseStyleObj: React.CSSProperties = {
+    position: 'relative' as 'relative',
+    overflow: 'hidden',
+    padding: style.padding || '64px 16px'
   };
-
+  
+  // Add other styles from component.style
+  // Ensure we don't copy over properties that might conflict with TypeScript typings
+  Object.keys(style).forEach(key => {
+    if (key !== 'position' && key !== 'overflow') {
+      (baseStyleObj as any)[key] = style[key];
+    }
+  });
+  
+  // Copy base style to final style object (to be modified)
+  let styleObj: React.CSSProperties = { ...baseStyleObj };
+  
   // Apply the appropriate background styling based on the type
+  // This will override any background properties in the style object
   if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
     styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+    
+    // Clear other background properties to avoid conflicts
+    delete styleObj.backgroundImage;
+    delete styleObj.backgroundColor;
   } else if (style.backgroundType === 'image' && style.backgroundImage) {
+    console.log('Applying background image:', style.backgroundImage);
+    
+    // Explicitly set these properties for background image
     styleObj.backgroundImage = `url(${style.backgroundImage})`;
     styleObj.backgroundSize = style.backgroundSize || 'cover';
     styleObj.backgroundPosition = style.backgroundPosition || 'center';
     styleObj.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+    
+    // Clear potentially conflicting properties
+    delete styleObj.background;
+    delete styleObj.backgroundColor;
   } else {
+    // Default to solid color background
     styleObj.backgroundColor = style.backgroundColor || '#f9fafb';
+    
+    // Clear other background properties to avoid conflicts
+    delete styleObj.backgroundImage;
+    delete styleObj.background;
   }
-
-  // Add any other style properties
-  Object.assign(styleObj, style);
 
   // Heading styles with mobile responsiveness
   const headingStyle = {

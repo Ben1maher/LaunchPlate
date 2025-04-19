@@ -19,11 +19,47 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   const ctaUrl = content.ctaUrl || '#';
   const showCta = type === 'header-1';
   
-  // Generate inline style object
-  const styleObj = {
-    backgroundColor: style.backgroundColor || '#ffffff',
-    borderBottom: style.borderBottom || '1px solid #e5e7eb',
-    ...style
+  // Start with a clean style object
+  const baseStyleObj: React.CSSProperties = {
+    borderBottom: style.borderBottom || '1px solid #e5e7eb'
+  };
+  
+  // Add other styles from component.style
+  Object.keys(style).forEach(key => {
+    if (key !== 'borderBottom') {
+      (baseStyleObj as any)[key] = style[key];
+    }
+  });
+  
+  // Copy base style to final style object (to be modified)
+  let styleObj: React.CSSProperties = { ...baseStyleObj };
+  
+  // Apply the appropriate background styling based on the type
+  if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
+    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+    
+    // Clear other background properties to avoid conflicts
+    delete styleObj.backgroundImage;
+    delete styleObj.backgroundColor;
+  } else if (style.backgroundType === 'image' && style.backgroundImage) {
+    console.log('Header: Applying background image:', style.backgroundImage);
+    
+    // Explicitly set these properties for background image
+    styleObj.backgroundImage = `url(${style.backgroundImage})`;
+    styleObj.backgroundSize = style.backgroundSize || 'cover';
+    styleObj.backgroundPosition = style.backgroundPosition || 'center';
+    styleObj.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+    
+    // Clear potentially conflicting properties
+    delete styleObj.background;
+    delete styleObj.backgroundColor;
+  } else {
+    // Default to solid color background
+    styleObj.backgroundColor = style.backgroundColor || '#ffffff';
+    
+    // Clear other background properties to avoid conflicts
+    delete styleObj.backgroundImage;
+    delete styleObj.background;
   };
   
   // CTA button styling
