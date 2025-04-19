@@ -10,6 +10,7 @@ import { getComponentData } from "./componentData";
 import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ColorPicker } from "@/components/ui/color-picker";
 
 export default function PropertiesPanel() {
   const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
@@ -1185,19 +1186,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
           {(component.style.backgroundType === 'color' || !component.style.backgroundType) && (
             <div>
               <label className="text-xs text-gray-600 block mb-1">Color</label>
-              <div className="flex">
-                <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
-                  <div 
-                    className="w-6 h-6 rounded-full border border-gray-300"
-                    style={{ backgroundColor: component.style.backgroundColor || '#F9FAFB' }}
-                  ></div>
-                </div>
-                <Input
-                  value={component.style.backgroundColor || '#F9FAFB'}
-                  onChange={(e) => updateStyle('backgroundColor', e.target.value)}
-                  className="rounded-l-none flex-1"
-                />
-              </div>
+              <ColorPicker
+                color={component.style.backgroundColor || '#F9FAFB'}
+                onChange={(color) => updateStyle('backgroundColor', color)}
+              />
             </div>
           )}
           
@@ -1225,36 +1217,18 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               
               <div>
                 <label className="text-xs text-gray-600 block mb-1">Start Color</label>
-                <div className="flex">
-                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
-                    <div 
-                      className="w-6 h-6 rounded-full border border-gray-300"
-                      style={{ backgroundColor: component.style.gradientStartColor || '#4F46E5' }}
-                    ></div>
-                  </div>
-                  <Input
-                    value={component.style.gradientStartColor || '#4F46E5'}
-                    onChange={(e) => updateStyle('gradientStartColor', e.target.value)}
-                    className="rounded-l-none flex-1"
-                  />
-                </div>
+                <ColorPicker
+                  color={component.style.gradientStartColor || '#4F46E5'}
+                  onChange={(color) => updateStyle('gradientStartColor', color)}
+                />
               </div>
               
               <div>
                 <label className="text-xs text-gray-600 block mb-1">End Color</label>
-                <div className="flex">
-                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
-                    <div 
-                      className="w-6 h-6 rounded-full border border-gray-300"
-                      style={{ backgroundColor: component.style.gradientEndColor || '#0EA5E9' }}
-                    ></div>
-                  </div>
-                  <Input
-                    value={component.style.gradientEndColor || '#0EA5E9'}
-                    onChange={(e) => updateStyle('gradientEndColor', e.target.value)}
-                    className="rounded-l-none flex-1"
-                  />
-                </div>
+                <ColorPicker
+                  color={component.style.gradientEndColor || '#0EA5E9'}
+                  onChange={(color) => updateStyle('gradientEndColor', color)}
+                />
               </div>
               
               {/* Gradient Preview */}
@@ -1455,20 +1429,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               
               <div>
                 <label className="text-xs text-gray-600 block mb-1">Overlay Color</label>
-                <div className="flex">
-                  <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
-                    <div 
-                      className="w-6 h-6 rounded-full border border-gray-300"
-                      style={{ backgroundColor: component.style.overlayColor || 'rgba(0,0,0,0)' }}
-                    ></div>
-                  </div>
-                  <Input
-                    value={component.style.overlayColor || 'rgba(0,0,0,0)'}
-                    onChange={(e) => updateStyle('overlayColor', e.target.value)}
-                    className="rounded-l-none flex-1"
-                    placeholder="rgba(0,0,0,0.5)"
-                  />
-                </div>
+                <ColorPicker
+                  color={component.style.overlayColor || 'rgba(0,0,0,0)'}
+                  onChange={(color) => updateStyle('overlayColor', color)}
+                />
                 <div className="mt-1 text-xs text-gray-500">
                   Use rgba format for transparency (e.g., rgba(0,0,0,0.5))
                 </div>
@@ -1589,19 +1553,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs text-gray-600 block mb-1">Text Color</label>
-              <div className="flex">
-                <div className="w-10 h-8 bg-gray-50 border border-gray-300 rounded-l flex items-center justify-center">
-                  <div 
-                    className="w-6 h-6 rounded-full border border-gray-300"
-                    style={{ backgroundColor: component.style.color || '#111827' }}
-                  ></div>
-                </div>
-                <Input
-                  value={component.style.color || '#111827'}
-                  onChange={(e) => updateStyle('color', e.target.value)}
-                  className="rounded-l-none flex-1"
-                />
-              </div>
+              <ColorPicker
+                color={component.style.color || '#111827'}
+                onChange={(color) => updateStyle('color', color)}
+              />
             </div>
             <div>
               <label className="text-xs text-gray-600 block mb-1">Text Align</label>
