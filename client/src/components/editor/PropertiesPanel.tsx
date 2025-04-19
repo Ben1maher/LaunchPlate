@@ -338,14 +338,197 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
                 </div>
               </div>
               
-              <div>
-                <label className="text-xs text-gray-600 block mb-1">Image URL</label>
-                <Input
-                  value={component.content.imageUrl || ''}
-                  onChange={(e) => updateContent('imageUrl', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  className="text-sm"
-                />
+              <div className="space-y-4">
+                <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Hero Image</h3>
+                
+                {/* Image upload section */}
+                <div className="mb-2 border border-dashed border-gray-300 rounded-md p-4 bg-gray-50">
+                  <div className="text-center">
+                    <Image className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                    <div className="text-xs text-gray-600 mb-2">
+                      Upload an image for your hero section
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      id="hero-image-upload"
+                      onChange={async (e) => {
+                        const files = e.target.files;
+                        if (!files || files.length === 0) return;
+                        
+                        const file = files[0];
+                        
+                        // Validate file type
+                        if (!file.type.startsWith('image/')) {
+                          toast({
+                            title: "Invalid file type",
+                            description: "Please select an image file (JPG, PNG, GIF, etc.)",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        // Validate file size (5MB max)
+                        if (file.size > 5 * 1024 * 1024) {
+                          toast({
+                            title: "File too large",
+                            description: "Image size exceeds 5MB limit",
+                            variant: "destructive"
+                          });
+                          return;
+                        }
+                        
+                        try {
+                          const formData = new FormData();
+                          formData.append('image', file);
+                          
+                          const response = await fetch('/api/upload/image', {
+                            method: 'POST',
+                            body: formData
+                          });
+                          
+                          if (!response.ok) {
+                            throw new Error('Failed to upload image');
+                          }
+                          
+                          const data = await response.json();
+                          updateContent('imageUrl', data.url);
+                          
+                          toast({
+                            title: "Image uploaded",
+                            description: "Hero image has been uploaded successfully",
+                            duration: 3000
+                          });
+                        } catch (error) {
+                          console.error('Image upload error:', error);
+                          toast({
+                            title: "Upload failed",
+                            description: "Failed to upload image. Please try again.",
+                            variant: "destructive"
+                          });
+                        } finally {
+                          // Clear the file input
+                          e.target.value = '';
+                        }
+                      }}
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="w-full"
+                      onClick={() => document.getElementById('hero-image-upload')?.click()}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <Upload className="h-4 w-4" />
+                        Choose Image
+                      </div>
+                    </Button>
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+                  <Input
+                    value={component.content.imageUrl || ''}
+                    onChange={(e) => updateContent('imageUrl', e.target.value)}
+                    placeholder="https://example.com/image.jpg"
+                    className="text-sm"
+                  />
+                </div>
+                
+                {component.content.imageUrl && (
+                  <div className="mt-1 p-2 border rounded-md bg-gray-50">
+                    <div className="aspect-video relative bg-white rounded-sm overflow-hidden border">
+                      <img 
+                        src={component.content.imageUrl} 
+                        alt="Preview" 
+                        className="absolute inset-0 w-full h-full object-contain"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                          const nextElement = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                          if (nextElement) {
+                            nextElement.style.display = 'flex';
+                          }
+                        }}
+                      />
+                      <div 
+                        className="absolute inset-0 w-full h-full flex-col items-center justify-center bg-gray-100 hidden" 
+                        style={{ display: 'none' }}
+                      >
+                        <i className="ri-error-warning-line text-amber-500 text-xl mb-1"></i>
+                        <span className="text-xs text-gray-600">Image failed to load</span>
+                      </div>
+                    </div>
+                    <div className="mt-1 text-xs text-right">
+                      <button 
+                        className="text-destructive hover:text-destructive-foreground"
+                        onClick={() => updateContent('imageUrl', '')}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Image size and display options */}
+                {component.content.imageUrl && (
+                  <>
+                    <div>
+                      <label className="text-xs text-gray-600 block mb-1">Max Height</label>
+                      <Input
+                        value={component.content.imageMaxHeight || ''}
+                        onChange={(e) => updateContent('imageMaxHeight', e.target.value)}
+                        placeholder="e.g., 400px, 50vh, auto"
+                        className="text-sm"
+                      />
+                      <div className="mt-1 text-xs text-gray-500">
+                        Use CSS values like px, %, vh, or "auto"
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="text-xs text-gray-600 block mb-1">Object Fit</label>
+                      <Select
+                        value={component.content.imageObjectFit || 'cover'}
+                        onValueChange={(value) => updateContent('imageObjectFit', value)}
+                      >
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select fit mode" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="cover">Cover (fill container)</SelectItem>
+                          <SelectItem value="contain">Contain (show all)</SelectItem>
+                          <SelectItem value="fill">Fill (stretch)</SelectItem>
+                          <SelectItem value="none">None (original size)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div>
+                      <label className="text-xs text-gray-600 block mb-1">Image Position</label>
+                      <Select
+                        value={component.content.imagePosition || 'center'}
+                        onValueChange={(value) => updateContent('imagePosition', value)}
+                      >
+                        <SelectTrigger className="text-sm">
+                          <SelectValue placeholder="Select position" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="center">Center</SelectItem>
+                          <SelectItem value="top">Top</SelectItem>
+                          <SelectItem value="bottom">Bottom</SelectItem>
+                          <SelectItem value="left">Left</SelectItem>
+                          <SelectItem value="right">Right</SelectItem>
+                          <SelectItem value="top left">Top Left</SelectItem>
+                          <SelectItem value="top right">Top Right</SelectItem>
+                          <SelectItem value="bottom left">Bottom Left</SelectItem>
+                          <SelectItem value="bottom right">Bottom Right</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </>
+                )}
               </div>
             </>
           )}
