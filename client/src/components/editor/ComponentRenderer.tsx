@@ -51,7 +51,12 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
       
       case 'hero-split':
       case 'hero-centered':
-        return <HeroComponent component={component} />;
+        return <HeroComponent 
+          component={component} 
+          inEditor={inEditor} 
+          viewportMode={viewportMode} 
+          onClick={onClick} 
+        />;
       
       case 'heading':
       case 'text-block':

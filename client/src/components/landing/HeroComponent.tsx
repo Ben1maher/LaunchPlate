@@ -4,9 +4,17 @@ import { Button } from '@/components/ui/button';
 
 interface HeroComponentProps {
   component: Component;
+  inEditor?: boolean;
+  viewportMode?: 'desktop' | 'tablet' | 'mobile';
+  onClick?: () => void;
 }
 
-export default function HeroComponent({ component }: HeroComponentProps) {
+export default function HeroComponent({ 
+  component, 
+  inEditor = false, 
+  viewportMode = 'desktop',
+  onClick 
+}: HeroComponentProps) {
   // Extract component data
   const { type, content, style } = component;
   

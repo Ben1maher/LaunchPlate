@@ -55,6 +55,41 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [historyIndex, setHistoryIndex] = useState(0);
   
   const { toast } = useToast();
+  
+  // Hero image update event listener
+  useEffect(() => {
+    const handleHeroImageUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { componentId, imageUrl } = customEvent.detail;
+      
+      const component = components.find(c => c.id === componentId);
+      if (component) {
+        // Use updateComponent to update the image URL
+        const updatedContent = {
+          ...component.content,
+          imageUrl
+        };
+        
+        updateComponent(componentId, {
+          content: updatedContent
+        });
+        
+        toast({
+          title: imageUrl ? "Image Updated" : "Image Removed",
+          description: imageUrl ? "The hero image has been updated." : "The hero image has been removed.",
+          duration: 3000
+        });
+      }
+    };
+    
+    // Add event listener
+    document.addEventListener('hero:updateImage', handleHeroImageUpdate);
+    
+    // Cleanup
+    return () => {
+      document.removeEventListener('hero:updateImage', handleHeroImageUpdate);
+    };
+  }, [components, toast]);
 
   // Set components with history tracking
   const setComponents = (newComponents: Component[]) => {
