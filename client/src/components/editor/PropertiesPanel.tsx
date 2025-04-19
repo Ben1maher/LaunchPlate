@@ -940,20 +940,22 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
       }
       
       const data = await response.json();
-      // Update both backgroundImage and backgroundType to ensure proper rendering
-      updateStyle('backgroundImage', data.url);
-      updateStyle('backgroundType', 'image');
+      // Update all background properties at once to ensure proper rendering
+      const newStyles = {
+        backgroundImage: data.url,
+        backgroundType: 'image',
+        backgroundSize: component.style.backgroundSize || 'cover',
+        backgroundPosition: component.style.backgroundPosition || 'center',
+        backgroundRepeat: component.style.backgroundRepeat || 'no-repeat'
+      };
       
-      // Set default background properties if not already set
-      if (!component.style.backgroundSize) {
-        updateStyle('backgroundSize', 'cover');
-      }
-      if (!component.style.backgroundPosition) {
-        updateStyle('backgroundPosition', 'center');
-      }
-      if (!component.style.backgroundRepeat) {
-        updateStyle('backgroundRepeat', 'no-repeat');
-      }
+      // Apply all style updates at once
+      updateComponent(component.id, {
+        style: {
+          ...component.style,
+          ...newStyles
+        }
+      });
       
       toast({
         title: "Background image uploaded",
@@ -1137,12 +1139,35 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     const url = e.target.value;
                     // Remove 'url()' if the user pastes a CSS background-image value
                     const cleanUrl = url.replace(/^url\(['"]?|['"]?\)$/g, '');
-                    updateStyle('backgroundImage', cleanUrl);
+                    
+                    // Update all related properties at once
+                    const newStyles: Partial<Record<string, any>> = {
+                      backgroundImage: cleanUrl
+                    };
                     
                     // If adding a URL, make sure backgroundType is set to 'image'
                     if (cleanUrl && component.style.backgroundType !== 'image') {
-                      updateStyle('backgroundType', 'image');
+                      newStyles.backgroundType = 'image';
+                      
+                      // Set default background properties if not already set
+                      if (!component.style.backgroundSize) {
+                        newStyles.backgroundSize = 'cover';
+                      }
+                      if (!component.style.backgroundPosition) {
+                        newStyles.backgroundPosition = 'center';
+                      }
+                      if (!component.style.backgroundRepeat) {
+                        newStyles.backgroundRepeat = 'no-repeat';
+                      }
                     }
+                    
+                    // Apply all style updates at once
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        ...newStyles
+                      }
+                    });
                   }}
                   placeholder="https://example.com/image.jpg"
                   className="text-sm"
@@ -1169,8 +1194,14 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       <button 
                         className="text-destructive hover:text-destructive-foreground"
                         onClick={() => {
-                          updateStyle('backgroundImage', '');
-                          updateStyle('backgroundType', 'color'); // Reset to color background type
+                          // Update all properties at once
+                          updateComponent(component.id, {
+                            style: {
+                              ...component.style,
+                              backgroundImage: '',
+                              backgroundType: 'color'
+                            }
+                          });
                         }}
                       >
                         Remove
