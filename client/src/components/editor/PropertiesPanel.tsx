@@ -2093,7 +2093,21 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <label className="text-xs text-gray-600 block mb-1">Gradient Direction</label>
                 <Select
                   value={component.style.gradientDirection || 'to right'}
-                  onValueChange={(value) => updateStyle('gradientDirection', value)}
+                  onValueChange={(value) => {
+                    // Create the full style update with new direction
+                    const startColor = component.style.gradientStartColor || '#4F46E5';
+                    const endColor = component.style.gradientEndColor || '#0EA5E9';
+                    const gradient = `linear-gradient(${value}, ${startColor}, ${endColor})`;
+                    
+                    // Update all related gradient properties at once
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        gradientDirection: value,
+                        background: gradient
+                      }
+                    });
+                  }}
                 >
                   <SelectTrigger className="text-sm">
                     <SelectValue placeholder="Direction" />

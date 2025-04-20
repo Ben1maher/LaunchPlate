@@ -38,8 +38,15 @@ export default function HeroComponent({
   
   // Apply the appropriate background styling based on the type
   // This will override any background properties in the style object
-  if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
-    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+  if (style.backgroundType === 'gradient') {
+    // If the background property is directly set (e.g., by the PropertiesPanel component)
+    if (style.background) {
+      styleObj.background = style.background;
+    } 
+    // Otherwise, construct it from gradient properties
+    else if (style.gradientStartColor && style.gradientEndColor) {
+      styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+    }
     
     // Clear other background properties to avoid conflicts
     delete styleObj.backgroundImage;
