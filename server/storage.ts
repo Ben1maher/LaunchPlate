@@ -458,20 +458,26 @@ export class MemStorage implements IStorage {
                 { text: "Home", url: "#" },
                 { text: "Product", url: "#product" },
                 { text: "Features", url: "#features" },
-                { text: "Testimonials", url: "#testimonials" }
+                { text: "Testimonials", url: "#testimonials" },
+                { text: "Pricing", url: "#pricing" }
               ],
               ctaText: "Early Access",
               ctaUrl: "#signup"
             },
             style: {
-              backgroundColor: "#7c3aed",
+              backgroundType: "gradient",
+              gradientDirection: "to right",
+              gradientStartColor: "#7c3aed",
+              gradientEndColor: "#9333ea",
+              backgroundImage: "linear-gradient(to right, #7c3aed, #9333ea)",
               color: "#ffffff",
-              padding: "16px 24px"
+              padding: "16px 24px",
+              fontFamily: "Poppins, sans-serif"
             }
           },
           {
-            id: "hero-split",
-            type: "hero-split",
+            id: "hero-centered",
+            type: "hero-centered",
             content: {
               heading: "Launch Your Idea Faster",
               subheading: "The all-in-one platform for modern startups. Build, launch, and grow with tools designed for today's entrepreneurs.",
@@ -479,12 +485,19 @@ export class MemStorage implements IStorage {
               primaryButtonUrl: "#signup",
               secondaryButtonText: "Watch Demo",
               secondaryButtonUrl: "#demo",
-              imageUrl: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab"
+              backgroundImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3"
             },
             style: {
-              backgroundColor: "#8b5cf6",
+              backgroundType: "image",
+              backgroundImage: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
               color: "#ffffff",
-              padding: "80px 24px"
+              padding: "120px 24px",
+              minHeight: "600px",
+              textAlign: "center",
+              overlayColor: "rgba(79, 70, 229, 0.85)",
+              fontFamily: "Poppins, sans-serif"
             }
           },
           {
@@ -509,7 +522,8 @@ export class MemStorage implements IStorage {
               fontSize: "2.5rem",
               fontWeight: "bold",
               margin: "0 0 24px",
-              color: "#1f2937"
+              color: "#1f2937",
+              fontFamily: "Poppins, sans-serif"
             }
           },
           {
@@ -524,7 +538,19 @@ export class MemStorage implements IStorage {
               margin: "0 auto 48px",
               fontSize: "1.1rem",
               lineHeight: "1.6",
-              color: "#4b5563"
+              color: "#4b5563",
+              fontFamily: "Poppins, sans-serif"
+            }
+          },
+          {
+            id: "feature-blocks",
+            type: "text-block",
+            content: {
+              text: "<div class='grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4'><div class='bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-purple-600'><div class='rounded-full bg-purple-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-rocket-line text-2xl text-purple-600'></i></div><h3 class='text-xl font-bold mb-3 text-center'>Quick Launch</h3><p class='text-gray-600'>Go from idea to live product in days instead of months with our streamlined tools and templates.</p></div><div class='bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-indigo-600'><div class='rounded-full bg-indigo-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-pie-chart-line text-2xl text-indigo-600'></i></div><h3 class='text-xl font-bold mb-3 text-center'>Smart Analytics</h3><p class='text-gray-600'>Make data-driven decisions with real-time insights and comprehensive analytics dashboards.</p></div><div class='bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-pink-600'><div class='rounded-full bg-pink-100 w-16 h-16 flex items-center justify-center mx-auto mb-4'><i class='ri-customer-service-line text-2xl text-pink-600'></i></div><h3 class='text-xl font-bold mb-3 text-center'>24/7 Support</h3><p class='text-gray-600'>Our expert support team is always available to help solve problems and answer questions.</p></div></div>"
+            },
+            style: {
+              margin: "48px 0",
+              padding: "0 16px"
             }
           },
           {
@@ -541,20 +567,63 @@ export class MemStorage implements IStorage {
             }
           },
           {
+            id: "testimonial-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4'><h2 class='text-2xl md:text-3xl font-bold text-center mb-12'>What Our Users Say</h2><div class='grid md:grid-cols-2 gap-8'><div class='bg-white p-6 rounded-xl shadow-md border border-gray-100'><div class='flex items-center mb-4'><img src='https://randomuser.me/api/portraits/women/32.jpg' alt='Testimonial' class='w-14 h-14 rounded-full mr-4'><div><h4 class='font-bold'>Sarah Johnson</h4><p class='text-gray-500 text-sm'>Founder, TechStart</p></div></div><div class='text-gray-700'><i class='ri-double-quotes-l text-purple-400 text-2xl'></i><p class='my-2'>RocketStart helped us launch our MVP in just two weeks! The intuitive interface and pre-built components saved us countless development hours.</p><div class='flex mt-2'><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i></div></div></div><div class='bg-white p-6 rounded-xl shadow-md border border-gray-100'><div class='flex items-center mb-4'><img src='https://randomuser.me/api/portraits/men/47.jpg' alt='Testimonial' class='w-14 h-14 rounded-full mr-4'><div><h4 class='font-bold'>David Chen</h4><p class='text-gray-500 text-sm'>CEO, InnovateCo</p></div></div><div class='text-gray-700'><i class='ri-double-quotes-l text-purple-400 text-2xl'></i><p class='my-2'>The analytics tools are incredible. We've been able to track user engagement and optimize our funnel in ways we never could before.</p><div class='flex mt-2'><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i><i class='ri-star-fill text-yellow-500'></i></div></div></div></div></div>"
+            },
+            style: {
+              margin: "64px 0",
+              padding: "0 16px",
+              backgroundColor: "#f9fafb"
+            }
+          },
+          {
+            id: "pricing-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4'><h2 class='text-3xl font-bold text-center mb-4' id='pricing'>Transparent Pricing</h2><p class='text-center text-gray-600 max-w-xl mx-auto mb-12'>Choose the plan that fits your needs. All plans include all features.</p><div class='grid md:grid-cols-3 gap-8'><div class='bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-purple-200 transform hover:-translate-y-1'><div class='text-center border-b pb-4'><h3 class='text-xl font-bold mb-1'>Starter</h3><p class='text-gray-500 mb-4'>For early-stage startups</p><div class='text-3xl font-bold mb-2'><span class='text-gray-500 text-lg'>$</span>29<span class='text-base font-normal text-gray-500'>/mo</span></div></div><ul class='mt-6 space-y-3 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Up to 5 team members</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Basic analytics</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>1,000 monthly active users</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Email support</li></ul><button class='w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-indigo-700 transition-all'>Choose Starter</button></div><div class='bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-2 border-purple-400 transform hover:-translate-y-1 relative'><div class='absolute -top-3 right-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-3 py-1 rounded-full text-sm font-medium'>Popular</div><div class='text-center border-b pb-4'><h3 class='text-xl font-bold mb-1'>Pro</h3><p class='text-gray-500 mb-4'>For growing companies</p><div class='text-3xl font-bold mb-2'><span class='text-gray-500 text-lg'>$</span>79<span class='text-base font-normal text-gray-500'>/mo</span></div></div><ul class='mt-6 space-y-3 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Up to 20 team members</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Advanced analytics</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>10,000 monthly active users</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Priority support</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Custom branding</li></ul><button class='w-full py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg font-medium hover:from-purple-700 hover:to-indigo-700 transition-all'>Choose Pro</button></div><div class='bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 hover:border-purple-200 transform hover:-translate-y-1'><div class='text-center border-b pb-4'><h3 class='text-xl font-bold mb-1'>Enterprise</h3><p class='text-gray-500 mb-4'>For large organizations</p><div class='text-3xl font-bold mb-2'><span class='text-gray-500 text-lg'>$</span>199<span class='text-base font-normal text-gray-500'>/mo</span></div></div><ul class='mt-6 space-y-3 mb-6'><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Unlimited team members</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Custom reporting</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Unlimited users</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>24/7 phone & email support</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Custom integrations</li><li class='flex items-center'><i class='ri-check-line text-green-500 mr-2'></i>Dedicated account manager</li></ul><button class='w-full py-3 border-2 border-purple-600 text-purple-600 rounded-lg font-medium hover:bg-purple-50 transition-all'>Contact Sales</button></div></div></div>"
+            },
+            style: {
+              margin: "80px 0",
+              padding: "64px 0",
+              backgroundColor: "#ffffff"
+            }
+          },
+          {
             id: "email-signup",
             type: "email-signup",
             content: {
               title: "Join the Waitlist",
               description: "Be the first to know when we launch. Get exclusive early access and special offers.",
-              buttonText: "Join Now"
+              buttonText: "Join Now",
+              placeholder: "Enter your email address"
             },
             style: {
-              backgroundColor: "#7c3aed",
+              backgroundType: "gradient",
+              gradientDirection: "to right",
+              gradientStartColor: "#7c3aed",
+              gradientEndColor: "#ec4899",
+              backgroundImage: "linear-gradient(to right, #7c3aed, #ec4899)",
               color: "#ffffff",
               padding: "64px 24px",
-              borderRadius: "12px",
-              maxWidth: "720px",
-              margin: "0 auto 80px"
+              borderRadius: "16px",
+              maxWidth: "1024px",
+              margin: "80px auto",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              fontFamily: "Poppins, sans-serif"
+            }
+          },
+          {
+            id: "footer-section",
+            type: "text-block",
+            content: {
+              text: "<footer class='max-w-6xl mx-auto px-4 pb-12'><div class='grid md:grid-cols-4 gap-8 py-8'><div><h3 class='font-bold text-lg mb-4'>RocketStart</h3><p class='text-gray-600 mb-4'>Launch your startup faster with our all-in-one platform.</p><div class='flex space-x-4'><a href='#' class='text-gray-400 hover:text-gray-800'><i class='ri-twitter-fill text-xl'></i></a><a href='#' class='text-gray-400 hover:text-gray-800'><i class='ri-facebook-fill text-xl'></i></a><a href='#' class='text-gray-400 hover:text-gray-800'><i class='ri-instagram-fill text-xl'></i></a><a href='#' class='text-gray-400 hover:text-gray-800'><i class='ri-linkedin-fill text-xl'></i></a></div></div><div><h3 class='font-bold mb-4'>Product</h3><ul class='space-y-2'><li><a href='#' class='text-gray-600 hover:text-purple-600'>Features</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Pricing</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Testimonials</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>FAQ</a></li></ul></div><div><h3 class='font-bold mb-4'>Resources</h3><ul class='space-y-2'><li><a href='#' class='text-gray-600 hover:text-purple-600'>Blog</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Documentation</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Community</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Support</a></li></ul></div><div><h3 class='font-bold mb-4'>Company</h3><ul class='space-y-2'><li><a href='#' class='text-gray-600 hover:text-purple-600'>About</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Careers</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Contact</a></li><li><a href='#' class='text-gray-600 hover:text-purple-600'>Privacy & Terms</a></li></ul></div></div><div class='border-t border-gray-200 pt-8 text-center text-gray-500 text-sm'>© 2025 RocketStart. All rights reserved.</div></footer>"
+            },
+            style: {
+              backgroundColor: "#f9fafb",
+              padding: "0 16px",
+              fontFamily: "Poppins, sans-serif"
             }
           }
         ],
