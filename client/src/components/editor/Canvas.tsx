@@ -420,7 +420,7 @@ export default function Canvas() {
                       
                       <div className="relative" style={{ backgroundColor: 'transparent' }}>
                         {selectedComponent?.id === component.id && (
-                          <div className="absolute -left-14 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
+                          <div className="absolute -left-24 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
                             <Button
                               variant="outline"
                               size="sm"

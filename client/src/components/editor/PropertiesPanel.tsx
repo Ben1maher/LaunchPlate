@@ -1219,7 +1219,19 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <label className="text-xs text-gray-600 block mb-1">Start Color</label>
                 <ColorPicker
                   color={component.style.gradientStartColor || '#4F46E5'}
-                  onChange={(color) => updateStyle('gradientStartColor', color)}
+                  onChange={(color) => {
+                    // Update the gradient start color and ensure it's applied
+                    updateStyle('gradientStartColor', color);
+                    
+                    // Also make sure backgroundImage is updated for components that need it
+                    const direction = component.style.gradientDirection || 'to right';
+                    const endColor = component.style.gradientEndColor || '#0EA5E9';
+                    const gradient = `linear-gradient(${direction}, ${color}, ${endColor})`;
+                    
+                    if (component.type.includes('hero') || component.type.includes('header')) {
+                      updateStyle('backgroundImage', gradient);
+                    }
+                  }}
                 />
               </div>
               
@@ -1227,7 +1239,19 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <label className="text-xs text-gray-600 block mb-1">End Color</label>
                 <ColorPicker
                   color={component.style.gradientEndColor || '#0EA5E9'}
-                  onChange={(color) => updateStyle('gradientEndColor', color)}
+                  onChange={(color) => {
+                    // Update the gradient end color and ensure it's applied
+                    updateStyle('gradientEndColor', color);
+                    
+                    // Also make sure backgroundImage is updated for components that need it
+                    const direction = component.style.gradientDirection || 'to right';
+                    const startColor = component.style.gradientStartColor || '#4F46E5';
+                    const gradient = `linear-gradient(${direction}, ${startColor}, ${color})`;
+                    
+                    if (component.type.includes('hero') || component.type.includes('header')) {
+                      updateStyle('backgroundImage', gradient);
+                    }
+                  }}
                 />
               </div>
               
