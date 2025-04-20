@@ -88,18 +88,58 @@ export type Project = typeof projects.$inferSelect;
 
 // Component type definitions for TypeScript
 export type ComponentType = 
+  // Headers
   | 'header-1' 
   | 'header-2' 
+  | 'header-transparent'
+  
+  // Hero sections
   | 'hero-split' 
-  | 'hero-centered' 
+  | 'hero-centered'
+  | 'hero-video'
+  | 'hero-gradient'
+  
+  // Text elements
   | 'heading' 
   | 'text-block' 
   | 'button' 
+  | 'list-item'
+  | 'blockquote'
+  
+  // Media elements
   | 'image' 
+  | 'gallery'
+  | 'video'
+  | 'carousel'
+  
+  // Layout elements
   | 'spacer' 
-  | 'divider' 
+  | 'divider'
+  | 'columns-2'
+  | 'columns-3'
+  | 'columns-4'
+  
+  // Forms and CTAs
   | 'form' 
-  | 'email-signup';
+  | 'email-signup'
+  | 'contact-details'
+  
+  // Feature sections
+  | 'feature-grid'
+  | 'feature-list'
+  | 'feature-cards'
+  
+  // Testimonial sections
+  | 'testimonial-single'
+  | 'testimonial-carousel'
+  
+  // Statistics and pricing
+  | 'stats-bar'
+  | 'pricing-cards'
+  
+  // Footers
+  | 'footer-simple'
+  | 'footer-columns';
 
 export interface Component {
   id: string;
