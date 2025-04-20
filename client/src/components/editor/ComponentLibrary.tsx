@@ -277,7 +277,7 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
     if (!isHovering) return null;
     
     return (
-      <div className="absolute -right-[240px] top-0 z-50 w-[230px] bg-white rounded-md shadow-lg border border-gray-200 p-3 pointer-events-none">
+      <div className="absolute -right-[240px] top-0 z-[9999] w-[230px] bg-white rounded-md shadow-lg border border-gray-200 p-3 pointer-events-none">
         <div className="flex items-start space-x-3">
           <div className="flex-1">
             <h4 className="font-medium text-sm">{component.label}</h4>

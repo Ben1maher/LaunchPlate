@@ -322,13 +322,13 @@ export default function Editor() {
       
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        <div id="componentLibrary">
+        <div id="componentLibrary" className="flex-shrink-0">
           <ComponentLibrary />
         </div>
-        <div id="mainCanvas">
+        <div id="mainCanvas" className="flex-1">
           <Canvas />
         </div>
-        <div id="propertiesPanel">
+        <div id="propertiesPanel" className="flex-shrink-0">
           <PropertiesPanel />
         </div>
       </div>
