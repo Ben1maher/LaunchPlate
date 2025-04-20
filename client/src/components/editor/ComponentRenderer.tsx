@@ -8,6 +8,11 @@ import ImageComponent from '../landing/ImageComponent';
 import FormComponent from '../landing/FormComponent';
 import SpacerComponent from '../landing/SpacerComponent';
 import DividerComponent from '../landing/DividerComponent';
+import ColumnsComponent from '../landing/ColumnsComponent';
+import FeatureComponent from '../landing/FeatureComponent';
+import TestimonialComponent from '../landing/TestimonialComponent';
+import MarketingComponent from '../landing/MarketingComponent';
+import FooterComponent from '../landing/FooterComponent';
 import { useEditor } from '../../context/EditorContext';
 import { Button } from '@/components/ui/button';
 import { Settings, Copy, Trash, Move } from 'lucide-react';
@@ -45,12 +50,17 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
   // Render the actual component based on its type
   const renderComponent = () => {
     switch (component.type) {
+      // Headers
       case 'header-1':
       case 'header-2':
+      case 'header-transparent':
         return <HeaderComponent component={component} viewportMode={viewportMode} />;
       
+      // Hero Sections
       case 'hero-split':
       case 'hero-centered':
+      case 'hero-video':
+      case 'hero-gradient':
         return <HeroComponent 
           component={component} 
           inEditor={inEditor} 
@@ -58,25 +68,61 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
           onClick={onClick} 
         />;
       
+      // Text Elements
       case 'heading':
       case 'text-block':
+      case 'list-item':
+      case 'blockquote':
         return <TextComponent component={component} />;
       
       case 'button':
         return <ButtonComponent component={component} />;
       
+      // Media Elements
       case 'image':
+      case 'gallery':
+      case 'video':
+      case 'carousel':
         return <ImageComponent component={component} />;
       
+      // Forms & CTAs
       case 'form':
       case 'email-signup':
+      case 'contact-details':
         return <FormComponent component={component} />;
       
+      // Layout Elements
       case 'spacer':
         return <SpacerComponent component={component} />;
       
       case 'divider':
         return <DividerComponent component={component} />;
+      
+      case 'columns-2':
+      case 'columns-3':
+      case 'columns-4':
+        return <ColumnsComponent component={component} inEditor={inEditor} />;
+      
+      // Feature Sections
+      case 'feature-grid':
+      case 'feature-list':
+      case 'feature-cards':
+        return <FeatureComponent component={component} />;
+      
+      // Testimonials
+      case 'testimonial-single':
+      case 'testimonial-carousel':
+        return <TestimonialComponent component={component} />;
+      
+      // Marketing
+      case 'stats-bar':
+      case 'pricing-cards':
+        return <MarketingComponent component={component} />;
+      
+      // Footers
+      case 'footer-simple':
+      case 'footer-columns':
+        return <FooterComponent component={component} />;
       
       default:
         return (
