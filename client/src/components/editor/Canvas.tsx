@@ -402,6 +402,7 @@ export default function Canvas() {
                     <div 
                       key={component.id} 
                       className="relative"
+                      style={{ backgroundColor: 'transparent' }}
                       draggable
                       onDragStart={(e) => handleComponentDragStart(e, index)}
                       onDragOver={(e) => handleComponentDragOver(e, index)}
@@ -417,7 +418,7 @@ export default function Canvas() {
                         </div>
                       )}
                       
-                      <div className="relative">
+                      <div className="relative" style={{ backgroundColor: 'transparent' }}>
                         {selectedComponent?.id === component.id && (
                           <div className="absolute -left-14 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
                             <Button
@@ -476,6 +477,16 @@ export default function Canvas() {
           background-image: linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
                           linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
           background-size: 20px 20px;
+        }
+        
+        /* Override any potential gray background on component selection */
+        .component-wrapper {
+          background-color: transparent !important;
+        }
+        .component-wrapper:hover, 
+        .component-wrapper.selected, 
+        .component-wrapper.active {
+          background-color: transparent !important;
         }
         `
       }} />

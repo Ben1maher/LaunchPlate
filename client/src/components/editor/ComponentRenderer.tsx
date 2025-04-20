@@ -95,8 +95,13 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
   return (
     <div 
       className={`relative component-wrapper group hover:outline hover:outline-1 hover:outline-gray-200 ${
-        isSelected ? 'outline outline-2 outline-primary' : ''
-      }`} 
+        isSelected ? 'outline outline-2 outline-primary selected' : ''
+      } hover:bg-transparent`}
+      // Force transparent background and remove any hover effects that might change the background
+      style={{ 
+        backgroundColor: 'transparent', 
+        backgroundImage: 'none' 
+      }} 
       onClick={onClick}
       data-component-id={component.id}
       data-component-type={component.type}
