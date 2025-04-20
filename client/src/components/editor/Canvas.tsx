@@ -13,7 +13,8 @@ import {
   Play,
   ArrowUp,
   ArrowDown,
-  Trash2
+  Trash2,
+  Pencil
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
