@@ -282,34 +282,6 @@ export default function Editor() {
           </div>
           
           <div className="flex items-center space-x-2">
-            {/* Responsive Preview Toggle */}
-            <div id="devicePreviewSelector" className="bg-gray-100 rounded-md p-0.5 flex items-center mr-4">
-              <Button 
-                variant={viewportMode === 'desktop' ? 'default' : 'ghost'} 
-                size="sm"
-                className={`px-2 ${viewportMode === 'desktop' ? '' : 'hover:bg-gray-200'}`}
-                onClick={() => setViewportMode('desktop')}
-              >
-                <Monitor className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant={viewportMode === 'tablet' ? 'default' : 'ghost'} 
-                size="sm"
-                className={`px-2 ${viewportMode === 'tablet' ? '' : 'hover:bg-gray-200'}`}
-                onClick={() => setViewportMode('tablet')}
-              >
-                <Tablet className="h-4 w-4" />
-              </Button>
-              <Button 
-                variant={viewportMode === 'mobile' ? 'default' : 'ghost'} 
-                size="sm"
-                className={`px-2 ${viewportMode === 'mobile' ? '' : 'hover:bg-gray-200'}`}
-                onClick={() => setViewportMode('mobile')}
-              >
-                <Smartphone className="h-4 w-4" />
-              </Button>
-            </div>
-            
             <Button variant="ghost" size="icon">
               <Settings className="h-5 w-5 text-gray-600" />
             </Button>

@@ -110,7 +110,7 @@ export default function ComponentLibrary() {
         </Tabs>
       </div>
 
-      <div className="overflow-y-auto flex-1">
+      <div className="overflow-y-auto flex-1" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
         {activeTab === "elements" && (
           <>
             {componentCategories

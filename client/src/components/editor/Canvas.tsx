@@ -1,257 +1,134 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useEditor } from "../../context/EditorContext";
 import ComponentRenderer from "./ComponentRenderer";
 import { Component, ComponentType } from "@shared/schema";
+import { Smartphone, Tablet, Monitor, LayoutGrid, ZoomIn, ZoomOut, ArrowUp, ArrowDown, Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { 
-  Monitor, 
-  Tablet, 
-  Smartphone, 
-  ZoomIn, 
-  ZoomOut, 
-  LayoutGrid, 
-  Play,
-  ArrowUp,
-  ArrowDown,
-  Trash2,
-  Pencil
-} from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 
 export default function Canvas() {
-  const { 
-    components, 
-    setComponents, 
-    addComponent, 
-    selectedComponent, 
-    setSelectedComponent, 
-    isDragging, 
+  const {
+    components,
+    selectedComponent,
+    setSelectedComponent,
+    isDragging,
+    addComponent,
     moveComponent,
     removeComponent,
     viewportMode,
     setViewportMode
   } = useEditor();
   
-  const [activeDropzone, setActiveDropzone] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState(100);
   const [showGridLines, setShowGridLines] = useState(false);
   const [dropPosition, setDropPosition] = useState<{ index: number, position: 'top' | 'bottom' } | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
+  
+  // Reset drop position on component selection change
+  useEffect(() => {
+    setDropPosition(null);
+  }, [selectedComponent]);
+  
+  // Zoom controls
+  const increaseZoom = () => {
+    setZoomLevel(Math.min(150, zoomLevel + 10));
+  };
+  
+  const decreaseZoom = () => {
+    setZoomLevel(Math.max(50, zoomLevel - 10));
+  };
 
-  // Handle canvas drop events with enhanced visual feedback
+  // Handle dragging components from library
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     
-    // Set the appropriate drop effect based on the operation
-    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
-    e.dataTransfer.dropEffect = isReorderOperation ? "move" : "copy";
+    // Check if dragging a new component or reordering
+    if (e.dataTransfer.types.includes('componentType')) {
+      e.currentTarget.classList.add('dropzone-active-copy');
+    } else {
+      e.currentTarget.classList.add('dropzone-active-move');
+    }
     
-    // Add active dropzone state with different styling for move vs copy
-    setActiveDropzone("mainDropzone");
-    
-    // Remove any existing classes first
-    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
-    
-    // Add the appropriate class based on operation type
-    e.currentTarget.classList.add(isReorderOperation ? "dropzone-active-move" : "dropzone-active-copy");
+    e.dataTransfer.dropEffect = 'copy';
   };
-
+  
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    setActiveDropzone(null);
-    
-    // Remove all active classes
-    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
+    e.currentTarget.classList.remove('dropzone-active-copy');
+    e.currentTarget.classList.remove('dropzone-active-move');
   };
-
+  
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log("Drop event triggered on main canvas");
+    e.currentTarget.classList.remove('dropzone-active-copy');
+    e.currentTarget.classList.remove('dropzone-active-move');
     
-    // Remove active states
-    setActiveDropzone(null);
-    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
-    
-    // Check if this is a reordering operation (existing component being moved)
-    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
-    
-    // If not a reordering operation, it's a new component from the library
-    if (!isReorderOperation) {
-      // Get drag data - try both methods for compatibility
-      const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
-      console.log("Dropped component type on main canvas:", componentType);
-      
-      if (componentType && componentType.trim() !== '') {
-        // Add the component at the end (default behavior for canvas drop)
-        addComponent(componentType as ComponentType);
-        
-        // Show toast for user feedback
-        toast({
-          title: "Component Added",
-          description: `Added ${componentType} component to your page.`,
-        });
-        
-        // Scroll to the bottom of the canvas to show the new component
-        if (canvasRef.current) {
-          setTimeout(() => {
-            canvasRef.current?.scrollTo({
-              top: canvasRef.current.scrollHeight,
-              behavior: 'smooth'
-            });
-          }, 100);
-        }
-      } else {
-        console.warn("Empty or invalid component type dropped on canvas:", componentType);
-      }
+    // Check if this is a new component or reordering
+    const componentType = e.dataTransfer.getData('componentType');
+    if (componentType) {
+      addComponent(componentType as ComponentType);
     }
   };
-
-  // Adjust zoom level
-  const increaseZoom = () => {
-    if (zoomLevel < 150) {
-      setZoomLevel(zoomLevel + 10);
-    }
-  };
-
-  const decreaseZoom = () => {
-    if (zoomLevel > 50) {
-      setZoomLevel(zoomLevel - 10);
-    }
-  };
-
-  // Handle component reordering with drag and drop
-  const handleComponentDragStart = (e: React.DragEvent, index: number) => {
-    console.log("Starting drag for component at index:", index);
+  
+  // Handle reordering components via drag and drop
+  const handleComponentDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('componentIndex', String(index));
     
-    try {
-      // Set the drag data (this is critical)
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("application/x-component-index", index.toString());
-      
-      // Set opacity for the dragged element for visual feedback
-      e.currentTarget.classList.add("opacity-50");
-    } catch (error) {
-      console.error("Error in drag start:", error);
-    }
+    // Create custom drag image
+    const dragPreview = document.createElement('div');
+    dragPreview.className = 'bg-primary p-2 shadow-lg rounded text-white text-xs';
+    dragPreview.textContent = `Moving ${components[index].type} component`;
+    document.body.appendChild(dragPreview);
+    e.dataTransfer.setDragImage(dragPreview, 20, 20);
+    
+    setTimeout(() => {
+      document.body.removeChild(dragPreview);
+    }, 0);
   };
-
-  // Improved component drag over handling with position detection
-  const handleComponentDragOver = (e: React.DragEvent, index: number) => {
+  
+  const handleComponentDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    
-    // Get the component's bounding rectangle
     const rect = e.currentTarget.getBoundingClientRect();
+    const mouseY = e.clientY;
+    const threshold = 10; // pixels from top/bottom to trigger position indicators
     
-    // Calculate how far into the component the cursor is (as a percentage)
-    const relativeY = e.clientY - rect.top;
-    const percentY = (relativeY / rect.height) * 100;
-    
-    // Use a 20% threshold at the top for more intuitive positioning
-    // This makes it easier to drop components at the top
-    const position = percentY < 20 ? 'top' : 'bottom';
-    
-    console.log(`Drag over component ${index}, position: ${position}, percentY: ${percentY.toFixed(1)}%`);
-    
-    // Set visual indicator for drop position
-    setDropPosition({ index, position });
-  };
-
-  // Handle drop on a component
-  const handleComponentDrop = (e: React.DragEvent, dropIndex: number) => {
-    e.preventDefault();
-    console.log("Component drop event at index:", dropIndex);
-    
-    // Reset drop position indicator
-    setDropPosition(null);
-    
-    // Log all available data types in the transfer
-    console.log("Available data types:", e.dataTransfer.types);
-    
-    // Log all the data transfer types for debugging
-    console.log("Full data types:", e.dataTransfer.types.join(', '));
-    
-    // Check if this is a reordering operation (existing component being moved)
-    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
-    
-    // If not a reordering operation, it's a new component from the library
-    if (!isReorderOperation) {
-      // This is a new component from the library
-      const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
-      console.log("Dropped new component type:", componentType);
-      
-      if (componentType && componentType.trim() !== '') {
-        // Determine position with 20% threshold for top section
-        const rect = e.currentTarget.getBoundingClientRect();
-        const relativeY = e.clientY - rect.top;
-        const percentY = (relativeY / rect.height) * 100;
-        const position = percentY < 20 ? 'top' : 'bottom';
-        console.log("Drop position:", position, "percent Y:", percentY.toFixed(1) + "%");
-        
-        // Adjust insert index based on position
-        const insertIndex = position === 'top' ? dropIndex : dropIndex + 1;
-        console.log("Inserting at index:", insertIndex);
-        
-        try {
-          // Add component at specific position
-          addComponent(componentType as ComponentType, insertIndex);
-          
-          toast({
-            title: "Component Added",
-            description: `Added ${componentType} component at position ${insertIndex}.`,
-          });
-        } catch (error) {
-          console.error("Error adding component:", error);
-          toast({
-            title: "Error",
-            description: "Failed to add component at the specified position.",
-            variant: "destructive"
-          });
-        }
-      } else {
-        console.warn("Empty or invalid component type:", componentType);
-      }
+    if (mouseY < rect.top + threshold) {
+      // Top area
+      setDropPosition({ index, position: 'top' });
+    } else if (mouseY > rect.bottom - threshold) {
+      // Bottom area
+      setDropPosition({ index, position: 'bottom' });
     } else {
-      // This is reordering existing components
-      try {
-        const dragIndexStr = e.dataTransfer.getData("application/x-component-index");
-        const dragIndex = parseInt(dragIndexStr);
-        console.log("Reordering from index:", dragIndex, "to around index:", dropIndex);
-        
-        if (!isNaN(dragIndex) && dragIndex !== dropIndex) {
-          // Determine position with 20% threshold for top section
-          const rect = e.currentTarget.getBoundingClientRect();
-          const relativeY = e.clientY - rect.top;
-          const percentY = (relativeY / rect.height) * 100;
-          const position = percentY < 20 ? 'top' : 'bottom';
-          console.log("Drop position for reordering:", position, "percent Y:", percentY.toFixed(1) + "%");
-          
-          // Calculate the target index based on position and drag direction
-          let targetIndex;
-          if (dragIndex < dropIndex) {
-            // Dragging downward
-            targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
-          } else {
-            // Dragging upward
-            targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
-            
-            // When dragging upward and dropping at the bottom of a component, 
-            // we need to adjust the target index
-            if (position === 'bottom' && targetIndex > dragIndex) {
-              targetIndex -= 1;
-            }
-          }
-          
-          console.log("Moving component from", dragIndex, "to", targetIndex);
-          moveComponent(dragIndex, targetIndex);
-        }
-      } catch (error) {
-        console.error("Error handling component reordering:", error);
-      }
+      // Middle area - highlight the component itself
+      setDropPosition(null);
     }
   };
-
+  
+  const handleComponentDrop = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault();
+    const fromIndex = Number(e.dataTransfer.getData('componentIndex'));
+    let toIndex = index;
+    
+    // Determine exact position based on dropPosition
+    if (dropPosition) {
+      if (dropPosition.position === 'top') {
+        toIndex = index;
+      } else {
+        toIndex = index + 1;
+      }
+    }
+    
+    // Adjust for component moving down
+    if (fromIndex < toIndex) {
+      toIndex--;
+    }
+    
+    if (fromIndex !== toIndex) {
+      moveComponent(fromIndex, toIndex);
+    }
+    
+    setDropPosition(null);
+  };
+  
   // Show tutorial for empty canvas
   const isEmpty = components.length === 0;
 
@@ -264,6 +141,34 @@ export default function Canvas() {
         </div>
         
         <div className="flex items-center space-x-3">
+          {/* Responsive Preview Toggle */}
+          <div className="bg-gray-100 rounded-md p-0.5 flex items-center">
+            <Button 
+              variant={viewportMode === 'desktop' ? 'default' : 'ghost'} 
+              size="sm"
+              className={`px-2 ${viewportMode === 'desktop' ? '' : 'hover:bg-gray-200'}`}
+              onClick={() => setViewportMode('desktop')}
+            >
+              <Monitor className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant={viewportMode === 'tablet' ? 'default' : 'ghost'} 
+              size="sm"
+              className={`px-2 ${viewportMode === 'tablet' ? '' : 'hover:bg-gray-200'}`}
+              onClick={() => setViewportMode('tablet')}
+            >
+              <Tablet className="h-4 w-4" />
+            </Button>
+            <Button 
+              variant={viewportMode === 'mobile' ? 'default' : 'ghost'} 
+              size="sm"
+              className={`px-2 ${viewportMode === 'mobile' ? '' : 'hover:bg-gray-200'}`}
+              onClick={() => setViewportMode('mobile')}
+            >
+              <Smartphone className="h-4 w-4" />
+            </Button>
+          </div>
+          
           <div className="flex items-center space-x-1">
             <Button 
               variant="ghost" 
@@ -484,23 +389,27 @@ export default function Canvas() {
         }
         
         @keyframes pulse-copy {
-          0%, 100% { border-color: rgba(59, 130, 246, 0.8); }
-          50% { border-color: rgba(59, 130, 246, 0.3); }
+          0% {
+            border-color: #3b82f6;
+          }
+          50% {
+            border-color: #93c5fd;
+          }
+          100% {
+            border-color: #3b82f6;
+          }
         }
         
         @keyframes pulse-move {
-          0%, 100% { border-color: rgba(16, 185, 129, 0.8); }
-          50% { border-color: rgba(16, 185, 129, 0.3); }
-        }
-        
-        /* Override any potential gray background on component selection */
-        .component-wrapper {
-          background-color: transparent !important;
-        }
-        .component-wrapper:hover, 
-        .component-wrapper.selected, 
-        .component-wrapper.active {
-          background-color: transparent !important;
+          0% {
+            border-color: #10b981;
+          }
+          50% {
+            border-color: #6ee7b7;
+          }
+          100% {
+            border-color: #10b981;
+          }
         }
         `
       }} />
