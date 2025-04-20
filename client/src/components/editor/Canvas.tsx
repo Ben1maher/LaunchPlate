@@ -44,35 +44,48 @@ export default function Canvas() {
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log("Drop event triggered");
+    console.log("Drop event triggered on main canvas");
     
     // Remove active states
     setActiveDropzone(null);
     e.currentTarget.classList.remove("dropzone-active");
     
-    // Get drag data - try both methods for compatibility
-    const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
-    console.log("Dropped component type:", componentType);
+    // Check if this is a component from library or reordering
+    const isNewComponent = e.dataTransfer.types.some(type => 
+      type === "componentType" || (type === "text/plain" && !e.dataTransfer.types.includes("componentIndex"))
+    );
     
-    if (componentType) {
-      // Add the component at the end (default behavior for canvas drop)
-      addComponent(componentType as ComponentType);
+    if (isNewComponent) {
+      // Get drag data - try both methods for compatibility
+      const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
+      console.log("Dropped component type on main canvas:", componentType);
       
-      // Show toast for user feedback
-      toast({
-        title: "Component Added",
-        description: `Added ${componentType} component to your page.`,
-      });
-      
-      // Scroll to the bottom of the canvas to show the new component
-      if (canvasRef.current) {
-        setTimeout(() => {
-          canvasRef.current?.scrollTo({
-            top: canvasRef.current.scrollHeight,
-            behavior: 'smooth'
-          });
-        }, 100);
+      if (componentType && componentType.trim() !== '') {
+        // Add the component at the end (default behavior for canvas drop)
+        addComponent(componentType as ComponentType);
+        
+        // Show toast for user feedback
+        toast({
+          title: "Component Added",
+          description: `Added ${componentType} component to your page.`,
+        });
+        
+        // Scroll to the bottom of the canvas to show the new component
+        if (canvasRef.current) {
+          setTimeout(() => {
+            canvasRef.current?.scrollTo({
+              top: canvasRef.current.scrollHeight,
+              behavior: 'smooth'
+            });
+          }, 100);
+        }
+      } else {
+        console.warn("Empty or invalid component type dropped on canvas:", componentType);
       }
+    } else {
+      // This might be a reordering operation concluding on the empty canvas area
+      // We don't need to do anything here as the component should stay in its current position
+      console.log("Non-component drop detected on main canvas");
     }
   };
 
@@ -91,8 +104,22 @@ export default function Canvas() {
 
   // Handle component reordering with drag and drop
   const handleComponentDragStart = (e: React.DragEvent, index: number) => {
+    console.log("Starting drag for component at index:", index);
+    e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("componentIndex", index.toString());
+    e.dataTransfer.setData("text/plain", index.toString()); // For compatibility
     e.currentTarget.classList.add("opacity-50");
+    
+    // Set a custom drag image to improve visual feedback
+    const dragPreview = document.createElement("div");
+    dragPreview.className = "bg-white p-2 shadow-lg rounded border border-gray-300 text-sm";
+    dragPreview.textContent = `Move component`;
+    document.body.appendChild(dragPreview);
+    e.dataTransfer.setDragImage(dragPreview, 0, 0);
+    
+    setTimeout(() => {
+      document.body.removeChild(dragPreview);
+    }, 0);
   };
 
   // Improved component drag over handling with position detection
@@ -118,52 +145,76 @@ export default function Canvas() {
   // Handle drop on a component
   const handleComponentDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
+    console.log("Component drop event at index:", dropIndex);
     
     // Reset drop position indicator
     setDropPosition(null);
     
-    // Check if this is a component from library or reordering
-    if (e.dataTransfer.types.includes("componentType") || 
-       (e.dataTransfer.types.includes("text/plain") && !e.dataTransfer.types.includes("componentIndex"))) {
+    // Log all available data types in the transfer
+    console.log("Available data types:", e.dataTransfer.types);
+    
+    // Check drag source - is this a new component or reordering?
+    const isNewComponent = e.dataTransfer.types.some(type => 
+      type === "componentType" || (type === "text/plain" && !e.dataTransfer.types.includes("componentIndex"))
+    );
+    
+    if (isNewComponent) {
       // This is a new component from the library
       const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
+      console.log("Dropped new component type:", componentType);
       
-      if (componentType) {
+      if (componentType && componentType.trim() !== '') {
         // Determine position (top or bottom half)
         const rect = e.currentTarget.getBoundingClientRect();
         const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
+        console.log("Drop position:", position);
         
         // Adjust insert index based on position
         const insertIndex = position === 'top' ? dropIndex : dropIndex + 1;
+        console.log("Inserting at index:", insertIndex);
         
-        // Add component at specific position
-        addComponent(componentType as ComponentType, insertIndex);
-        
-        toast({
-          title: "Component Added",
-          description: `Added ${componentType} component to your page.`,
-        });
+        try {
+          // Add component at specific position
+          addComponent(componentType as ComponentType, insertIndex);
+          
+          toast({
+            title: "Component Added",
+            description: `Added ${componentType} component at position ${insertIndex}.`,
+          });
+        } catch (error) {
+          console.error("Error adding component:", error);
+          toast({
+            title: "Error",
+            description: "Failed to add component at the specified position.",
+            variant: "destructive"
+          });
+        }
+      } else {
+        console.warn("Empty or invalid component type:", componentType);
       }
     } else {
       // This is reordering existing components
-      const dragIndex = parseInt(e.dataTransfer.getData("componentIndex"));
+      const dragIndexStr = e.dataTransfer.getData("componentIndex");
+      const dragIndex = parseInt(dragIndexStr);
+      console.log("Reordering from index:", dragIndex, "to around index:", dropIndex);
       
-      if (dragIndex !== dropIndex && !isNaN(dragIndex)) {
+      if (!isNaN(dragIndex) && dragIndex !== dropIndex) {
         // Determine position (top or bottom half)
         const rect = e.currentTarget.getBoundingClientRect();
         const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
+        console.log("Drop position for reordering:", position);
         
-        // Adjust target index based on position and drag direction
-        let targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
-        
-        // Handle adjustments needed when dragging downward
-        if (dragIndex < dropIndex && position === 'bottom') {
-          targetIndex = dropIndex;
+        // Calculate the target index
+        let targetIndex;
+        if (dragIndex < dropIndex) {
+          // Dragging downward
+          targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+        } else {
+          // Dragging upward
+          targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
         }
-        if (dragIndex > dropIndex && position === 'top') {
-          targetIndex = dropIndex;
-        }
         
+        console.log("Moving component from", dragIndex, "to", targetIndex);
         moveComponent(dragIndex, targetIndex);
       }
     }
