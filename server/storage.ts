@@ -4,13 +4,19 @@ import {
   projects, type Project, type InsertProject,
   type PageComponent, type Component
 } from "@shared/schema";
+import session from "express-session";
+import createMemoryStore from "memorystore";
+
+const MemoryStore = createMemoryStore(session);
 
 // Storage interface for CRUD operations
 export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, updates: Partial<InsertUser>): Promise<User | undefined>;
   
   // Template operations
   getAllTemplates(): Promise<Template[]>;
@@ -28,6 +34,9 @@ export interface IStorage {
   createProject(project: InsertProject): Promise<Project>;
   updateProject(id: number, project: Partial<InsertProject>): Promise<Project | undefined>;
   deleteProject(id: number): Promise<boolean>;
+  
+  // Session store
+  sessionStore: session.Store;
 }
 
 export class MemStorage implements IStorage {
@@ -37,6 +46,7 @@ export class MemStorage implements IStorage {
   private userId: number;
   private templateId: number;
   private projectId: number;
+  sessionStore: session.Store;
 
   constructor() {
     this.users = new Map();
@@ -45,6 +55,9 @@ export class MemStorage implements IStorage {
     this.userId = 1;
     this.templateId = 1;
     this.projectId = 1;
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000 // 24h - how often expired sessions are removed
+    });
 
     // Add some default templates
     this.initDefaultTemplates();
@@ -60,12 +73,31 @@ export class MemStorage implements IStorage {
       (user) => user.username === username,
     );
   }
+  
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find(
+      (user) => user.email === email,
+    );
+  }
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
     const user: User = { ...insertUser, id };
     this.users.set(id, user);
     return user;
+  }
+  
+  async updateUser(id: number, updates: Partial<InsertUser>): Promise<User | undefined> {
+    const existingUser = this.users.get(id);
+    if (!existingUser) return undefined;
+    
+    const updatedUser: User = {
+      ...existingUser,
+      ...updates,
+    };
+    
+    this.users.set(id, updatedUser);
+    return updatedUser;
   }
 
   // Template methods

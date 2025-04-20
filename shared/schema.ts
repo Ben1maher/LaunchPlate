@@ -6,12 +6,28 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("username").notNull().unique(),
+  email: text("email").notNull().unique(),
   password: text("password").notNull(),
+  fullName: text("full_name"),
+  createdAt: text("created_at").notNull(), // ISO date string
+  accountType: text("account_type").default("free"), // free, pro, enterprise
+  projectsLimit: integer("projects_limit").default(3), // Limit based on account type
+  storage: integer("storage").default(10), // Storage in MB based on account type
+  avatarUrl: text("avatar_url"),
+  isActive: boolean("is_active").default(true),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
+  email: true,
   password: true,
+  fullName: true,
+  createdAt: true,
+  accountType: true,
+  projectsLimit: true,
+  storage: true,
+  avatarUrl: true,
+  isActive: true,
 });
 
 // Landing page templates
