@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useEditor } from "../../context/EditorContext";
 import { componentCategories, ComponentData } from "./componentData";
 import { Button } from "@/components/ui/button";
@@ -7,11 +7,38 @@ import { LayoutTemplate } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Template } from "@shared/schema";
 import TemplateModal from "./TemplateModal";
+import { createPortal } from "react-dom";
 
 export default function ComponentLibrary() {
   const { addComponent, isDragging, setIsDragging } = useEditor();
   const [activeTab, setActiveTab] = useState("elements");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [tooltipPortal, setTooltipPortal] = useState<HTMLElement | null>(null);
+  
+  useEffect(() => {
+    // Create a container for tooltips at the document level
+    let portal = document.getElementById('tooltip-portal');
+    if (!portal) {
+      portal = document.createElement('div');
+      portal.id = 'tooltip-portal';
+      portal.style.position = 'fixed';
+      portal.style.top = '0';
+      portal.style.left = '0';
+      portal.style.width = '100%';
+      portal.style.height = '100%';
+      portal.style.pointerEvents = 'none';
+      portal.style.zIndex = '9999';
+      document.body.appendChild(portal);
+    }
+    setTooltipPortal(portal);
+    
+    return () => {
+      // Cleanup on unmount if necessary
+      if (document.querySelectorAll('.library-tooltip').length === 0) {
+        portal?.remove();
+      }
+    };
+  }, []);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, componentType: string) => {
     console.log("Drag started with component type:", componentType);
@@ -108,6 +135,7 @@ export default function ComponentLibrary() {
                         onDragStart={handleDragStart} 
                         onDragEnd={handleDragEnd}
                         onAddComponent={() => addComponent(component.type)}
+                        tooltipPortal={tooltipPortal}
                       />
                     ))}
                   </div>
@@ -141,6 +169,7 @@ export default function ComponentLibrary() {
                         onDragStart={handleDragStart} 
                         onDragEnd={handleDragEnd}
                         onAddComponent={() => addComponent(component.type)}
+                        tooltipPortal={tooltipPortal}
                       />
                     ))}
                   </div>
@@ -267,17 +296,39 @@ interface ComponentItemProps {
   onDragStart: (e: React.DragEvent<HTMLDivElement>, componentType: string) => void;
   onDragEnd: (e: React.DragEvent<HTMLDivElement>) => void;
   onAddComponent: () => void;
+  tooltipPortal: HTMLElement | null;
 }
 
-function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: ComponentItemProps) {
+function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent, tooltipPortal }: ComponentItemProps) {
   const [isHovering, setIsHovering] = useState(false);
+  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
+  const itemRef = useRef<HTMLDivElement>(null);
+  
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!itemRef.current) return;
+    
+    const rect = itemRef.current.getBoundingClientRect();
+    setTooltipPosition({
+      x: rect.right + 10, // 10px to the right of the component
+      y: rect.top
+    });
+    setIsHovering(true);
+  };
   
   // Component Preview Tooltip
-  const ComponentPreview = () => {
-    if (!isHovering) return null;
+  const ComponentTooltip = () => {
+    if (!isHovering || !tooltipPortal) return null;
     
-    return (
-      <div className="absolute -right-[240px] top-0 z-[9999] w-[230px] bg-white rounded-md shadow-lg border border-gray-200 p-3 pointer-events-none">
+    return createPortal(
+      <div 
+        className="library-tooltip fixed shadow-lg border border-gray-200 p-3 rounded-md bg-white pointer-events-none"
+        style={{ 
+          left: `${tooltipPosition.x}px`,
+          top: `${tooltipPosition.y}px`,
+          width: '230px',
+          zIndex: 9999
+        }}
+      >
         <div className="flex items-start space-x-3">
           <div className="flex-1">
             <h4 className="font-medium text-sm">{component.label}</h4>
@@ -299,7 +350,8 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
             </div>
           </div>
         </div>
-      </div>
+      </div>,
+      tooltipPortal
     );
   };
   
@@ -307,20 +359,21 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (["heading", "text-block", "button", "image", "spacer", "divider"].includes(component.type)) {
     return (
       <div
+        ref={itemRef}
         className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsHovering(false)}
       >
         <div className="h-8 flex items-center justify-center">
           <i className={`${component.icon} text-gray-500`}></i>
         </div>
         <p className="text-xs text-gray-600 font-medium text-center">{component.label}</p>
-        <ComponentPreview />
+        <ComponentTooltip />
       </div>
     );
   }
@@ -329,19 +382,20 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type.startsWith("header")) {
     return (
       <div
+        ref={itemRef}
         className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsHovering(false)}
       >
         <div className="text-center h-10 flex items-center justify-center">
           <p className="text-xs text-gray-600 font-medium">{component.label}</p>
         </div>
-        <ComponentPreview />
+        <ComponentTooltip />
       </div>
     );
   }
@@ -350,13 +404,14 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type.startsWith("hero")) {
     return (
       <div
+        ref={itemRef}
         className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsHovering(false)}
       >
         {component.type === "hero-split" ? (
@@ -377,7 +432,7 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
           </div>
         )}
         <p className="text-xs text-gray-600 font-medium text-center mt-1">{component.label}</p>
-        <ComponentPreview />
+        <ComponentTooltip />
       </div>
     );
   }
@@ -386,20 +441,21 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type === "form" || component.type === "email-signup") {
     return (
       <div
+        ref={itemRef}
         className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
-        onMouseEnter={() => setIsHovering(true)}
+        onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setIsHovering(false)}
       >
         <div className="h-12 flex flex-col items-center justify-center">
           <i className={`${component.icon} text-gray-500`}></i>
         </div>
         <p className="text-xs text-gray-600 font-medium text-center">{component.label}</p>
-        <ComponentPreview />
+        <ComponentTooltip />
       </div>
     );
   }
@@ -407,19 +463,20 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   // Fallback for any other component types
   return (
     <div
+      ref={itemRef}
       className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
       draggable
       onDragStart={(e) => onDragStart(e, component.type)}
       onDragEnd={onDragEnd}
       onClick={onAddComponent}
       data-component-type={component.type}
-      onMouseEnter={() => setIsHovering(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="text-center h-10 flex items-center justify-center">
         <p className="text-xs text-gray-600 font-medium">{component.label}</p>
       </div>
-      <ComponentPreview />
+      <ComponentTooltip />
     </div>
   );
 }
