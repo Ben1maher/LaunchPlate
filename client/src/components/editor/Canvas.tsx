@@ -210,6 +210,7 @@ export default function Canvas() {
         className="flex-1 overflow-y-auto p-8 flex justify-center" 
         id="canvasDropzone"
         ref={canvasRef}
+        style={{ maxHeight: 'calc(100vh - 12rem)' }}
       >
         {/* Canvas container with zoom effect */}
         <div 

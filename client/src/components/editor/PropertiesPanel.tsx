@@ -110,7 +110,7 @@ export default function PropertiesPanel() {
       </div>
       
       {/* Properties Tabs */}
-      <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col overflow-hidden">
+      <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <div className="px-3 pt-3 border-b border-gray-200 flex-shrink-0">
           <TabsList className="grid grid-cols-3 h-9">
             <TabsTrigger value="general" className="text-xs">General</TabsTrigger>
@@ -119,7 +119,7 @@ export default function PropertiesPanel() {
           </TabsList>
         </div>
         
-        <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="flex-1 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
           {/* General Tab */}
           <TabsContent value="general" className="p-0 m-0 h-full overflow-y-auto">
             <RenderGeneralProperties component={selectedComponent} updateComponent={updateComponent} />
