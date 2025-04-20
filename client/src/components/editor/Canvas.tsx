@@ -33,7 +33,6 @@ export default function Canvas() {
   } = useEditor();
   
   const [activeDropzone, setActiveDropzone] = useState<string | null>(null);
-  // Using viewportMode from EditorContext instead of local state
   const [zoomLevel, setZoomLevel] = useState(100);
   const [showGridLines, setShowGridLines] = useState(false);
   const [dropPosition, setDropPosition] = useState<{ index: number, position: 'top' | 'bottom' } | null>(null);
@@ -321,180 +320,180 @@ export default function Canvas() {
                 viewportMode === 'mobile' ? 'max-w-sm mx-auto' : 
                 'w-full'
               }`}
-          >
-            {/* Page Canvas */}
-            <div 
-              className={`min-h-[80vh] border-4 ${
-                isDragging 
-                  ? "border-primary border-dashed" 
-                  : "border-transparent"
-              } dropzone ${showGridLines ? 'bg-grid-pattern' : ''} ${
-                activeDropzone === "mainDropzone" ? "dropzone-active" : ""
-              }`}
-              id="mainDropzone"
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
             >
-              {isEmpty ? (
-                // Empty State
-                <div className="flex flex-col items-center justify-center h-full" id="emptyState">
-                  <div className="text-center p-10">
-                    <div className="flex justify-center">
-                      <i className="ri-drag-drop-line text-6xl text-gray-300 mb-4"></i>
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Landing Page</h3>
-                    <p className="text-gray-500 max-w-md mb-6">Drag and drop components from the library on the left to begin creating your page.</p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                      <Button 
-                        variant="outline" 
-                        className="gap-2" 
-                        onClick={async () => {
-                          try {
-                            // Fetch the default template from the API
-                            const response = await fetch('/api/templates/1');
-                            if (!response.ok) throw new Error('Failed to fetch template');
-                            
-                            const template = await response.json();
-                            
-                            // Apply template components to the canvas
-                            if (template && template.components) {
-                              setComponents(template.components);
+              {/* Page Canvas */}
+              <div 
+                className={`min-h-[80vh] border-4 ${
+                  isDragging 
+                    ? "border-primary border-dashed" 
+                    : "border-transparent"
+                } dropzone ${showGridLines ? 'bg-grid-pattern' : ''} ${
+                  activeDropzone === "mainDropzone" ? "dropzone-active" : ""
+                }`}
+                id="mainDropzone"
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                {isEmpty ? (
+                  // Empty State
+                  <div className="flex flex-col items-center justify-center h-full" id="emptyState">
+                    <div className="text-center p-10">
+                      <div className="flex justify-center">
+                        <i className="ri-drag-drop-line text-6xl text-gray-300 mb-4"></i>
+                      </div>
+                      <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Landing Page</h3>
+                      <p className="text-gray-500 max-w-md mb-6">Drag and drop components from the library on the left to begin creating your page.</p>
+                      <div className="flex flex-wrap justify-center gap-4">
+                        <Button 
+                          variant="outline" 
+                          className="gap-2" 
+                          onClick={async () => {
+                            try {
+                              // Fetch the default template from the API
+                              const response = await fetch('/api/templates/1');
+                              if (!response.ok) throw new Error('Failed to fetch template');
+                              
+                              const template = await response.json();
+                              
+                              // Apply template components to the canvas
+                              if (template && template.components) {
+                                setComponents(template.components);
+                                toast({
+                                  title: "Template applied",
+                                  description: "Template has been loaded successfully!",
+                                });
+                              }
+                            } catch (error) {
+                              console.error("Error loading template:", error);
                               toast({
-                                title: "Template applied",
-                                description: "Template has been loaded successfully!",
+                                title: "Error loading template",
+                                description: "Failed to load the template. Please try again.",
+                                variant: "destructive",
                               });
                             }
-                          } catch (error) {
-                            console.error("Error loading template:", error);
-                            toast({
-                              title: "Error loading template",
-                              description: "Failed to load the template. Please try again.",
-                              variant: "destructive",
-                            });
-                          }
-                        }}
-                      >
-                        <i className="ri-file-copy-line"></i>
-                        Start with Template
-                      </Button>
-                      <Button 
-                        variant="default" 
-                        className="gap-2"
-                        onClick={() => toast({
-                          title: "Tutorial",
-                          description: "Follow the interactive guide to build your landing page step by step."
-                        })}
-                      >
-                        <Play className="h-4 w-4" />
-                        Watch Tutorial
-                      </Button>
+                          }}
+                        >
+                          <i className="ri-file-copy-line"></i>
+                          Start with Template
+                        </Button>
+                        <Button 
+                          variant="default" 
+                          className="gap-2"
+                          onClick={() => toast({
+                            title: "Tutorial",
+                            description: "Follow the interactive guide to build your landing page step by step."
+                          })}
+                        >
+                          <Play className="h-4 w-4" />
+                          Watch Tutorial
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
-                // Components on the canvas
-                <div className="flex flex-col">
-                  {components.map((component, index) => (
-                    <div 
-                      key={component.id} 
-                      className="relative group component-wrapper"
-                      style={{ backgroundColor: 'transparent' }}
-                      draggable
-                      onDragStart={(e) => handleComponentDragStart(e, index)}
-                      onDragOver={(e) => handleComponentDragOver(e, index)}
-                      onDrop={(e) => handleComponentDrop(e, index)}
-                      onDragEnd={() => setDropPosition(null)}
-                    >
-                      {/* Top drop indicator */}
-                      {dropPosition?.index === index && dropPosition?.position === 'top' && (
-                        <div className="absolute top-0 left-0 right-0 h-1 bg-primary z-10 -translate-y-[2px]" 
-                          style={{ pointerEvents: 'none' }}>
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
-                          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      )}
-                      
-                      <div className="relative" style={{ backgroundColor: 'transparent' }}>
-                        {/* Component Controls */}
-                        {selectedComponent?.id === component.id && (
-                          <div className="absolute left-0 -translate-x-full top-0 h-full flex items-center pr-2 z-50">
-                            <div className="flex flex-col gap-2 bg-white shadow-lg rounded-md p-2 border border-gray-200">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
-                                onClick={() => index > 0 && moveComponent(index, index - 1)}
-                                disabled={index === 0}
-                                title="Move component up"
-                              >
-                                <ArrowUp className="h-4 w-4" />
-                                <span className="sr-only">Move Up</span>
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
-                                onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
-                                disabled={index === components.length - 1}
-                                title="Move component down"
-                              >
-                                <ArrowDown className="h-4 w-4" />
-                                <span className="sr-only">Move Down</span>
-                              </Button>
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
-                                onClick={() => {
-                                  if (confirm("Are you sure you want to remove this component?")) {
-                                    removeComponent(component.id);
-                                    setSelectedComponent(null);
-                                  }
-                                }}
-                                title="Delete component"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                                <span className="sr-only">Delete</span>
-                              </Button>
-                            </div>
+                ) : (
+                  // Components on the canvas
+                  <div className="flex flex-col">
+                    {components.map((component, index) => (
+                      <div 
+                        key={component.id} 
+                        className="relative group component-wrapper"
+                        style={{ backgroundColor: 'transparent' }}
+                        draggable
+                        onDragStart={(e) => handleComponentDragStart(e, index)}
+                        onDragOver={(e) => handleComponentDragOver(e, index)}
+                        onDrop={(e) => handleComponentDrop(e, index)}
+                        onDragEnd={() => setDropPosition(null)}
+                      >
+                        {/* Top drop indicator */}
+                        {dropPosition?.index === index && dropPosition?.position === 'top' && (
+                          <div className="absolute top-0 left-0 right-0 h-1 bg-primary z-10 -translate-y-[2px]" 
+                            style={{ pointerEvents: 'none' }}>
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
                           </div>
                         )}
                         
-                        {/* Additional visible controls for all components */}
-                        <div className={`absolute -right-10 top-0 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-40`}>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="flex items-center justify-center h-6 w-6 p-0 bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200"
+                        <div className="relative" style={{ backgroundColor: 'transparent' }}>
+                          {/* Component Controls */}
+                          {selectedComponent?.id === component.id && (
+                            <div className="absolute left-0 -translate-x-full top-0 h-full flex items-center pr-2 z-50">
+                              <div className="flex flex-col gap-2 bg-white shadow-lg rounded-md p-2 border border-gray-200">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
+                                  onClick={() => index > 0 && moveComponent(index, index - 1)}
+                                  disabled={index === 0}
+                                  title="Move component up"
+                                >
+                                  <ArrowUp className="h-4 w-4" />
+                                  <span className="sr-only">Move Up</span>
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
+                                  onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
+                                  disabled={index === components.length - 1}
+                                  title="Move component down"
+                                >
+                                  <ArrowDown className="h-4 w-4" />
+                                  <span className="sr-only">Move Down</span>
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="flex items-center justify-center h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                  onClick={() => {
+                                    if (confirm("Are you sure you want to remove this component?")) {
+                                      removeComponent(component.id);
+                                      setSelectedComponent(null);
+                                    }
+                                  }}
+                                  title="Delete component"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                  <span className="sr-only">Delete</span>
+                                </Button>
+                              </div>
+                            </div>
+                          )}
+                          
+                          {/* Additional visible controls for all components */}
+                          <div className={`absolute -right-10 top-0 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-40`}>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center justify-center h-6 w-6 p-0 bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200"
+                              onClick={() => setSelectedComponent(component)}
+                              title="Edit component"
+                            >
+                              <Pencil className="h-3 w-3" />
+                            </Button>
+                          </div>
+                          <ComponentRenderer 
+                            component={component}
+                            isSelected={selectedComponent?.id === component.id}
                             onClick={() => setSelectedComponent(component)}
-                            title="Edit component"
-                          >
-                            <Pencil className="h-3 w-3" />
-                          </Button>
+                            inEditor={true}
+                            viewportMode={viewportMode}
+                          />
                         </div>
-                        <ComponentRenderer 
-                          component={component}
-                          isSelected={selectedComponent?.id === component.id}
-                          onClick={() => setSelectedComponent(component)}
-                          inEditor={true}
-                          viewportMode={viewportMode}
-                        />
+                        
+                        {/* Bottom drop indicator */}
+                        {dropPosition?.index === index && dropPosition?.position === 'bottom' && (
+                          <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary z-10 translate-y-[2px]" 
+                            style={{ pointerEvents: 'none' }}>
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                          </div>
+                        )}
                       </div>
-                      
-                      {/* Bottom drop indicator */}
-                      {dropPosition?.index === index && dropPosition?.position === 'bottom' && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary z-10 translate-y-[2px]" 
-                          style={{ pointerEvents: 'none' }}>
-                          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
-                          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
