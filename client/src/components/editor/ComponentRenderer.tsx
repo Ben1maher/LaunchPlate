@@ -94,7 +94,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   return (
     <div 
-      className={`relative component-wrapper group hover:bg-gray-50/50 hover:outline hover:outline-1 hover:outline-gray-200 ${
+      className={`relative component-wrapper group hover:outline hover:outline-1 hover:outline-gray-200 ${
         isSelected ? 'outline outline-2 outline-primary' : ''
       }`} 
       onClick={onClick}

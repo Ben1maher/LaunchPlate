@@ -417,13 +417,41 @@ export default function Canvas() {
                         </div>
                       )}
                       
-                      <ComponentRenderer 
-                        component={component}
-                        isSelected={selectedComponent?.id === component.id}
-                        onClick={() => setSelectedComponent(component)}
-                        inEditor={true}
-                        viewportMode={viewportSize}
-                      />
+                      <div className="relative">
+                        {selectedComponent?.id === component.id && (
+                          <div className="absolute -left-14 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center gap-1 py-1 px-1.5 text-xs"
+                              onClick={() => index > 0 && moveComponent(index, index - 1)}
+                              disabled={index === 0}
+                              title="Move component up"
+                            >
+                              <i className="ri-arrow-up-line"></i>
+                              <span>Move Up</span>
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center gap-1 py-1 px-1.5 text-xs"
+                              onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
+                              disabled={index === components.length - 1}
+                              title="Move component down"
+                            >
+                              <i className="ri-arrow-down-line"></i>
+                              <span>Move Down</span>
+                            </Button>
+                          </div>
+                        )}
+                        <ComponentRenderer 
+                          component={component}
+                          isSelected={selectedComponent?.id === component.id}
+                          onClick={() => setSelectedComponent(component)}
+                          inEditor={true}
+                          viewportMode={viewportSize}
+                        />
+                      </div>
                       
                       {/* Bottom drop indicator */}
                       {dropPosition?.index === index && dropPosition?.position === 'bottom' && (
