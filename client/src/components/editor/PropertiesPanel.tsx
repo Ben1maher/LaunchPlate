@@ -11,6 +11,7 @@ import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Uploa
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ColorPicker } from "@/components/ui/color-picker";
+import SortableList from "./SortableList";
 
 export default function PropertiesPanel() {
   const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
@@ -185,6 +186,7 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
   switch (component.type) {
     case 'header-1':
     case 'header-2':
+    case 'header-transparent':
       return (
         <div className="p-4 space-y-4">
           <div>
@@ -267,11 +269,32 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
               </div>
             </div>
           )}
+          
+          {component.type === 'header-transparent' && (
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Header Style</label>
+              <Select
+                value={component.content.headerStyle || 'overlay'}
+                onValueChange={(value) => updateContent('headerStyle', value)}
+              >
+                <SelectTrigger className="text-sm">
+                  <SelectValue placeholder="Select style" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="overlay">Overlay</SelectItem>
+                  <SelectItem value="fixed">Fixed</SelectItem>
+                  <SelectItem value="gradient">Gradient</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
       );
     
     case 'hero-split':
     case 'hero-centered':
+    case 'hero-video':
+    case 'hero-gradient':
       return (
         <div className="p-4 space-y-4">
           <div>
