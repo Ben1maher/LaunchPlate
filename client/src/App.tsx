@@ -7,15 +7,23 @@ import Home from "@/pages/Home";
 import Editor from "@/pages/Editor";
 import Preview from "@/pages/Preview";
 import Guide from "@/pages/Guide";
+import AuthPage from "@/pages/auth-page";
 import Layout from "@/components/Layout";
 import { EditorProvider } from "./context/EditorContext";
+import { AuthProvider } from "@/hooks/use-auth";
+import { ProtectedRoute } from "@/components/shared/ProtectedRoute";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/editor" component={Editor} />
-      <Route path="/editor/:id" component={Editor} />
+      <Route path="/auth" component={AuthPage} />
+      <ProtectedRoute path="/editor">
+        <Editor />
+      </ProtectedRoute>
+      <ProtectedRoute path="/editor/:id">
+        <Editor />
+      </ProtectedRoute>
       <Route path="/preview/:id" component={Preview} />
       <Route path="/guide" component={Guide} />
       <Route component={NotFound} />
@@ -25,14 +33,16 @@ function Router() {
 
 function App() {
   return (
-    <EditorProvider>
-      <QueryClientProvider client={queryClient}>
-        <Layout>
-          <Router />
-        </Layout>
-        <Toaster />
-      </QueryClientProvider>
-    </EditorProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <EditorProvider>
+          <Layout>
+            <Router />
+          </Layout>
+          <Toaster />
+        </EditorProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 

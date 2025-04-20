@@ -6,8 +6,12 @@ import { insertTemplateSchema, insertProjectSchema } from "@shared/schema";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import { setupAuth } from "./auth";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Set up authentication
+  setupAuth(app);
+  
   // Add routes with /api prefix
   
   // Templates
