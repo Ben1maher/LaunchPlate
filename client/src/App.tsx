@@ -8,6 +8,7 @@ import Editor from "@/pages/Editor";
 import Preview from "@/pages/Preview";
 import Guide from "@/pages/Guide";
 import AuthPage from "@/pages/auth-page";
+import Projects from "@/pages/Projects";
 import Layout from "@/components/Layout";
 import { EditorProvider } from "./context/EditorContext";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -26,6 +27,9 @@ function Router() {
       </ProtectedRoute>
       <Route path="/preview/:id" component={Preview} />
       <Route path="/guide" component={Guide} />
+      <ProtectedRoute path="/projects">
+        <Projects />
+      </ProtectedRoute>
       <Route component={NotFound} />
     </Switch>
   );

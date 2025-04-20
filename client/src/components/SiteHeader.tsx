@@ -3,10 +3,13 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { LayoutGrid, PlusCircle, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { UserMenu } from "@/components/shared/UserMenu";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function SiteHeader() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
   
   // Don't show header on editor page
   if (location.startsWith('/editor')) {
@@ -58,16 +61,20 @@ export default function SiteHeader() {
             ))}
             
             {/* Desktop CTA button */}
-            <Link href="/editor">
+            <Link href={isAuthenticated ? "/editor" : "/auth"}>
               <Button className="bg-primary text-white">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 New Landing Page
               </Button>
             </Link>
+            
+            {/* User Menu */}
+            <UserMenu />
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile menu actions */}
+          <div className="md:hidden flex items-center space-x-4">
+            <UserMenu />
             <button
               onClick={toggleMenu}
               className="text-gray-700 focus:outline-none"
@@ -99,7 +106,7 @@ export default function SiteHeader() {
           
           {/* Mobile CTA button */}
           <div className="pt-2">
-            <Link href="/editor">
+            <Link href={isAuthenticated ? "/editor" : "/auth"}>
               <Button className="w-full bg-primary text-white">
                 <PlusCircle className="h-4 w-4 mr-2" />
                 New Landing Page
