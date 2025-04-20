@@ -39,20 +39,30 @@ export default function Canvas() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Handle canvas drop events
+  // Handle canvas drop events with enhanced visual feedback
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    e.dataTransfer.dropEffect = "copy";
+    
+    // Set the appropriate drop effect based on the operation
+    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
+    e.dataTransfer.dropEffect = isReorderOperation ? "move" : "copy";
+    
+    // Add active dropzone state with different styling for move vs copy
     setActiveDropzone("mainDropzone");
     
-    // Add a highlight class to show where the component can be dropped
-    e.currentTarget.classList.add("dropzone-active");
+    // Remove any existing classes first
+    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
+    
+    // Add the appropriate class based on operation type
+    e.currentTarget.classList.add(isReorderOperation ? "dropzone-active-move" : "dropzone-active-copy");
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setActiveDropzone(null);
-    e.currentTarget.classList.remove("dropzone-active");
+    
+    // Remove all active classes
+    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -61,7 +71,7 @@ export default function Canvas() {
     
     // Remove active states
     setActiveDropzone(null);
-    e.currentTarget.classList.remove("dropzone-active");
+    e.currentTarget.classList.remove("dropzone-active-copy", "dropzone-active-move");
     
     // Check if this is a reordering operation (existing component being moved)
     const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
@@ -327,68 +337,21 @@ export default function Canvas() {
                   isDragging 
                     ? "border-primary border-dashed" 
                     : "border-transparent"
-                } dropzone ${showGridLines ? 'bg-grid-pattern' : ''} ${
-                  activeDropzone === "mainDropzone" ? "dropzone-active" : ""
-                }`}
+                } dropzone ${showGridLines ? 'bg-grid-pattern' : ''}`}
                 id="mainDropzone"
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
               >
                 {isEmpty ? (
-                  // Empty State
+                  // Improved Empty State with better instructions and less text
                   <div className="flex flex-col items-center justify-center h-full" id="emptyState">
                     <div className="text-center p-10">
                       <div className="flex justify-center">
                         <i className="ri-drag-drop-line text-6xl text-gray-300 mb-4"></i>
                       </div>
-                      <h3 className="text-lg font-medium text-gray-700 mb-2">Start Building Your Landing Page</h3>
-                      <p className="text-gray-500 max-w-md mb-6">Drag and drop components from the library on the left to begin creating your page.</p>
-                      <div className="flex flex-wrap justify-center gap-4">
-                        <Button 
-                          variant="outline" 
-                          className="gap-2" 
-                          onClick={async () => {
-                            try {
-                              // Fetch the default template from the API
-                              const response = await fetch('/api/templates/1');
-                              if (!response.ok) throw new Error('Failed to fetch template');
-                              
-                              const template = await response.json();
-                              
-                              // Apply template components to the canvas
-                              if (template && template.components) {
-                                setComponents(template.components);
-                                toast({
-                                  title: "Template applied",
-                                  description: "Template has been loaded successfully!",
-                                });
-                              }
-                            } catch (error) {
-                              console.error("Error loading template:", error);
-                              toast({
-                                title: "Error loading template",
-                                description: "Failed to load the template. Please try again.",
-                                variant: "destructive",
-                              });
-                            }
-                          }}
-                        >
-                          <i className="ri-file-copy-line"></i>
-                          Start with Template
-                        </Button>
-                        <Button 
-                          variant="default" 
-                          className="gap-2"
-                          onClick={() => toast({
-                            title: "Tutorial",
-                            description: "Follow the interactive guide to build your landing page step by step."
-                          })}
-                        >
-                          <Play className="h-4 w-4" />
-                          Watch Tutorial
-                        </Button>
-                      </div>
+                      <h3 className="text-lg font-medium text-gray-700 mb-2">Drop Components Here</h3>
+                      <p className="text-gray-500 max-w-md mb-6">Drag elements from the sidebar and drop them in this area.</p>
                     </div>
                   </div>
                 ) : (
@@ -505,6 +468,29 @@ export default function Canvas() {
           background-image: linear-gradient(to right, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
                           linear-gradient(to bottom, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
           background-size: 20px 20px;
+        }
+        
+        /* Improved dropzone feedback */
+        .dropzone-active-copy {
+          border: 4px dashed #3b82f6 !important;
+          background-color: rgba(59, 130, 246, 0.05) !important;
+          animation: pulse-copy 1.5s infinite;
+        }
+        
+        .dropzone-active-move {
+          border: 4px dashed #10b981 !important;
+          background-color: rgba(16, 185, 129, 0.05) !important;
+          animation: pulse-move 1.5s infinite;
+        }
+        
+        @keyframes pulse-copy {
+          0%, 100% { border-color: rgba(59, 130, 246, 0.8); }
+          50% { border-color: rgba(59, 130, 246, 0.3); }
+        }
+        
+        @keyframes pulse-move {
+          0%, 100% { border-color: rgba(16, 185, 129, 0.8); }
+          50% { border-color: rgba(16, 185, 129, 0.3); }
         }
         
         /* Override any potential gray background on component selection */

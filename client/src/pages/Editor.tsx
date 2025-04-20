@@ -140,8 +140,8 @@ export default function Editor() {
   };
   
   useEffect(() => {
-    // Always show tutorial for testing
-    setTutorialActive(true);
+    // Disable tutorial for better UX
+    setTutorialActive(false);
     
     // Load project or template if ID is provided, or reset the editor
     const handleInitialLoad = async () => {
