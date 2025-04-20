@@ -33,16 +33,11 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
     removeComponent(component.id);
   };
 
+  // Note: Duplicate button was removed, but we'll keep this function in case we want to restore it later
   const handleDuplicate = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Create a deep copy of the component
-    const duplicatedComponent: Component = {
-      ...JSON.parse(JSON.stringify(component)),
-      id: `${component.id}-copy-${Date.now()}`
-    };
-    // Add the component as a new entry
-    const { addComponent } = useEditor();
-    addComponent(component.type, undefined, duplicatedComponent);
+    // Just a placeholder for now since we removed the button
+    console.log("Duplicate component feature is disabled");
   };
 
   const handleSettingsClick = (e: React.MouseEvent) => {
@@ -170,24 +165,6 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
           isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         } transition-opacity duration-200`}
       >
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-          title="Edit properties"
-          onClick={handleSettingsClick}
-        >
-          <Settings className="h-3.5 w-3.5" />
-        </Button>
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          className="h-7 w-7 text-gray-500 hover:text-gray-700 hover:bg-gray-100"
-          title="Duplicate component"
-          onClick={handleDuplicate}
-        >
-          <Copy className="h-3.5 w-3.5" />
-        </Button>
         <Button 
           size="icon" 
           variant="ghost" 
