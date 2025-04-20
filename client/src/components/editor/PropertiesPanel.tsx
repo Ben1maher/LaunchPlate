@@ -11,7 +11,6 @@ import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Uploa
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ColorPicker } from "@/components/ui/color-picker";
-import SortableList from "./SortableList";
 
 export default function PropertiesPanel() {
   const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
@@ -1080,6 +1079,815 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
               value={component.content.buttonText || ''}
               onChange={(e) => updateContent('buttonText', e.target.value)}
               className="text-sm"
+            />
+          </div>
+        </div>
+      );
+      
+    // Columns components
+    case 'columns-2':
+    case 'columns-3':
+    case 'columns-4':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Columns Gap</label>
+            <Select
+              value={component.content.gap || 'medium'}
+              onValueChange={(value) => updateContent('gap', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Select gap size" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="small">Small</SelectItem>
+                <SelectItem value="medium">Medium</SelectItem>
+                <SelectItem value="large">Large</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Vertical Alignment</label>
+            <Select
+              value={component.content.verticalAlign || 'top'}
+              onValueChange={(value) => updateContent('verticalAlign', value)}
+            >
+              <SelectTrigger className="text-sm">
+                <SelectValue placeholder="Select alignment" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="top">Top</SelectItem>
+                <SelectItem value="center">Center</SelectItem>
+                <SelectItem value="bottom">Bottom</SelectItem>
+                <SelectItem value="stretch">Stretch</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Equal Column Width</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="equalWidth"
+                checked={component.content.equalWidth || true}
+                onChange={(e) => updateContent('equalWidth', e.target.checked)}
+              />
+              <label htmlFor="equalWidth" className="text-sm">Make all columns equal width</label>
+            </div>
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Stack on Mobile</label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="stackOnMobile"
+                checked={component.content.stackOnMobile !== false}
+                onChange={(e) => updateContent('stackOnMobile', e.target.checked)}
+              />
+              <label htmlFor="stackOnMobile" className="text-sm">Stack columns on mobile devices</label>
+            </div>
+          </div>
+        </div>
+      );
+      
+    // Feature components
+    case 'feature-grid':
+    case 'feature-list':
+    case 'feature-cards':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Description</label>
+            <Textarea
+              value={component.content.description || ''}
+              onChange={(e) => updateContent('description', e.target.value)}
+              className="text-sm resize-none"
+              rows={2}
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-gray-600">Features</label>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => {
+                  const newFeatures = [
+                    ...(component.content.features || []),
+                    {
+                      title: 'New Feature',
+                      description: 'Description of this feature',
+                      icon: 'ri-star-line'
+                    }
+                  ];
+                  updateContent('features', newFeatures);
+                }}
+              >
+                Add Feature
+              </Button>
+            </div>
+            
+            {component.content.features?.map((feature: any, index: number) => (
+              <div key={index} className="border rounded-md p-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">Feature {index + 1}</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={() => {
+                      const newFeatures = component.content.features.filter((_: any, i: number) => i !== index);
+                      updateContent('features', newFeatures);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Title</label>
+                  <Input
+                    value={feature.title || ''}
+                    onChange={(e) => {
+                      const newFeatures = [...component.content.features];
+                      newFeatures[index] = { ...feature, title: e.target.value };
+                      updateContent('features', newFeatures);
+                    }}
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Description</label>
+                  <Textarea
+                    value={feature.description || ''}
+                    onChange={(e) => {
+                      const newFeatures = [...component.content.features];
+                      newFeatures[index] = { ...feature, description: e.target.value };
+                      updateContent('features', newFeatures);
+                    }}
+                    className="text-sm resize-none"
+                    rows={2}
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Icon</label>
+                  <Input
+                    value={feature.icon || ''}
+                    onChange={(e) => {
+                      const newFeatures = [...component.content.features];
+                      newFeatures[index] = { ...feature, icon: e.target.value };
+                      updateContent('features', newFeatures);
+                    }}
+                    className="text-sm"
+                    placeholder="Remix icon class (e.g., ri-star-line)"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      
+    // Testimonial components
+    case 'testimonial-single':
+    case 'testimonial-carousel':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-gray-600">Testimonials</label>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => {
+                  const newTestimonials = [
+                    ...(component.content.testimonials || []),
+                    {
+                      quote: 'This product changed my life!',
+                      author: 'Jane Doe',
+                      role: 'CEO, Company',
+                      avatarUrl: ''
+                    }
+                  ];
+                  updateContent('testimonials', newTestimonials);
+                }}
+              >
+                Add Testimonial
+              </Button>
+            </div>
+            
+            {component.content.testimonials?.map((item: any, index: number) => (
+              <div key={index} className="border rounded-md p-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">Testimonial {index + 1}</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={() => {
+                      const newTestimonials = component.content.testimonials.filter((_: any, i: number) => i !== index);
+                      updateContent('testimonials', newTestimonials);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Quote</label>
+                  <Textarea
+                    value={item.quote || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...component.content.testimonials];
+                      newTestimonials[index] = { ...item, quote: e.target.value };
+                      updateContent('testimonials', newTestimonials);
+                    }}
+                    className="text-sm resize-none"
+                    rows={3}
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Author Name</label>
+                  <Input
+                    value={item.author || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...component.content.testimonials];
+                      newTestimonials[index] = { ...item, author: e.target.value };
+                      updateContent('testimonials', newTestimonials);
+                    }}
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Author Role</label>
+                  <Input
+                    value={item.role || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...component.content.testimonials];
+                      newTestimonials[index] = { ...item, role: e.target.value };
+                      updateContent('testimonials', newTestimonials);
+                    }}
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Avatar URL</label>
+                  <Input
+                    value={item.avatarUrl || ''}
+                    onChange={(e) => {
+                      const newTestimonials = [...component.content.testimonials];
+                      newTestimonials[index] = { ...item, avatarUrl: e.target.value };
+                      updateContent('testimonials', newTestimonials);
+                    }}
+                    className="text-sm"
+                    placeholder="https://example.com/avatar.jpg"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      
+    // Stats bar
+    case 'stats-bar':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-gray-600">Statistics</label>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => {
+                  const newStats = [
+                    ...(component.content.stats || []),
+                    { value: '100+', label: 'Customers' }
+                  ];
+                  updateContent('stats', newStats);
+                }}
+              >
+                Add Stat
+              </Button>
+            </div>
+            
+            {component.content.stats?.map((stat: any, index: number) => (
+              <div key={index} className="border rounded-md p-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">Stat {index + 1}</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={() => {
+                      const newStats = component.content.stats.filter((_: any, i: number) => i !== index);
+                      updateContent('stats', newStats);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Value</label>
+                  <Input
+                    value={stat.value || ''}
+                    onChange={(e) => {
+                      const newStats = [...component.content.stats];
+                      newStats[index] = { ...stat, value: e.target.value };
+                      updateContent('stats', newStats);
+                    }}
+                    className="text-sm"
+                    placeholder="100+"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Label</label>
+                  <Input
+                    value={stat.label || ''}
+                    onChange={(e) => {
+                      const newStats = [...component.content.stats];
+                      newStats[index] = { ...stat, label: e.target.value };
+                      updateContent('stats', newStats);
+                    }}
+                    className="text-sm"
+                    placeholder="Customers"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      
+    // Pricing cards
+    case 'pricing-cards':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Title</label>
+            <Input
+              value={component.content.title || ''}
+              onChange={(e) => updateContent('title', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Section Description</label>
+            <Textarea
+              value={component.content.description || ''}
+              onChange={(e) => updateContent('description', e.target.value)}
+              className="text-sm resize-none"
+              rows={2}
+            />
+          </div>
+          
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="text-xs text-gray-600">Pricing Plans</label>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 px-2 text-xs"
+                onClick={() => {
+                  const newPlans = [
+                    ...(component.content.plans || []),
+                    {
+                      name: 'Basic',
+                      price: '$19',
+                      period: 'per month',
+                      description: 'Perfect for individuals',
+                      features: ['Feature 1', 'Feature 2'],
+                      buttonText: 'Get Started',
+                      buttonUrl: '#',
+                      highlight: false
+                    }
+                  ];
+                  updateContent('plans', newPlans);
+                }}
+              >
+                Add Plan
+              </Button>
+            </div>
+            
+            {component.content.plans?.map((plan: any, index: number) => (
+              <div key={index} className="border rounded-md p-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <h4 className="text-sm font-medium">{plan.name || `Plan ${index + 1}`}</h4>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 w-7 p-0"
+                    onClick={() => {
+                      const newPlans = component.content.plans.filter((_: any, i: number) => i !== index);
+                      updateContent('plans', newPlans);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Plan Name</label>
+                  <Input
+                    value={plan.name || ''}
+                    onChange={(e) => {
+                      const newPlans = [...component.content.plans];
+                      newPlans[index] = { ...plan, name: e.target.value };
+                      updateContent('plans', newPlans);
+                    }}
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-gray-600 block mb-1">Price</label>
+                    <Input
+                      value={plan.price || ''}
+                      onChange={(e) => {
+                        const newPlans = [...component.content.plans];
+                        newPlans[index] = { ...plan, price: e.target.value };
+                        updateContent('plans', newPlans);
+                      }}
+                      className="text-sm"
+                      placeholder="$19"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-600 block mb-1">Period</label>
+                    <Input
+                      value={plan.period || ''}
+                      onChange={(e) => {
+                        const newPlans = [...component.content.plans];
+                        newPlans[index] = { ...plan, period: e.target.value };
+                        updateContent('plans', newPlans);
+                      }}
+                      className="text-sm"
+                      placeholder="per month"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Description</label>
+                  <Input
+                    value={plan.description || ''}
+                    onChange={(e) => {
+                      const newPlans = [...component.content.plans];
+                      newPlans[index] = { ...plan, description: e.target.value };
+                      updateContent('plans', newPlans);
+                    }}
+                    className="text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs text-gray-600">Features</label>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-6 px-2 text-xs"
+                      onClick={() => {
+                        const newPlans = [...component.content.plans];
+                        const newFeatures = [...(plan.features || []), 'New feature'];
+                        newPlans[index] = { ...plan, features: newFeatures };
+                        updateContent('plans', newPlans);
+                      }}
+                    >
+                      + Add
+                    </Button>
+                  </div>
+                  
+                  {plan.features?.map((feature: string, featureIndex: number) => (
+                    <div key={featureIndex} className="flex items-center gap-2 mb-1">
+                      <Input
+                        value={feature}
+                        onChange={(e) => {
+                          const newPlans = [...component.content.plans];
+                          const newFeatures = [...plan.features];
+                          newFeatures[featureIndex] = e.target.value;
+                          newPlans[index] = { ...plan, features: newFeatures };
+                          updateContent('plans', newPlans);
+                        }}
+                        className="text-sm"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        onClick={() => {
+                          const newPlans = [...component.content.plans];
+                          const newFeatures = plan.features.filter((_: string, i: number) => i !== featureIndex);
+                          newPlans[index] = { ...plan, features: newFeatures };
+                          updateContent('plans', newPlans);
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-xs text-gray-600 block mb-1">Button Text</label>
+                    <Input
+                      value={plan.buttonText || ''}
+                      onChange={(e) => {
+                        const newPlans = [...component.content.plans];
+                        newPlans[index] = { ...plan, buttonText: e.target.value };
+                        updateContent('plans', newPlans);
+                      }}
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-600 block mb-1">Button URL</label>
+                    <Input
+                      value={plan.buttonUrl || ''}
+                      onChange={(e) => {
+                        const newPlans = [...component.content.plans];
+                        newPlans[index] = { ...plan, buttonUrl: e.target.value };
+                        updateContent('plans', newPlans);
+                      }}
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="checkbox"
+                    id={`highlight-${index}`}
+                    checked={plan.highlight || false}
+                    onChange={(e) => {
+                      const newPlans = [...component.content.plans];
+                      newPlans[index] = { ...plan, highlight: e.target.checked };
+                      updateContent('plans', newPlans);
+                    }}
+                  />
+                  <label htmlFor={`highlight-${index}`} className="text-sm">Highlight this plan</label>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+      
+    // Footer components
+    case 'footer-simple':
+    case 'footer-columns':
+      return (
+        <div className="p-4 space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Company Name</label>
+            <Input
+              value={component.content.companyName || ''}
+              onChange={(e) => updateContent('companyName', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Tagline</label>
+            <Input
+              value={component.content.tagline || ''}
+              onChange={(e) => updateContent('tagline', e.target.value)}
+              className="text-sm"
+            />
+          </div>
+          
+          {component.type === 'footer-simple' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <label className="text-xs text-gray-600">Links</label>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 px-2 text-xs"
+                  onClick={() => {
+                    const newLinks = [
+                      ...(component.content.links || []),
+                      { text: 'New Link', url: '#' }
+                    ];
+                    updateContent('links', newLinks);
+                  }}
+                >
+                  Add Link
+                </Button>
+              </div>
+              
+              {component.content.links?.map((link: any, index: number) => (
+                <div key={index} className="flex items-center gap-2">
+                  <Input
+                    value={link.text || ''}
+                    onChange={(e) => {
+                      const newLinks = [...component.content.links];
+                      newLinks[index] = { ...link, text: e.target.value };
+                      updateContent('links', newLinks);
+                    }}
+                    className="text-sm"
+                    placeholder="Link text"
+                  />
+                  <Input
+                    value={link.url || ''}
+                    onChange={(e) => {
+                      const newLinks = [...component.content.links];
+                      newLinks[index] = { ...link, url: e.target.value };
+                      updateContent('links', newLinks);
+                    }}
+                    className="text-sm"
+                    placeholder="URL"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-9 w-9 p-0"
+                    onClick={() => {
+                      const newLinks = component.content.links.filter((_: any, i: number) => i !== index);
+                      updateContent('links', newLinks);
+                    }}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          {component.type === 'footer-columns' && (
+            <>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs text-gray-600">Footer Columns</label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-xs"
+                    onClick={() => {
+                      const newColumns = [
+                        ...(component.content.columns || []),
+                        { 
+                          title: 'New Column',
+                          links: [
+                            { text: 'Link 1', url: '#' },
+                            { text: 'Link 2', url: '#' }
+                          ]
+                        }
+                      ];
+                      updateContent('columns', newColumns);
+                    }}
+                  >
+                    Add Column
+                  </Button>
+                </div>
+                
+                {component.content.columns?.map((column: any, colIndex: number) => (
+                  <div key={colIndex} className="border rounded-md p-3 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <h4 className="text-sm font-medium">{column.title || `Column ${colIndex + 1}`}</h4>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0"
+                        onClick={() => {
+                          const newColumns = component.content.columns.filter((_: any, i: number) => i !== colIndex);
+                          updateContent('columns', newColumns);
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    
+                    <div>
+                      <label className="text-xs text-gray-600 block mb-1">Column Title</label>
+                      <Input
+                        value={column.title || ''}
+                        onChange={(e) => {
+                          const newColumns = [...component.content.columns];
+                          newColumns[colIndex] = { ...column, title: e.target.value };
+                          updateContent('columns', newColumns);
+                        }}
+                        className="text-sm"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs text-gray-600">Links</label>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 px-2 text-xs"
+                          onClick={() => {
+                            const newColumns = [...component.content.columns];
+                            const newLinks = [...(column.links || []), { text: 'New Link', url: '#' }];
+                            newColumns[colIndex] = { ...column, links: newLinks };
+                            updateContent('columns', newColumns);
+                          }}
+                        >
+                          + Add Link
+                        </Button>
+                      </div>
+                      
+                      {column.links?.map((link: any, linkIndex: number) => (
+                        <div key={linkIndex} className="flex items-center gap-2">
+                          <Input
+                            value={link.text || ''}
+                            onChange={(e) => {
+                              const newColumns = [...component.content.columns];
+                              const newLinks = [...column.links];
+                              newLinks[linkIndex] = { ...link, text: e.target.value };
+                              newColumns[colIndex] = { ...column, links: newLinks };
+                              updateContent('columns', newColumns);
+                            }}
+                            className="text-sm"
+                            placeholder="Link text"
+                          />
+                          <Input
+                            value={link.url || ''}
+                            onChange={(e) => {
+                              const newColumns = [...component.content.columns];
+                              const newLinks = [...column.links];
+                              newLinks[linkIndex] = { ...link, url: e.target.value };
+                              newColumns[colIndex] = { ...column, links: newLinks };
+                              updateContent('columns', newColumns);
+                            }}
+                            className="text-sm"
+                            placeholder="URL"
+                          />
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-9 w-9 p-0"
+                            onClick={() => {
+                              const newColumns = [...component.content.columns];
+                              const newLinks = column.links.filter((_: any, i: number) => i !== linkIndex);
+                              newColumns[colIndex] = { ...column, links: newLinks };
+                              updateContent('columns', newColumns);
+                            }}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Copyright Text</label>
+            <Input
+              value={component.content.copyright || ''}
+              onChange={(e) => updateContent('copyright', e.target.value)}
+              className="text-sm"
+              placeholder="© 2025 Your Company. All rights reserved."
             />
           </div>
         </div>
