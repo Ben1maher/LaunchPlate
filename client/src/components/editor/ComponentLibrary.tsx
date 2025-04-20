@@ -86,153 +86,68 @@ export default function ComponentLibrary() {
       <div className="overflow-y-auto flex-1">
         {activeTab === "elements" && (
           <>
-            {componentCategories.map((category, index) => (
-              <div 
-                key={category.name} 
-                className={`p-3 ${category.name === "Hero Sections" ? "tutorial-highlight" : ""}`}
-                id={category.name === "Hero Sections" ? "componentCategory" : undefined}
-              >
-                <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                  <h3 className="font-medium">{category.name}</h3>
-                  <i className="ri-arrow-down-s-line"></i>
-                </div>
+            {componentCategories
+              .filter(category => 
+                ["Text Elements", "Media", "Layout", "Basic Elements"].includes(category.name)
+              )
+              .map((category, index) => (
+                <div 
+                  key={category.name} 
+                  className="p-3"
+                >
+                  <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                    <h3 className="font-medium">{category.name}</h3>
+                    <i className="ri-arrow-down-s-line"></i>
+                  </div>
 
-                <div className={`grid ${category.name === "Basic Elements" ? "grid-cols-3" : "grid-cols-2"} gap-2`}>
-                  {category.items.map((component) => (
-                    <ComponentItem 
-                      key={component.type} 
-                      component={component} 
-                      onDragStart={handleDragStart} 
-                      onDragEnd={handleDragEnd}
-                      onAddComponent={() => addComponent(component.type)}
-                    />
-                  ))}
+                  <div className={`grid ${category.name === "Basic Elements" || category.name === "Text Elements" ? "grid-cols-3" : "grid-cols-2"} gap-2`}>
+                    {category.items.map((component) => (
+                      <ComponentItem 
+                        key={component.type} 
+                        component={component} 
+                        onDragStart={handleDragStart} 
+                        onDragEnd={handleDragEnd}
+                        onAddComponent={() => addComponent(component.type)}
+                      />
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            }
           </>
         )}
 
         {activeTab === "sections" && (
-          <div className="p-3">
-            <div className="mb-4">
-              <h3 className="font-medium text-sm text-gray-600 mb-2">Header Sections</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "header-1")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("header-1")}
+          <>
+            {componentCategories
+              .filter(category => 
+                ["Headers", "Hero Sections", "Forms & CTAs", "Features", "Testimonials", "Marketing", "Footers"].includes(category.name)
+              )
+              .map((category, index) => (
+                <div 
+                  key={category.name} 
+                  className="p-3 mb-2"
                 >
-                  <div className="h-12 bg-gray-200 rounded-t flex items-center justify-center">
-                    <div className="w-full px-3 flex items-center justify-between">
-                      <div className="w-8 h-3 bg-gray-300 rounded"></div>
-                      <div className="flex space-x-1">
-                        <div className="w-3 h-3 bg-gray-300 rounded"></div>
-                        <div className="w-3 h-3 bg-gray-300 rounded"></div>
-                        <div className="w-3 h-3 bg-gray-300 rounded"></div>
-                      </div>
-                    </div>
+                  <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                    <h3 className="font-medium">{category.name}</h3>
+                    <i className="ri-arrow-down-s-line"></i>
                   </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Simple Header</p>
-                </div>
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "header-2")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("header-2")}
-                >
-                  <div className="h-12 bg-gray-200 rounded-t flex items-center justify-center">
-                    <div className="w-full px-3 flex items-center justify-between">
-                      <div className="w-8 h-3 bg-gray-300 rounded"></div>
-                      <div className="flex space-x-2">
-                        <div className="w-5 h-3 bg-gray-300 rounded"></div>
-                        <div className="w-5 h-3 bg-gray-300 rounded"></div>
-                        <div className="w-5 h-3 bg-gray-300 rounded"></div>
-                        <div className="w-8 h-3 bg-primary/70 rounded"></div>
-                      </div>
-                    </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {category.items.map((component) => (
+                      <ComponentItem 
+                        key={component.type} 
+                        component={component} 
+                        onDragStart={handleDragStart} 
+                        onDragEnd={handleDragEnd}
+                        onAddComponent={() => addComponent(component.type)}
+                      />
+                    ))}
                   </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Navigation Header</p>
                 </div>
-              </div>
-            </div>
-            
-            <div className="mb-4">
-              <h3 className="font-medium text-sm text-gray-600 mb-2">Hero Sections</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "hero-split")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("hero-split")}
-                >
-                  <div className="h-16 bg-gray-200 rounded-t flex items-center justify-center">
-                    <div className="w-1/2 h-full bg-gray-300 flex items-center justify-center">
-                      <i className="ri-image-line text-gray-500"></i>
-                    </div>
-                    <div className="w-1/2 h-full flex flex-col items-center justify-center p-1">
-                      <div className="w-full h-2 bg-gray-400 rounded mb-1"></div>
-                      <div className="w-3/4 h-2 bg-gray-400 rounded mb-2"></div>
-                      <div className="w-1/2 h-3 bg-primary/70 rounded"></div>
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Split Hero</p>
-                </div>
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "hero-centered")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("hero-centered")}
-                >
-                  <div className="h-16 bg-gray-200 rounded-t flex flex-col items-center justify-center p-2">
-                    <div className="w-3/4 h-2 bg-gray-400 rounded mb-1"></div>
-                    <div className="w-1/2 h-2 bg-gray-400 rounded mb-2"></div>
-                    <div className="w-1/3 h-3 bg-primary/70 rounded"></div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Centered Hero</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mb-4">
-              <h3 className="font-medium text-sm text-gray-600 mb-2">Feature Sections</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "text-block")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("text-block")}
-                >
-                  <div className="h-16 bg-gray-200 rounded-t p-2">
-                    <div className="w-full h-2 bg-gray-300 rounded mb-1"></div>
-                    <div className="w-full h-2 bg-gray-300 rounded mb-1"></div>
-                    <div className="w-3/4 h-2 bg-gray-300 rounded"></div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Text Block</p>
-                </div>
-                <div
-                  className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, "form")}
-                  onDragEnd={handleDragEnd}
-                  onClick={() => addComponent("form")}
-                >
-                  <div className="h-16 bg-gray-200 rounded-t p-2 flex flex-col items-center justify-center">
-                    <div className="w-full h-3 bg-gray-300 rounded mb-1"></div>
-                    <div className="w-full h-3 bg-gray-300 rounded mb-1"></div>
-                    <div className="w-full h-4 bg-primary/70 rounded"></div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-medium text-center mt-1">Contact Form</p>
-                </div>
-              </div>
-            </div>
-          </div>
+              ))
+            }
+          </>
         )}
 
         {activeTab === "templates" && (
