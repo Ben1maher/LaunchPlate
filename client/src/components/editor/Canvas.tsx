@@ -1,11 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useEditor } from "../../context/EditorContext";
 import ComponentRenderer from "./ComponentRenderer";
 import { Component, ComponentType } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Monitor, Tablet, Smartphone, ZoomIn, ZoomOut, LayoutGrid, Play } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "wouter";
 
 export default function Canvas() {
   const { 
@@ -50,12 +49,11 @@ export default function Canvas() {
     setActiveDropzone(null);
     e.currentTarget.classList.remove("dropzone-active");
     
-    // Check if this is a component from library or reordering
-    const isNewComponent = e.dataTransfer.types.some(type => 
-      type === "componentType" || (type === "text/plain" && !e.dataTransfer.types.includes("componentIndex"))
-    );
+    // Check if this is a reordering operation (existing component being moved)
+    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
     
-    if (isNewComponent) {
+    // If not a reordering operation, it's a new component from the library
+    if (!isReorderOperation) {
       // Get drag data - try both methods for compatibility
       const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
       console.log("Dropped component type on main canvas:", componentType);
@@ -82,10 +80,6 @@ export default function Canvas() {
       } else {
         console.warn("Empty or invalid component type dropped on canvas:", componentType);
       }
-    } else {
-      // This might be a reordering operation concluding on the empty canvas area
-      // We don't need to do anything here as the component should stay in its current position
-      console.log("Non-component drop detected on main canvas");
     }
   };
 
@@ -105,21 +99,17 @@ export default function Canvas() {
   // Handle component reordering with drag and drop
   const handleComponentDragStart = (e: React.DragEvent, index: number) => {
     console.log("Starting drag for component at index:", index);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("componentIndex", index.toString());
-    e.dataTransfer.setData("text/plain", index.toString()); // For compatibility
-    e.currentTarget.classList.add("opacity-50");
     
-    // Set a custom drag image to improve visual feedback
-    const dragPreview = document.createElement("div");
-    dragPreview.className = "bg-white p-2 shadow-lg rounded border border-gray-300 text-sm";
-    dragPreview.textContent = `Move component`;
-    document.body.appendChild(dragPreview);
-    e.dataTransfer.setDragImage(dragPreview, 0, 0);
-    
-    setTimeout(() => {
-      document.body.removeChild(dragPreview);
-    }, 0);
+    try {
+      // Set the drag data (this is critical)
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("application/x-component-index", index.toString());
+      
+      // Set opacity for the dragged element for visual feedback
+      e.currentTarget.classList.add("opacity-50");
+    } catch (error) {
+      console.error("Error in drag start:", error);
+    }
   };
 
   // Improved component drag over handling with position detection
@@ -155,12 +145,14 @@ export default function Canvas() {
     // Log all available data types in the transfer
     console.log("Available data types:", e.dataTransfer.types);
     
-    // Check drag source - is this a new component or reordering?
-    const isNewComponent = e.dataTransfer.types.some(type => 
-      type === "componentType" || (type === "text/plain" && !e.dataTransfer.types.includes("componentIndex"))
-    );
+    // Log all the data transfer types for debugging
+    console.log("Full data types:", e.dataTransfer.types.join(', '));
     
-    if (isNewComponent) {
+    // Check if this is a reordering operation (existing component being moved)
+    const isReorderOperation = e.dataTransfer.types.includes("application/x-component-index");
+    
+    // If not a reordering operation, it's a new component from the library
+    if (!isReorderOperation) {
       // This is a new component from the library
       const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
       console.log("Dropped new component type:", componentType);
@@ -198,36 +190,40 @@ export default function Canvas() {
       }
     } else {
       // This is reordering existing components
-      const dragIndexStr = e.dataTransfer.getData("componentIndex");
-      const dragIndex = parseInt(dragIndexStr);
-      console.log("Reordering from index:", dragIndex, "to around index:", dropIndex);
-      
-      if (!isNaN(dragIndex) && dragIndex !== dropIndex) {
-        // Determine position with 20% threshold for top section
-        const rect = e.currentTarget.getBoundingClientRect();
-        const relativeY = e.clientY - rect.top;
-        const percentY = (relativeY / rect.height) * 100;
-        const position = percentY < 20 ? 'top' : 'bottom';
-        console.log("Drop position for reordering:", position, "percent Y:", percentY.toFixed(1) + "%");
+      try {
+        const dragIndexStr = e.dataTransfer.getData("application/x-component-index");
+        const dragIndex = parseInt(dragIndexStr);
+        console.log("Reordering from index:", dragIndex, "to around index:", dropIndex);
         
-        // Calculate the target index based on position and drag direction
-        let targetIndex;
-        if (dragIndex < dropIndex) {
-          // Dragging downward
-          targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
-        } else {
-          // Dragging upward
-          targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+        if (!isNaN(dragIndex) && dragIndex !== dropIndex) {
+          // Determine position with 20% threshold for top section
+          const rect = e.currentTarget.getBoundingClientRect();
+          const relativeY = e.clientY - rect.top;
+          const percentY = (relativeY / rect.height) * 100;
+          const position = percentY < 20 ? 'top' : 'bottom';
+          console.log("Drop position for reordering:", position, "percent Y:", percentY.toFixed(1) + "%");
           
-          // When dragging upward and dropping at the bottom of a component, 
-          // we need to adjust the target index
-          if (position === 'bottom' && targetIndex > dragIndex) {
-            targetIndex -= 1;
+          // Calculate the target index based on position and drag direction
+          let targetIndex;
+          if (dragIndex < dropIndex) {
+            // Dragging downward
+            targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+          } else {
+            // Dragging upward
+            targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+            
+            // When dragging upward and dropping at the bottom of a component, 
+            // we need to adjust the target index
+            if (position === 'bottom' && targetIndex > dragIndex) {
+              targetIndex -= 1;
+            }
           }
+          
+          console.log("Moving component from", dragIndex, "to", targetIndex);
+          moveComponent(dragIndex, targetIndex);
         }
-        
-        console.log("Moving component from", dragIndex, "to", targetIndex);
-        moveComponent(dragIndex, targetIndex);
+      } catch (error) {
+        console.error("Error handling component reordering:", error);
       }
     }
   };
