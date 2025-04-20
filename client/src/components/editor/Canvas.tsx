@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useEditor } from "../../context/EditorContext";
 import ComponentRenderer from "./ComponentRenderer";
-import { Component } from "@shared/schema";
+import { Component, ComponentType } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Monitor, Tablet, Smartphone, ZoomIn, ZoomOut, LayoutGrid, Play } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -22,10 +22,11 @@ export default function Canvas() {
   const [viewportSize, setViewportSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [zoomLevel, setZoomLevel] = useState(100);
   const [showGridLines, setShowGridLines] = useState(false);
+  const [dropPosition, setDropPosition] = useState<{ index: number, position: 'top' | 'bottom' } | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  // Handle drop events
+  // Handle canvas drop events
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
@@ -54,8 +55,8 @@ export default function Canvas() {
     console.log("Dropped component type:", componentType);
     
     if (componentType) {
-      // Add the component
-      addComponent(componentType as any);
+      // Add the component at the end (default behavior for canvas drop)
+      addComponent(componentType as ComponentType);
       
       // Show toast for user feedback
       toast({
@@ -94,17 +95,77 @@ export default function Canvas() {
     e.currentTarget.classList.add("opacity-50");
   };
 
+  // Improved component drag over handling with position detection
   const handleComponentDragOver = (e: React.DragEvent, index: number) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
+    
+    // If we're dragging from the component library (not reordering)
+    const componentType = e.dataTransfer.types.includes("componentType") || 
+                         (e.dataTransfer.types.includes("text/plain") && !e.dataTransfer.types.includes("componentIndex"));
+
+    // Get the drag source (from library or reordering)
+    const dragSourceIsLibrary = componentType;
+    
+    // Determine if cursor is in the top or bottom half of the component
+    const rect = e.currentTarget.getBoundingClientRect();
+    const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
+    
+    // Update the drop position state
+    setDropPosition({ index, position });
   };
 
+  // Handle drop on a component
   const handleComponentDrop = (e: React.DragEvent, dropIndex: number) => {
     e.preventDefault();
-    const dragIndex = parseInt(e.dataTransfer.getData("componentIndex"));
     
-    if (dragIndex !== dropIndex) {
-      moveComponent(dragIndex, dropIndex);
+    // Reset drop position indicator
+    setDropPosition(null);
+    
+    // Check if this is a component from library or reordering
+    if (e.dataTransfer.types.includes("componentType") || 
+       (e.dataTransfer.types.includes("text/plain") && !e.dataTransfer.types.includes("componentIndex"))) {
+      // This is a new component from the library
+      const componentType = e.dataTransfer.getData("componentType") || e.dataTransfer.getData("text/plain");
+      
+      if (componentType) {
+        // Determine position (top or bottom half)
+        const rect = e.currentTarget.getBoundingClientRect();
+        const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
+        
+        // Adjust insert index based on position
+        const insertIndex = position === 'top' ? dropIndex : dropIndex + 1;
+        
+        // Add component at specific position
+        addComponent(componentType as ComponentType, insertIndex);
+        
+        toast({
+          title: "Component Added",
+          description: `Added ${componentType} component to your page.`,
+        });
+      }
+    } else {
+      // This is reordering existing components
+      const dragIndex = parseInt(e.dataTransfer.getData("componentIndex"));
+      
+      if (dragIndex !== dropIndex && !isNaN(dragIndex)) {
+        // Determine position (top or bottom half)
+        const rect = e.currentTarget.getBoundingClientRect();
+        const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
+        
+        // Adjust target index based on position and drag direction
+        let targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+        
+        // Handle adjustments needed when dragging downward
+        if (dragIndex < dropIndex && position === 'bottom') {
+          targetIndex = dropIndex;
+        }
+        if (dragIndex > dropIndex && position === 'top') {
+          targetIndex = dropIndex;
+        }
+        
+        moveComponent(dragIndex, targetIndex);
+      }
     }
   };
 
@@ -286,7 +347,17 @@ export default function Canvas() {
                       onDragStart={(e) => handleComponentDragStart(e, index)}
                       onDragOver={(e) => handleComponentDragOver(e, index)}
                       onDrop={(e) => handleComponentDrop(e, index)}
+                      onDragEnd={() => setDropPosition(null)}
                     >
+                      {/* Top drop indicator */}
+                      {dropPosition?.index === index && dropPosition?.position === 'top' && (
+                        <div className="absolute top-0 left-0 right-0 h-1 bg-primary z-10 -translate-y-[2px]" 
+                          style={{ pointerEvents: 'none' }}>
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
+                      
                       <ComponentRenderer 
                         component={component}
                         isSelected={selectedComponent?.id === component.id}
@@ -294,6 +365,15 @@ export default function Canvas() {
                         inEditor={true}
                         viewportMode={viewportSize}
                       />
+                      
+                      {/* Bottom drop indicator */}
+                      {dropPosition?.index === index && dropPosition?.position === 'bottom' && (
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-primary z-10 translate-y-[2px]" 
+                          style={{ pointerEvents: 'none' }}>
+                          <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 w-2 h-2 rounded-full bg-primary" />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
