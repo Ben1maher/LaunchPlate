@@ -27,7 +27,9 @@ export default function Canvas() {
     setSelectedComponent, 
     isDragging, 
     moveComponent,
-    removeComponent
+    removeComponent,
+    viewportMode,
+    setViewportMode
   } = useEditor();
   
   const [activeDropzone, setActiveDropzone] = useState<string | null>(null);

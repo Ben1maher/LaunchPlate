@@ -16,6 +16,7 @@ interface EditorContextType {
   isDragging: boolean;
   tutorialActive: boolean;
   tourStep: number;
+  viewportMode: 'desktop' | 'tablet' | 'mobile';
   history: Component[][];
   historyIndex: number;
   
@@ -24,6 +25,7 @@ interface EditorContextType {
   setIsDragging: (isDragging: boolean) => void;
   setTutorialActive: (active: boolean) => void;
   setTourStep: (step: number) => void;
+  setViewportMode: (mode: 'desktop' | 'tablet' | 'mobile') => void;
   
   addComponent: (type: ComponentType, index?: number) => void;
   updateComponent: (id: string, updates: Partial<Component>) => void;
@@ -51,6 +53,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [isDragging, setIsDragging] = useState(false);
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   
   // History for undo/redo functionality
   const [history, setHistory] = useState<Component[][]>([[]]);
@@ -890,6 +893,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     isDragging,
     tutorialActive,
     tourStep,
+    viewportMode,
     history,
     historyIndex,
     
@@ -898,6 +902,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setIsDragging,
     setTutorialActive,
     setTourStep,
+    setViewportMode,
     
     addComponent,
     updateComponent,
