@@ -640,34 +640,45 @@ export class MemStorage implements IStorage {
             id: "header-2",
             type: "header-2",
             content: {
-              logo: "John Doe",
+              logo: "Alexandra Design",
               menuItems: [
                 { text: "Home", url: "#" },
-                { text: "Work", url: "#work" },
+                { text: "Portfolio", url: "#portfolio" },
                 { text: "About", url: "#about" },
+                { text: "Services", url: "#services" },
                 { text: "Contact", url: "#contact" }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
               padding: "24px",
-              fontFamily: "Georgia, serif"
+              fontFamily: "'Playfair Display', serif",
+              borderBottom: "1px solid #f0f0f0"
             }
           },
           {
             id: "hero-centered",
             type: "hero-centered",
             content: {
-              heading: "Creative Designer & Developer",
-              subheading: "I create beautiful, functional digital experiences that help businesses connect with their audience.",
-              buttonText: "View My Work",
-              buttonUrl: "#work"
+              heading: "Crafting Digital Experiences",
+              subheading: "Transforming ideas into beautiful, functional digital experiences that help brands tell their stories and connect with their audience.",
+              primaryButtonText: "View My Work",
+              primaryButtonUrl: "#portfolio",
+              secondaryButtonText: "Contact Me",
+              secondaryButtonUrl: "#contact",
+              backgroundImage: "https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-4.0.3"
             },
             style: {
-              backgroundColor: "#f3f4f6",
-              padding: "120px 24px",
+              backgroundType: "image",
+              backgroundImage: "https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-4.0.3",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              padding: "140px 24px",
+              minHeight: "85vh",
               textAlign: "center",
-              fontFamily: "Georgia, serif"
+              overlayColor: "rgba(0, 0, 0, 0.7)",
+              color: "#ffffff",
+              fontFamily: "'Playfair Display', serif"
             }
           },
           {
@@ -676,77 +687,113 @@ export class MemStorage implements IStorage {
             content: {
               height: 80
             },
-            style: {}
-          },
-          {
-            id: "heading-about",
-            type: "heading",
-            content: {
-              text: "About Me",
-              level: "h2"
-            },
             style: {
-              fontSize: "2rem",
-              fontWeight: "normal",
-              margin: "0 0 24px",
-              color: "#1f2937",
-              fontFamily: "Georgia, serif",
-              borderBottom: "1px solid #e5e7eb",
-              paddingBottom: "8px"
+              backgroundColor: "#ffffff"
             }
           },
           {
-            id: "text-about",
+            id: "portfolio-section",
             type: "text-block",
             content: {
-              text: "With over 10 years of experience in design and development, I've helped dozens of clients achieve their digital goals. My work focuses on clean, minimal aesthetics combined with intuitive functionality."
+              text: "<div class='max-w-6xl mx-auto px-4' id='portfolio'><h2 class='text-3xl md:text-4xl font-bold mb-10 text-center relative inline-block'><span class='relative z-10'>Selected Works</span><span class='absolute bottom-0 left-0 w-full h-3 bg-yellow-200 transform -rotate-1 z-0'></span></h2><div class='grid md:grid-cols-2 lg:grid-cols-3 gap-6'><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1541701494587-cb58502866ab?ixlib=rb-4.0.3' alt='Project 1' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>E-Commerce Redesign</h3><p class='text-sm text-gray-200'>UX/UI Design, Development</p></div></div><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3' alt='Project 2' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>Finance App</h3><p class='text-sm text-gray-200'>Mobile App Design</p></div></div><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3' alt='Project 3' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>Brand Identity</h3><p class='text-sm text-gray-200'>Logo Design, Branding</p></div></div><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3' alt='Project 4' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>Coffee Shop Website</h3><p class='text-sm text-gray-200'>Web Design, Development</p></div></div><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1558655146-605d86ed31b3?ixlib=rb-4.0.3' alt='Project 5' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>Health & Wellness App</h3><p class='text-sm text-gray-200'>UX/UI Design, Development</p></div></div><div class='group relative overflow-hidden rounded-lg transition-all duration-300 transform hover:-translate-y-2'><img src='https://images.unsplash.com/photo-1629429407673-58e58883c777?ixlib=rb-4.0.3' alt='Project 6' class='w-full aspect-video object-cover transform transition-transform duration-500 group-hover:scale-110'><div class='absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div><div class='absolute bottom-0 left-0 p-4 text-white transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300'><h3 class='text-xl font-semibold'>Educational Platform</h3><p class='text-sm text-gray-200'>Web App Design</p></div></div></div></div>"
             },
             style: {
-              maxWidth: "720px",
-              margin: "0 0 48px",
-              fontSize: "1.1rem",
-              lineHeight: "1.8",
-              color: "#4b5563",
-              fontFamily: "Georgia, serif"
+              padding: "0px",
+              margin: "0px 0px 80px 0px"
             }
           },
           {
-            id: "image-portrait",
-            type: "image",
+            id: "divider-1",
+            type: "divider",
             content: {
-              url: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
-              alt: "Portrait photo",
-              caption: "Photo by Mark Williams"
+              style: "solid"
             },
             style: {
-              maxWidth: "400px",
-              margin: "0 auto 64px",
-              borderRadius: "4px",
-              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)"
+              margin: "0px auto 80px",
+              maxWidth: "200px",
+              height: "1px",
+              backgroundColor: "#e5e7eb"
             }
           },
           {
-            id: "form-contact",
+            id: "about-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4' id='about'><div class='grid md:grid-cols-2 gap-12 items-center'><div class='relative'><img src='https://images.unsplash.com/photo-1580609a3622a291d3a0a9e3a52995ece?ixlib=rb-4.0.3' alt='Portrait' class='rounded-lg shadow-xl z-10 relative'><div class='absolute -bottom-4 -right-4 w-64 h-64 bg-yellow-100 rounded-lg -z-10'></div></div><div><h2 class='text-3xl md:text-4xl font-bold mb-6 relative inline-block'><span class='relative z-10'>About Me</span><span class='absolute bottom-0 left-0 w-full h-3 bg-yellow-200 transform -rotate-1 z-0'></span></h2><p class='text-gray-700 mb-6 leading-relaxed'>With over 10 years of experience in design and development, I bring a unique blend of creative and technical expertise to every project. My design philosophy centers around creating intuitive, beautiful digital experiences that solve real problems.</p><p class='text-gray-700 mb-8 leading-relaxed'>I've worked with clients ranging from startups to Fortune 500 companies, helping them build brand identities, websites, and digital products that connect with their audiences and drive business growth.</p><div class='flex flex-wrap gap-3'><span class='px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'>UX/UI Design</span><span class='px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'>Web Development</span><span class='px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'>Branding</span><span class='px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'>Mobile Design</span><span class='px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm'>Illustration</span></div></div></div></div>"
+            },
+            style: {
+              padding: "0px",
+              margin: "0px 0px 100px 0px"
+            }
+          },
+          {
+            id: "services-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4 py-20 bg-gray-50' id='services'><h2 class='text-3xl md:text-4xl font-bold mb-12 text-center relative inline-block'><span class='relative z-10'>Services</span><span class='absolute bottom-0 left-0 w-full h-3 bg-yellow-200 transform -rotate-1 z-0'></span></h2><div class='grid md:grid-cols-2 lg:grid-cols-3 gap-10'><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-layout-4-line text-yellow-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>UX/UI Design</h3><p class='text-gray-600'>Creating intuitive, user-centered digital experiences that solve real problems with beautiful, functional interfaces.</p></div><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-code-s-slash-line text-blue-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>Web Development</h3><p class='text-gray-600'>Building responsive, performant websites and applications using modern frameworks and best practices.</p></div><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-paint-brush-line text-green-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>Branding</h3><p class='text-gray-600'>Developing cohesive brand identities that communicate your values and resonate with your target audience.</p></div><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-smartphone-line text-purple-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>Mobile Design</h3><p class='text-gray-600'>Designing engaging mobile experiences that are optimized for touch interactions and different screen sizes.</p></div><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-store-line text-red-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>E-Commerce</h3><p class='text-gray-600'>Building intuitive shopping experiences that convert visitors into customers with seamless checkout flows.</p></div><div class='p-6 bg-white rounded-lg shadow-sm border border-gray-100 transition-all duration-300 hover:shadow-md'><div class='w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4'><i class='ri-line-chart-line text-orange-700 text-xl'></i></div><h3 class='text-xl font-bold mb-3'>SEO & Analytics</h3><p class='text-gray-600'>Optimizing websites for search engines and implementing analytics to track performance and user behavior.</p></div></div></div>"
+            },
+            style: {
+              padding: "0px",
+              margin: "0px 0px 80px 0px",
+              backgroundColor: "#f9fafb"
+            }
+          },
+          {
+            id: "testimonial-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-5xl mx-auto px-4 py-16'><h2 class='text-3xl md:text-4xl font-bold mb-12 text-center relative inline-block'><span class='relative z-10'>Client Feedback</span><span class='absolute bottom-0 left-0 w-full h-3 bg-yellow-200 transform -rotate-1 z-0'></span></h2><div class='px-8 py-10 bg-white rounded-xl shadow-lg border border-gray-100 mb-12 relative'><div class='absolute -top-5 left-10 text-6xl text-yellow-300'>\"</div><p class='text-gray-700 mb-6 text-lg italic relative z-10'>Alexandra transformed our outdated website into a beautiful, functional platform that perfectly represents our brand. Her attention to detail and user-centered approach resulted in a significant increase in engagement and conversions.</p><div class='flex items-center'><img src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3' class='w-12 h-12 rounded-full mr-4' alt='Client'><div><h4 class='font-bold'>Sarah Johnson</h4><p class='text-gray-600 text-sm'>CEO, TechStart Inc.</p></div></div></div><div class='grid md:grid-cols-2 gap-8'><div class='px-6 py-8 bg-white rounded-xl shadow-sm border border-gray-100 relative'><div class='absolute -top-4 left-8 text-4xl text-yellow-300'>\"</div><p class='text-gray-700 mb-5 relative z-10'>Working with Alexandra was a pleasure. She took the time to understand our business goals and delivered a design that exceeded our expectations.</p><div class='flex items-center'><img src='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3' class='w-10 h-10 rounded-full mr-3' alt='Client'><div><h4 class='font-bold text-sm'>Michael Chen</h4><p class='text-gray-600 text-xs'>Marketing Director, GrowthCo</p></div></div></div><div class='px-6 py-8 bg-white rounded-xl shadow-sm border border-gray-100 relative'><div class='absolute -top-4 left-8 text-4xl text-yellow-300'>\"</div><p class='text-gray-700 mb-5 relative z-10'>Alexandra's design skills are matched by her technical expertise. The website she created for us is not only beautiful but also performs exceptionally well.</p><div class='flex items-center'><img src='https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-4.0.3' class='w-10 h-10 rounded-full mr-3' alt='Client'><div><h4 class='font-bold text-sm'>Emily Rodriguez</h4><p class='text-gray-600 text-xs'>Founder, Creative Solutions</p></div></div></div></div></div>"
+            },
+            style: {
+              padding: "0px",
+              margin: "0px 0px 80px 0px"
+            }
+          },
+          {
+            id: "contact-section",
             type: "form",
             content: {
-              title: "Get In Touch",
+              title: "Let's Work Together",
               fields: [
                 { name: "name", label: "Your Name", type: "text", required: true },
                 { name: "email", label: "Email Address", type: "email", required: true },
-                { name: "project", label: "Project Description", type: "textarea", required: true }
+                { name: "service", label: "Service Needed", type: "select", 
+                  options: [
+                    "UX/UI Design", 
+                    "Web Development", 
+                    "Branding",
+                    "Mobile Design",
+                    "E-Commerce",
+                    "Other"
+                  ],
+                  required: true 
+                },
+                { name: "message", label: "Project Details", type: "textarea", required: true }
               ],
               submitText: "Send Message"
             },
             style: {
-              backgroundColor: "#ffffff",
-              padding: "48px 32px",
-              margin: "64px 0",
-              borderRadius: "4px",
-              maxWidth: "720px",
+              backgroundColor: "#f9fafb",
+              padding: "64px 32px",
+              margin: "0px 0px 0px 0px",
+              borderRadius: "0px",
+              maxWidth: "900px",
               marginLeft: "auto",
               marginRight: "auto",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
-              border: "1px solid #e5e7eb"
+              fontFamily: "'Playfair Display', serif",
+              boxShadow: "none",
+              border: "none"
+            }
+          },
+          {
+            id: "footer-section",
+            type: "text-block",
+            content: {
+              text: "<footer class='bg-gray-900 text-white py-12'><div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-3 gap-8 mb-8'><div><h3 class='text-xl font-bold mb-4'>Alexandra Design</h3><p class='text-gray-400 mb-4'>Creating beautiful digital experiences that connect, engage, and inspire.</p><div class='flex space-x-4'><a href='#' class='text-gray-400 hover:text-white transition-colors'><i class='ri-instagram-line text-xl'></i></a><a href='#' class='text-gray-400 hover:text-white transition-colors'><i class='ri-dribbble-line text-xl'></i></a><a href='#' class='text-gray-400 hover:text-white transition-colors'><i class='ri-behance-line text-xl'></i></a><a href='#' class='text-gray-400 hover:text-white transition-colors'><i class='ri-linkedin-line text-xl'></i></a></div></div><div><h3 class='text-xl font-bold mb-4'>Contact</h3><ul class='space-y-2 text-gray-400'><li class='flex items-center'><i class='ri-mail-line mr-2'></i>hello@alexandradesign.com</li><li class='flex items-center'><i class='ri-phone-line mr-2'></i>+1 (555) 123-4567</li><li class='flex items-center'><i class='ri-map-pin-line mr-2'></i>San Francisco, CA</li></ul></div><div><h3 class='text-xl font-bold mb-4'>Quick Links</h3><ul class='space-y-2 text-gray-400'><li><a href='#portfolio' class='hover:text-white transition-colors'>Portfolio</a></li><li><a href='#services' class='hover:text-white transition-colors'>Services</a></li><li><a href='#about' class='hover:text-white transition-colors'>About</a></li><li><a href='#contact' class='hover:text-white transition-colors'>Contact</a></li></ul></div></div><div class='border-t border-gray-800 pt-8 text-center text-gray-500'>© 2025 Alexandra Design. All rights reserved.</div></div></footer>"
+            },
+            style: {
+              padding: "0px",
+              margin: "0px"
             }
           }
         ],
