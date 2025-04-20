@@ -2000,7 +2000,70 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
             <label className="text-xs text-gray-600 block mb-1">Type</label>
             <Select
               value={component.style.backgroundType || 'color'}
-              onValueChange={(value) => updateStyle('backgroundType', value)}
+              onValueChange={(value) => {
+                // Update background type
+                updateStyle('backgroundType', value);
+                
+                // Apply appropriate styling based on the new background type
+                if (value === 'gradient') {
+                  // Set default gradient colors if not already set
+                  const startColor = component.style.gradientStartColor || '#4F46E5';
+                  const endColor = component.style.gradientEndColor || '#0EA5E9';
+                  const direction = component.style.gradientDirection || 'to right';
+                  
+                  // Create the gradient
+                  const gradient = `linear-gradient(${direction}, ${startColor}, ${endColor})`;
+                  
+                  // Update style properties
+                  updateComponent(component.id, {
+                    style: {
+                      ...component.style,
+                      backgroundType: value,
+                      gradientStartColor: startColor,
+                      gradientEndColor: endColor,
+                      gradientDirection: direction,
+                      background: gradient,
+                      // Clear potentially conflicting properties
+                      backgroundColor: undefined,
+                      backgroundImage: undefined
+                    }
+                  });
+                } else if (value === 'color') {
+                  // Default color if switching to solid color
+                  const color = component.style.backgroundColor || '#F9FAFB';
+                  
+                  // Update style properties
+                  updateComponent(component.id, {
+                    style: {
+                      ...component.style,
+                      backgroundType: value,
+                      backgroundColor: color,
+                      // Clear potentially conflicting properties
+                      background: undefined,
+                      backgroundImage: undefined
+                    }
+                  });
+                } else if (value === 'image') {
+                  // Keep current background image if exists, or set empty
+                  const imgUrl = component.style.backgroundImage || '';
+                  
+                  // Update style properties
+                  updateComponent(component.id, {
+                    style: {
+                      ...component.style,
+                      backgroundType: value,
+                      backgroundImage: imgUrl,
+                      // Set default image properties if not set
+                      backgroundSize: component.style.backgroundSize || 'cover',
+                      backgroundPosition: component.style.backgroundPosition || 'center',
+                      backgroundRepeat: component.style.backgroundRepeat || 'no-repeat',
+                      // Clear potentially conflicting properties
+                      backgroundColor: undefined,
+                      background: undefined
+                    }
+                  });
+                }
+              }}
             >
               <SelectTrigger className="text-sm">
                 <SelectValue placeholder="Background type" />
@@ -2051,17 +2114,19 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <ColorPicker
                   color={component.style.gradientStartColor || '#4F46E5'}
                   onChange={(color) => {
-                    // Update the gradient start color and ensure it's applied
-                    updateStyle('gradientStartColor', color);
-                    
-                    // Also make sure backgroundImage is updated for components that need it
+                    // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const endColor = component.style.gradientEndColor || '#0EA5E9';
                     const gradient = `linear-gradient(${direction}, ${color}, ${endColor})`;
                     
-                    if (component.type.includes('hero') || component.type.includes('header')) {
-                      updateStyle('backgroundImage', gradient);
-                    }
+                    // Update all related gradient properties at once
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        gradientStartColor: color,
+                        background: gradient
+                      }
+                    });
                   }}
                 />
               </div>
@@ -2071,17 +2136,19 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <ColorPicker
                   color={component.style.gradientEndColor || '#0EA5E9'}
                   onChange={(color) => {
-                    // Update the gradient end color and ensure it's applied
-                    updateStyle('gradientEndColor', color);
-                    
-                    // Also make sure backgroundImage is updated for components that need it
+                    // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const startColor = component.style.gradientStartColor || '#4F46E5';
                     const gradient = `linear-gradient(${direction}, ${startColor}, ${color})`;
                     
-                    if (component.type.includes('hero') || component.type.includes('header')) {
-                      updateStyle('backgroundImage', gradient);
-                    }
+                    // Update all related gradient properties at once
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        gradientEndColor: color,
+                        background: gradient
+                      }
+                    });
                   }}
                 />
               </div>
