@@ -117,8 +117,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const addComponent = (type: ComponentType, index?: number) => {
-    const newComponent: Component = {
+  const addComponent = (type: ComponentType, index?: number, customComponent?: Component) => {
+    const newComponent: Component = customComponent || {
       id: uuidv4(),
       type,
       content: getDefaultContentForType(type),

@@ -35,11 +35,14 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   const handleDuplicate = (e: React.MouseEvent) => {
     e.stopPropagation();
+    // Create a deep copy of the component
     const duplicatedComponent: Component = {
-      ...component,
+      ...JSON.parse(JSON.stringify(component)),
       id: `${component.id}-copy-${Date.now()}`
     };
-    updateComponent(duplicatedComponent.id, duplicatedComponent);
+    // Add the component as a new entry
+    const { addComponent } = useEditor();
+    addComponent(component.type, undefined, duplicatedComponent);
   };
 
   const handleSettingsClick = (e: React.MouseEvent) => {
