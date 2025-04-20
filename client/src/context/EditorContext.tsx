@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/use-auth";
+import { useLocation } from "wouter";
 import { 
   Component,
   ComponentType, 
@@ -55,6 +57,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [historyIndex, setHistoryIndex] = useState(0);
   
   const { toast } = useToast();
+  const { user, isAuthenticated, isGuest } = useAuth();
+  const [_, navigate] = useLocation();
   
   // Hero image update event listener
   useEffect(() => {
@@ -182,9 +186,41 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const canRedo = () => historyIndex < history.length - 1;
 
   const saveProject = async (name: string, description: string): Promise<number> => {
+    // Check authentication status
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to save your project.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      throw new Error("Authentication required");
+    }
+
     try {
+      // Check if the user has reached their project limit (only for free tier)
+      if (user?.accountType === "free" && !isGuest) {
+        // Fetch user's current projects to check against limit
+        const projectsResponse = await apiRequest('GET', `/api/projects?userId=${user.id}`);
+        
+        if (projectsResponse.ok) {
+          const userProjects = await projectsResponse.json();
+          const projectLimit = user.projectsLimit || 3;
+          
+          if (userProjects.length >= projectLimit) {
+            toast({
+              title: "Project limit reached",
+              description: `Free accounts are limited to ${projectLimit} projects. Upgrade to create more projects.`,
+              variant: "destructive",
+            });
+            return -1;
+          }
+        }
+      }
+      
+      // Save the project
       const response = await apiRequest('POST', '/api/projects', {
-        userId: 1, // In a real app, this would be the logged-in user's ID
+        userId: user?.id,
         name,
         description,
         components,
@@ -192,6 +228,10 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         updatedAt: new Date().toISOString(),
         published: false
       });
+      
+      if (!response.ok) {
+        throw new Error("Failed to save project");
+      }
       
       const project = await response.json();
       
@@ -202,6 +242,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       
       return project.id;
     } catch (error) {
+      console.error("Error saving project:", error);
       toast({
         title: "Error saving project",
         description: "There was an error saving your project. Please try again.",
@@ -213,22 +254,34 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
   const loadProject = async (id: number): Promise<void> => {
     try {
-      const response = await fetch(`/api/projects/${id}`, {
-        credentials: 'include'
-      });
+      const response = await apiRequest('GET', `/api/projects/${id}`);
       
       if (!response.ok) {
         throw new Error(`Failed to load project: ${response.statusText}`);
       }
       
       const project = await response.json();
+      
+      // Check if the user has permission to edit this project
+      if (user?.id !== project.userId && !isGuest) {
+        toast({
+          title: "Permission denied",
+          description: "You don't have permission to edit this project.",
+          variant: "destructive",
+        });
+        navigate("/projects");
+        throw new Error("Permission denied");
+      }
+      
       setComponents(project.components);
       
       toast({
         title: "Project loaded",
         description: `${project.name} has been loaded successfully.`,
+        duration: 3000
       });
     } catch (error) {
+      console.error("Error loading project:", error);
       toast({
         title: "Error loading project",
         description: "There was an error loading the project. Please try again.",
