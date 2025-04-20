@@ -3,7 +3,18 @@ import { useEditor } from "../../context/EditorContext";
 import ComponentRenderer from "./ComponentRenderer";
 import { Component, ComponentType } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { Monitor, Tablet, Smartphone, ZoomIn, ZoomOut, LayoutGrid, Play } from "lucide-react";
+import { 
+  Monitor, 
+  Tablet, 
+  Smartphone, 
+  ZoomIn, 
+  ZoomOut, 
+  LayoutGrid, 
+  Play,
+  ArrowUp,
+  ArrowDown,
+  Trash2
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Canvas() {
@@ -14,7 +25,8 @@ export default function Canvas() {
     selectedComponent, 
     setSelectedComponent, 
     isDragging, 
-    moveComponent 
+    moveComponent,
+    removeComponent
   } = useEditor();
   
   const [activeDropzone, setActiveDropzone] = useState<string | null>(null);
@@ -419,30 +431,43 @@ export default function Canvas() {
                       )}
                       
                       <div className="relative" style={{ backgroundColor: 'transparent' }}>
+                        {/* Component Controls */}
                         {selectedComponent?.id === component.id && (
-                          <div className="absolute -left-24 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-10">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex items-center gap-1 py-1 px-1.5 text-xs"
-                              onClick={() => index > 0 && moveComponent(index, index - 1)}
-                              disabled={index === 0}
-                              title="Move component up"
-                            >
-                              <i className="ri-arrow-up-line"></i>
-                              <span>Move Up</span>
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex items-center gap-1 py-1 px-1.5 text-xs"
-                              onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
-                              disabled={index === components.length - 1}
-                              title="Move component down"
-                            >
-                              <i className="ri-arrow-down-line"></i>
-                              <span>Move Down</span>
-                            </Button>
+                          <div className="absolute left-0 -translate-x-full top-0 h-full flex items-center pr-2 z-50">
+                            <div className="flex flex-col gap-1 bg-white shadow-md rounded-md p-1 border border-gray-200">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex items-center justify-center h-8 w-8 p-0"
+                                onClick={() => index > 0 && moveComponent(index, index - 1)}
+                                disabled={index === 0}
+                                title="Move component up"
+                              >
+                                <ArrowUp className="h-4 w-4" />
+                                <span className="sr-only">Move Up</span>
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex items-center justify-center h-8 w-8 p-0"
+                                onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
+                                disabled={index === components.length - 1}
+                                title="Move component down"
+                              >
+                                <ArrowDown className="h-4 w-4" />
+                                <span className="sr-only">Move Down</span>
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="flex items-center justify-center h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                onClick={() => removeComponent(component.id)}
+                                title="Delete component"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                                <span className="sr-only">Delete</span>
+                              </Button>
+                            </div>
                           </div>
                         )}
                         <ComponentRenderer 
