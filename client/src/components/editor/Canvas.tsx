@@ -127,18 +127,20 @@ export default function Canvas() {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     
-    // If we're dragging from the component library (not reordering)
-    const componentType = e.dataTransfer.types.includes("componentType") || 
-                         (e.dataTransfer.types.includes("text/plain") && !e.dataTransfer.types.includes("componentIndex"));
-
-    // Get the drag source (from library or reordering)
-    const dragSourceIsLibrary = componentType;
-    
-    // Determine if cursor is in the top or bottom half of the component
+    // Get the component's bounding rectangle
     const rect = e.currentTarget.getBoundingClientRect();
-    const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
     
-    // Update the drop position state
+    // Calculate how far into the component the cursor is (as a percentage)
+    const relativeY = e.clientY - rect.top;
+    const percentY = (relativeY / rect.height) * 100;
+    
+    // Use a 20% threshold at the top for more intuitive positioning
+    // This makes it easier to drop components at the top
+    const position = percentY < 20 ? 'top' : 'bottom';
+    
+    console.log(`Drag over component ${index}, position: ${position}, percentY: ${percentY.toFixed(1)}%`);
+    
+    // Set visual indicator for drop position
     setDropPosition({ index, position });
   };
 
@@ -164,10 +166,12 @@ export default function Canvas() {
       console.log("Dropped new component type:", componentType);
       
       if (componentType && componentType.trim() !== '') {
-        // Determine position (top or bottom half)
+        // Determine position with 20% threshold for top section
         const rect = e.currentTarget.getBoundingClientRect();
-        const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
-        console.log("Drop position:", position);
+        const relativeY = e.clientY - rect.top;
+        const percentY = (relativeY / rect.height) * 100;
+        const position = percentY < 20 ? 'top' : 'bottom';
+        console.log("Drop position:", position, "percent Y:", percentY.toFixed(1) + "%");
         
         // Adjust insert index based on position
         const insertIndex = position === 'top' ? dropIndex : dropIndex + 1;
@@ -199,12 +203,14 @@ export default function Canvas() {
       console.log("Reordering from index:", dragIndex, "to around index:", dropIndex);
       
       if (!isNaN(dragIndex) && dragIndex !== dropIndex) {
-        // Determine position (top or bottom half)
+        // Determine position with 20% threshold for top section
         const rect = e.currentTarget.getBoundingClientRect();
-        const position = e.clientY - rect.top < rect.height / 2 ? 'top' : 'bottom';
-        console.log("Drop position for reordering:", position);
+        const relativeY = e.clientY - rect.top;
+        const percentY = (relativeY / rect.height) * 100;
+        const position = percentY < 20 ? 'top' : 'bottom';
+        console.log("Drop position for reordering:", position, "percent Y:", percentY.toFixed(1) + "%");
         
-        // Calculate the target index
+        // Calculate the target index based on position and drag direction
         let targetIndex;
         if (dragIndex < dropIndex) {
           // Dragging downward
@@ -212,6 +218,12 @@ export default function Canvas() {
         } else {
           // Dragging upward
           targetIndex = position === 'top' ? dropIndex : dropIndex + 1;
+          
+          // When dragging upward and dropping at the bottom of a component, 
+          // we need to adjust the target index
+          if (position === 'bottom' && targetIndex > dragIndex) {
+            targetIndex -= 1;
+          }
         }
         
         console.log("Moving component from", dragIndex, "to", targetIndex);
