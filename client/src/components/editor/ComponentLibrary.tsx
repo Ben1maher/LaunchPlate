@@ -270,21 +270,57 @@ interface ComponentItemProps {
 }
 
 function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: ComponentItemProps) {
+  const [isHovering, setIsHovering] = useState(false);
+  
+  // Component Preview Tooltip
+  const ComponentPreview = () => {
+    if (!isHovering) return null;
+    
+    return (
+      <div className="absolute -right-[240px] top-0 z-50 w-[230px] bg-white rounded-md shadow-lg border border-gray-200 p-3 pointer-events-none">
+        <div className="flex items-start space-x-3">
+          <div className="flex-1">
+            <h4 className="font-medium text-sm">{component.label}</h4>
+            <p className="text-xs text-gray-500 mt-1">{component.description}</p>
+            
+            {component.preview && (
+              <div className="mt-3 w-full overflow-hidden rounded border border-gray-200">
+                <img 
+                  src={component.preview} 
+                  alt={`Preview of ${component.label}`} 
+                  className="w-full h-auto" 
+                />
+              </div>
+            )}
+            
+            <div className="text-xs text-gray-400 mt-2 flex items-center">
+              <i className="ri-information-line mr-1"></i>
+              <span>Drag or click to add</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
   // Standard Basic Element (Icon + Label)
   if (["heading", "text-block", "button", "image", "spacer", "divider"].includes(component.type)) {
     return (
       <div
-        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
+        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         <div className="h-8 flex items-center justify-center">
           <i className={`${component.icon} text-gray-500`}></i>
         </div>
         <p className="text-xs text-gray-600 font-medium text-center">{component.label}</p>
+        <ComponentPreview />
       </div>
     );
   }
@@ -293,16 +329,19 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type.startsWith("header")) {
     return (
       <div
-        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
+        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         <div className="text-center h-10 flex items-center justify-center">
           <p className="text-xs text-gray-600 font-medium">{component.label}</p>
         </div>
+        <ComponentPreview />
       </div>
     );
   }

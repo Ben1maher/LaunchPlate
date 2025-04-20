@@ -1,180 +1,194 @@
 import { useState, useEffect } from "react";
 import { useEditor } from "../../context/EditorContext";
+import { X, ArrowRight, ArrowLeft, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+
+interface TourStep {
+  title: string;
+  content: string;
+  target: string;
+  position: "top" | "right" | "bottom" | "left";
+}
 
 export default function InteractiveTour() {
-  const { tourStep, setTourStep } = useEditor();
-  const [isVisible, setIsVisible] = useState(false);
-
-  // Position states for each step
-  const [position, setPosition] = useState({
-    left: "150px",
-    top: "200px",
-    arrowPosition: "right"
-  });
+  const { tutorialActive, setTutorialActive, tourStep, setTourStep } = useEditor();
+  const [targetElement, setTargetElement] = useState<DOMRect | null>(null);
+  
+  const tourSteps: TourStep[] = [
+    {
+      title: "Welcome to LaunchPlate!",
+      content: "Let's take a quick tour to help you get started building your landing page.",
+      target: "#welcomeHeader",
+      position: "bottom"
+    },
+    {
+      title: "Component Library",
+      content: "Browse and add components from our library. Just drag and drop elements onto your canvas.",
+      target: "#componentLibrary",
+      position: "right"
+    },
+    {
+      title: "Canvas",
+      content: "This is your canvas where you'll build your landing page by adding components.",
+      target: "#mainCanvas",
+      position: "left"
+    },
+    {
+      title: "Properties Panel",
+      content: "Select any component to edit its properties in this panel.",
+      target: "#propertiesPanel",
+      position: "left"
+    },
+    {
+      title: "Component Categories",
+      content: "Components are organized by type. Try adding headers, hero sections, features, and more!",
+      target: "#componentCategories",
+      position: "right"
+    },
+    {
+      title: "View Modes",
+      content: "Preview your page in desktop, tablet, or mobile view to ensure it looks great on all devices.",
+      target: "#viewModes",
+      position: "bottom"
+    },
+    {
+      title: "Ready to go!",
+      content: "That's it! You're ready to start building your landing page. You can access this tour anytime from the help menu.",
+      target: "#welcomeHeader",
+      position: "bottom"
+    }
+  ];
 
   useEffect(() => {
-    // Only show if a tour step is active
-    if (tourStep > 0) {
-      setIsVisible(true);
-      positionTourPopup(tourStep);
-    } else {
-      setIsVisible(false);
+    if (tutorialActive && tourStep < tourSteps.length) {
+      const targetId = tourSteps[tourStep].target;
+      const element = document.querySelector(targetId);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        setTargetElement(rect);
+        
+        // Scroll element into view if needed
+        element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Add highlight effect
+        element.classList.add('tour-highlight');
+        
+        return () => {
+          element.classList.remove('tour-highlight');
+        };
+      }
     }
-  }, [tourStep]);
+  }, [tutorialActive, tourStep, tourSteps]);
 
-  const positionTourPopup = (step: number) => {
-    // Calculate positions based on the step
-    // These are approximations - in a real app they would be dynamic based on element positions
-    switch (step) {
-      case 1: // Component library
-        setPosition({
-          left: "250px",
-          top: "200px",
-          arrowPosition: "right"
-        });
-        break;
-      case 2: // Canvas
-        setPosition({
-          left: "50%",
-          top: "300px",
-          arrowPosition: "top"
-        });
-        break;
-      case 3: // Properties panel
-        setPosition({
-          left: "calc(100% - 350px)",
-          top: "200px",
-          arrowPosition: "left"
-        });
-        break;
-      case 4: // Toolbar
-        setPosition({
-          left: "50%",
-          top: "70px",
-          arrowPosition: "bottom"
-        });
-        break;
-      default:
-        setPosition({
-          left: "150px",
-          top: "200px",
-          arrowPosition: "right"
-        });
+  const handleNext = () => {
+    if (tourStep < tourSteps.length - 1) {
+      setTourStep(tourStep + 1);
+    } else {
+      // End of tour
+      setTutorialActive(false);
+      setTourStep(0);
     }
   };
 
-  const handleCloseTour = () => {
+  const handlePrevious = () => {
+    if (tourStep > 0) {
+      setTourStep(tourStep - 1);
+    }
+  };
+
+  const handleClose = () => {
+    setTutorialActive(false);
     setTourStep(0);
   };
 
-  const handleNextStep = () => {
-    if (tourStep < 4) {
-      setTourStep(tourStep + 1);
-    } else {
-      handleCloseTour();
-    }
-  };
-
-  if (!isVisible) {
+  if (!tutorialActive || !targetElement) {
     return null;
   }
 
-  // Configure content based on the current step
-  let tourContent = {
-    title: "Select a Component",
-    description: "Start by choosing a component from the library on the left. Hero sections are a great first element for any landing page.",
-    step: 1,
-    totalSteps: 4
-  };
-
-  switch (tourStep) {
-    case 1:
-      tourContent = {
-        title: "Select a Component",
-        description: "Start by choosing a component from the library on the left. Hero sections are a great first element for any landing page.",
-        step: 1,
-        totalSteps: 4
-      };
-      break;
-    case 2:
-      tourContent = {
-        title: "Drop it on the Canvas",
-        description: "Drag the component to the canvas and drop it where you want it to appear. You can rearrange components later.",
-        step: 2,
-        totalSteps: 4
-      };
-      break;
-    case 3:
-      tourContent = {
-        title: "Customize Properties",
-        description: "Select any component to edit its properties in the right panel. Change text, colors, images, and more.",
-        step: 3,
-        totalSteps: 4
-      };
-      break;
-    case 4:
-      tourContent = {
-        title: "Save and Preview",
-        description: "Use the toolbar buttons to undo/redo changes, preview your page, and save your work when you're done.",
-        step: 4,
-        totalSteps: 4
-      };
-      break;
-  }
-
-  // Get arrow position class
-  const getArrowPositionClass = () => {
-    switch (position.arrowPosition) {
-      case "right":
-        return "right-[-8px] top-[50%] transform-gpu -translate-y-1/2 rotate-45";
-      case "left":
-        return "left-[-8px] top-[50%] transform-gpu -translate-y-1/2 rotate-45";
+  // Calculate tooltip position based on target element position
+  const getTooltipPosition = () => {
+    const position = tourSteps[tourStep].position;
+    const margin = 15; // margin from target element
+    
+    switch (position) {
       case "top":
-        return "top-[-8px] left-[50%] transform-gpu -translate-x-1/2 rotate-45";
+        return {
+          top: targetElement.top - margin - 180,
+          left: targetElement.left + targetElement.width / 2 - 150
+        };
+      case "right":
+        return {
+          top: targetElement.top + targetElement.height / 2 - 90,
+          left: targetElement.right + margin
+        };
       case "bottom":
-        return "bottom-[-8px] left-[50%] transform-gpu -translate-x-1/2 rotate-45";
+        return {
+          top: targetElement.bottom + margin,
+          left: targetElement.left + targetElement.width / 2 - 150
+        };
+      case "left":
+        return {
+          top: targetElement.top + targetElement.height / 2 - 90,
+          left: targetElement.left - margin - 300
+        };
       default:
-        return "right-[-8px] top-[50%] transform-gpu -translate-y-1/2 rotate-45";
+        return {
+          top: targetElement.bottom + margin,
+          left: targetElement.left + targetElement.width / 2 - 150
+        };
     }
   };
 
+  const tooltipPosition = getTooltipPosition();
+  const currentStep = tourSteps[tourStep];
+  const isLastStep = tourStep === tourSteps.length - 1;
+
   return (
-    <div className="fixed inset-0 z-50" id="interactiveTour">
-      <div className="absolute inset-0 bg-black bg-opacity-30 pointer-events-none"></div>
-      
-      {/* Tour Popup */}
-      <div
-        className="absolute z-10 bg-white rounded-lg shadow-xl max-w-xs"
-        style={{
-          left: position.left,
-          top: position.top,
-          transform: position.left === "50%" ? "translateX(-50%)" : "none"
-        }}
-      >
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <span className="bg-primary-100 text-primary-800 text-xs font-medium px-2 py-0.5 rounded">
-              Step {tourContent.step} of {tourContent.totalSteps}
-            </span>
-            <Button variant="ghost" size="icon" className="h-6 w-6" onClick={handleCloseTour}>
-              <X className="h-4 w-4" />
-            </Button>
+    <AnimatePresence>
+      <div className="fixed inset-0 bg-black/30 z-50 pointer-events-none">
+        {/* This is the modal overlay, but clicks should pass through */}
+        <motion.div
+          className="absolute z-[60] bg-background border border-border shadow-lg rounded-lg w-[300px] pointer-events-auto"
+          style={{
+            top: tooltipPosition.top,
+            left: tooltipPosition.left
+          }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-medium">{currentStep.title}</h3>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleClose}>
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">{currentStep.content}</p>
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-1">
+                <span className="text-xs text-muted-foreground">
+                  {tourStep + 1} of {tourSteps.length}
+                </span>
+              </div>
+              <div className="flex gap-2">
+                {tourStep > 0 && (
+                  <Button variant="outline" size="sm" onClick={handlePrevious}>
+                    <ArrowLeft className="h-4 w-4 mr-1" />
+                    Back
+                  </Button>
+                )}
+                <Button size="sm" onClick={handleNext}>
+                  {isLastStep ? "Finish" : "Next"}
+                  {!isLastStep && <ArrowRight className="h-4 w-4 ml-1" />}
+                </Button>
+              </div>
+            </div>
           </div>
-          <h3 className="font-medium text-gray-800 mb-1">{tourContent.title}</h3>
-          <p className="text-gray-600 text-sm mb-3">{tourContent.description}</p>
-          <Button 
-            variant="default" 
-            size="sm" 
-            className="w-full"
-            onClick={handleNextStep}
-          >
-            {tourStep < 4 ? "Got it, Next" : "Finish Tour"}
-          </Button>
-        </div>
-        <div className={`absolute w-4 h-4 bg-white ${getArrowPositionClass()}`}></div>
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>
   );
 }
