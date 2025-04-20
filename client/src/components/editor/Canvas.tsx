@@ -413,7 +413,7 @@ export default function Canvas() {
                   {components.map((component, index) => (
                     <div 
                       key={component.id} 
-                      className="relative"
+                      className="relative group component-wrapper"
                       style={{ backgroundColor: 'transparent' }}
                       draggable
                       onDragStart={(e) => handleComponentDragStart(e, index)}
@@ -434,11 +434,11 @@ export default function Canvas() {
                         {/* Component Controls */}
                         {selectedComponent?.id === component.id && (
                           <div className="absolute left-0 -translate-x-full top-0 h-full flex items-center pr-2 z-50">
-                            <div className="flex flex-col gap-1 bg-white shadow-md rounded-md p-1 border border-gray-200">
+                            <div className="flex flex-col gap-2 bg-white shadow-lg rounded-md p-2 border border-gray-200">
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0"
+                                className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
                                 onClick={() => index > 0 && moveComponent(index, index - 1)}
                                 disabled={index === 0}
                                 title="Move component up"
@@ -449,7 +449,7 @@ export default function Canvas() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0"
+                                className="flex items-center justify-center h-8 w-8 p-0 hover:bg-gray-100 hover:text-primary transition-colors"
                                 onClick={() => index < components.length - 1 && moveComponent(index, index + 1)}
                                 disabled={index === components.length - 1}
                                 title="Move component down"
@@ -460,8 +460,13 @@ export default function Canvas() {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="flex items-center justify-center h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50"
-                                onClick={() => removeComponent(component.id)}
+                                className="flex items-center justify-center h-8 w-8 p-0 text-red-500 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                onClick={() => {
+                                  if (confirm("Are you sure you want to remove this component?")) {
+                                    removeComponent(component.id);
+                                    setSelectedComponent(null);
+                                  }
+                                }}
                                 title="Delete component"
                               >
                                 <Trash2 className="h-4 w-4" />
@@ -470,6 +475,19 @@ export default function Canvas() {
                             </div>
                           </div>
                         )}
+                        
+                        {/* Additional visible controls for all components */}
+                        <div className={`absolute -right-10 top-0 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-40`}>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center justify-center h-6 w-6 p-0 bg-white/80 backdrop-blur-sm shadow-sm border border-gray-200"
+                            onClick={() => setSelectedComponent(component)}
+                            title="Edit component"
+                          >
+                            <Pencil className="h-3 w-3" />
+                          </Button>
+                        </div>
                         <ComponentRenderer 
                           component={component}
                           isSelected={selectedComponent?.id === component.id}
