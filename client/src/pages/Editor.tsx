@@ -223,7 +223,7 @@ export default function Editor() {
           </Link>
           <div className="flex items-center space-x-2">
             <i className="ri-layout-4-line text-primary text-2xl"></i>
-            <h1 className="font-semibold text-xl">LaunchPlate</h1>
+            <h1 id="welcomeHeader" className="font-semibold text-xl">LaunchPlate</h1>
           </div>
         </div>
         
@@ -289,9 +289,15 @@ export default function Editor() {
       
       {/* Main Content Area */}
       <div className="flex-1 flex overflow-hidden">
-        <ComponentLibrary />
-        <Canvas />
-        <PropertiesPanel />
+        <div id="componentLibrary">
+          <ComponentLibrary />
+        </div>
+        <div id="mainCanvas">
+          <Canvas />
+        </div>
+        <div id="propertiesPanel">
+          <PropertiesPanel />
+        </div>
       </div>
       
       {/* Tutorial Components */}

@@ -350,12 +350,14 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type.startsWith("hero")) {
     return (
       <div
-        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
+        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         {component.type === "hero-split" ? (
           <div className="h-16 bg-gray-200 rounded-t flex items-center justify-center">
@@ -375,6 +377,7 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
           </div>
         )}
         <p className="text-xs text-gray-600 font-medium text-center mt-1">{component.label}</p>
+        <ComponentPreview />
       </div>
     );
   }
@@ -383,17 +386,20 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   if (component.type === "form" || component.type === "email-signup") {
     return (
       <div
-        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
+        className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
         draggable
         onDragStart={(e) => onDragStart(e, component.type)}
         onDragEnd={onDragEnd}
         onClick={onAddComponent}
         data-component-type={component.type}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
       >
         <div className="h-12 flex flex-col items-center justify-center">
           <i className={`${component.icon} text-gray-500`}></i>
         </div>
         <p className="text-xs text-gray-600 font-medium text-center">{component.label}</p>
+        <ComponentPreview />
       </div>
     );
   }
@@ -401,16 +407,19 @@ function ComponentItem({ component, onDragStart, onDragEnd, onAddComponent }: Co
   // Fallback for any other component types
   return (
     <div
-      className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition"
+      className="component-draggable bg-gray-100 hover:bg-gray-200 rounded p-2 cursor-grab transition relative"
       draggable
       onDragStart={(e) => onDragStart(e, component.type)}
       onDragEnd={onDragEnd}
       onClick={onAddComponent}
       data-component-type={component.type}
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
     >
       <div className="text-center h-10 flex items-center justify-center">
         <p className="text-xs text-gray-600 font-medium">{component.label}</p>
       </div>
+      <ComponentPreview />
     </div>
   );
 }
