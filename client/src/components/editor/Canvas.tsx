@@ -33,7 +33,7 @@ export default function Canvas() {
   } = useEditor();
   
   const [activeDropzone, setActiveDropzone] = useState<string | null>(null);
-  const [viewportSize, setViewportSize] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  // Using viewportMode from EditorContext instead of local state
   const [zoomLevel, setZoomLevel] = useState(100);
   const [showGridLines, setShowGridLines] = useState(false);
   const [dropPosition, setDropPosition] = useState<{ index: number, position: 'top' | 'bottom' } | null>(null);
@@ -250,34 +250,8 @@ export default function Canvas() {
     <div className="flex-1 flex flex-col bg-gray-100 overflow-hidden">
       {/* Canvas Controls */}
       <div className="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <span className="text-xs text-gray-500">Viewport:</span>
-          <div className="flex items-center bg-gray-100 rounded p-1">
-            <Button
-              variant={viewportSize === 'desktop' ? 'default' : 'ghost'}
-              size="icon"
-              className="h-7 w-7"
-              onClick={() => setViewportSize('desktop')}
-            >
-              <Monitor className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewportSize === 'tablet' ? 'default' : 'ghost'}
-              size="icon"
-              className="h-7 w-7"
-              onClick={() => setViewportSize('tablet')}
-            >
-              <Tablet className="h-4 w-4" />
-            </Button>
-            <Button
-              variant={viewportSize === 'mobile' ? 'default' : 'ghost'}
-              size="icon"
-              className="h-7 w-7"
-              onClick={() => setViewportSize('mobile')}
-            >
-              <Smartphone className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="flex items-center">
+          <span className="text-xs font-medium text-gray-700">Canvas Controls</span>
         </div>
         
         <div className="flex items-center space-x-3">
@@ -332,13 +306,21 @@ export default function Canvas() {
           }}
         >
           {/* Actual canvas with responsive preview */}
-          <div 
-            data-viewport={viewportSize}
-            className={`bg-white shadow-sm rounded-lg overflow-hidden transition-all duration-300 ${
-              viewportSize === 'tablet' ? 'max-w-xl mx-auto' : 
-              viewportSize === 'mobile' ? 'max-w-sm mx-auto' : 
-              'w-full'
-            }`}
+          <div className="relative">
+            {viewportMode !== 'desktop' && (
+              <div className="absolute -top-8 left-0 right-0 text-center">
+                <span className="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs font-medium text-gray-700">
+                  {viewportMode === 'tablet' ? 'Tablet View (768px)' : 'Mobile View (375px)'}
+                </span>
+              </div>
+            )}
+            <div 
+              data-viewport={viewportMode}
+              className={`bg-white shadow-sm rounded-lg overflow-hidden transition-all duration-300 ${
+                viewportMode === 'tablet' ? 'max-w-xl mx-auto' : 
+                viewportMode === 'mobile' ? 'max-w-sm mx-auto' : 
+                'w-full'
+              }`}
           >
             {/* Page Canvas */}
             <div 
@@ -496,7 +478,7 @@ export default function Canvas() {
                           isSelected={selectedComponent?.id === component.id}
                           onClick={() => setSelectedComponent(component)}
                           inEditor={true}
-                          viewportMode={viewportSize}
+                          viewportMode={viewportMode}
                         />
                       </div>
                       
@@ -512,6 +494,7 @@ export default function Canvas() {
                   ))}
                 </div>
               )}
+            </div>
             </div>
           </div>
         </div>
