@@ -8,7 +8,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16',
+  apiVersion: '2023-10-16' as any, // Use type assertion to prevent version compatibility issues
 });
 
 // Map subscription tiers to Stripe price IDs
@@ -216,8 +216,8 @@ export async function getUserSubscription(userId: number) {
       subscription: {
         id: subscription.id,
         status: subscription.status,
-        current_period_end: subscription.current_period_end,
-        cancel_at_period_end: subscription.cancel_at_period_end,
+        current_period_end: (subscription as any).current_period_end, // Type assertion for compatibility
+        cancel_at_period_end: (subscription as any).cancel_at_period_end, // Type assertion for compatibility
       },
     };
   } catch (error) {

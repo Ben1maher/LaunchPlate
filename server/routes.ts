@@ -277,7 +277,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({
         subscription,
         tier: user?.accountType || 'free',
-        hasActiveSubscription: !!subscription && (subscription.status === 'active' || subscription.status === 'trialing'),
+        hasActiveSubscription: subscription ? subscription.hasActiveSubscription : false,
       });
     } catch (error) {
       console.error('Error fetching subscription:', error);
@@ -295,8 +295,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { tier } = req.body;
       
       // Validate tier
-      if (!tier || (tier !== SubscriptionTiers.PAID && tier !== SubscriptionTiers.PREMIUM)) {
+      if (!tier || !Object.values(SubscriptionTiers).includes(tier as SubscriptionTier)) {
         return res.status(400).json({ message: "Invalid subscription tier" });
+      }
+      
+      // Only allow paid tiers
+      if (tier !== SubscriptionTiers.PAID && tier !== SubscriptionTiers.PREMIUM) {
+        return res.status(400).json({ message: "Cannot create a checkout session for a free tier" });
       }
       
       // Get origin for success/cancel URLs
@@ -305,18 +310,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cancelUrl = `${origin}/pricing?checkout_canceled=true`;
       
       // Create checkout session
-      const checkoutUrl = await createSubscriptionCheckoutSession(
+      const checkoutSession = await createSubscriptionCheckoutSession(
         req.user.id,
-        tier as SubscriptionTier,
-        successUrl,
-        cancelUrl
+        req.user.email,
+        req.user.fullName,
+        tier as SubscriptionTier
       );
       
-      if (!checkoutUrl) {
+      if (!checkoutSession || !checkoutSession.url) {
         return res.status(500).json({ message: "Failed to create checkout session" });
       }
       
-      res.json({ url: checkoutUrl });
+      res.json({ url: checkoutSession.url });
     } catch (error) {
       console.error('Error creating checkout session:', error);
       res.status(500).json({ message: "Failed to create checkout session" });
