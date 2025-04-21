@@ -78,10 +78,12 @@ export function UserMenu() {
     }
     
     switch (user?.accountType) {
-      case "pro":
+      case "paid":
         return <Badge variant="outline" className="text-purple-500 border-purple-200 bg-purple-50">Pro</Badge>;
-      case "enterprise":
-        return <Badge variant="outline" className="text-emerald-500 border-emerald-200 bg-emerald-50">Enterprise</Badge>;
+      case "premium":
+        return <Badge variant="outline" className="text-emerald-500 border-emerald-200 bg-emerald-50">Premium</Badge>;
+      case "free":
+        return <Badge variant="outline" className="text-gray-500 border-gray-200 bg-gray-50">Free</Badge>;
       default:
         return <Badge variant="outline" className="text-gray-500 border-gray-200 bg-gray-50">Free</Badge>;
     }
@@ -131,7 +133,7 @@ export function UserMenu() {
 
         <DropdownMenuSeparator />
 
-        {!isGuest && user?.accountType !== "enterprise" && (
+        {!isGuest && user?.accountType !== "premium" && (
           <>
             <DropdownMenuItem onClick={() => navigate("/pricing")}>
               <Crown className="mr-2 h-4 w-4" />

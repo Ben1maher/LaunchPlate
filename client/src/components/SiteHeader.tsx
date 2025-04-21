@@ -27,7 +27,13 @@ export default function SiteHeader() {
   // Navigation items
   const navItems = [
     { text: "Home", url: "/" },
+    { text: "Pricing", url: "/pricing" },
     { text: "Guides", url: "/guide" }
+  ];
+  
+  // Extra nav items for authenticated users
+  const authenticatedNavItems = [
+    { text: "My Projects", url: "/projects" }
   ];
   
   // Toggle mobile menu
@@ -50,6 +56,18 @@ export default function SiteHeader() {
           <div className="hidden md:flex items-center space-x-6">
             {navItems.map((item, index) => (
               <div key={index} className="inline-block">
+                <Link href={item.url}>
+                  <span className={`font-medium hover:text-primary cursor-pointer ${
+                    location === item.url ? 'text-primary' : 'text-gray-700'
+                  }`}>
+                    {item.text}
+                  </span>
+                </Link>
+              </div>
+            ))}
+            
+            {isAuthenticated && authenticatedNavItems.map((item, index) => (
+              <div key={`auth-${index}`} className="inline-block">
                 <Link href={item.url}>
                   <span className={`font-medium hover:text-primary cursor-pointer ${
                     location === item.url ? 'text-primary' : 'text-gray-700'
@@ -103,6 +121,37 @@ export default function SiteHeader() {
               </Link>
             </div>
           ))}
+          
+          {isAuthenticated && authenticatedNavItems.map((item, index) => (
+            <div key={`auth-${index}`} className="block">
+              <Link href={item.url}>
+                <span 
+                  className={`block py-2 font-medium hover:text-primary cursor-pointer ${
+                    location === item.url ? 'text-primary' : 'text-gray-700'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.text}
+                </span>
+              </Link>
+            </div>
+          ))}
+          
+          {/* Account link (only for authenticated users) */}
+          {isAuthenticated && (
+            <div className="block">
+              <Link href="/account">
+                <span 
+                  className={`block py-2 font-medium hover:text-primary cursor-pointer ${
+                    location === '/account' ? 'text-primary' : 'text-gray-700'
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  My Account
+                </span>
+              </Link>
+            </div>
+          )}
           
           {/* Mobile CTA button */}
           <div className="pt-2">
