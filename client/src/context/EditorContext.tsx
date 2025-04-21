@@ -5,7 +5,8 @@ import { useLocation } from "wouter";
 import { 
   Component,
   ComponentType, 
-  PageComponent 
+  PageComponent,
+  PageSettings
 } from '@shared/schema';
 import { v4 as uuidv4 } from 'uuid';
 import { apiRequest } from '@/lib/queryClient';
@@ -19,6 +20,8 @@ interface EditorContextType {
   viewportMode: 'desktop' | 'tablet' | 'mobile';
   history: Component[][];
   historyIndex: number;
+  pageSettings: PageSettings;
+  isEditingPage: boolean;
   
   setComponents: (components: Component[]) => void;
   setSelectedComponent: (component: Component | null) => void;
@@ -26,11 +29,14 @@ interface EditorContextType {
   setTutorialActive: (active: boolean) => void;
   setTourStep: (step: number) => void;
   setViewportMode: (mode: 'desktop' | 'tablet' | 'mobile') => void;
+  setIsEditingPage: (isEditing: boolean) => void;
   
   addComponent: (type: ComponentType, index?: number) => void;
   updateComponent: (id: string, updates: Partial<Component>) => void;
   removeComponent: (id: string) => void;
   moveComponent: (fromIndex: number, toIndex: number) => void;
+  
+  updatePageSettings: (settings: Partial<PageSettings>) => void;
   
   undo: () => void;
   redo: () => void;
@@ -54,6 +60,17 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tourStep, setTourStep] = useState(0);
   const [viewportMode, setViewportMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [isEditingPage, setIsEditingPage] = useState(false);
+  
+  // Default page settings
+  const [pageSettings, setPageSettings] = useState<PageSettings>({
+    background: {
+      type: 'color',
+      color: '#ffffff'
+    },
+    width: 'contained',
+    maxWidth: 1200
+  });
   
   // History for undo/redo functionality
   const [history, setHistory] = useState<Component[][]>([[]]);
@@ -305,11 +322,50 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updatePageSettings = (settings: Partial<PageSettings>) => {
+    if (settings.background && typeof settings.background === 'object') {
+      // For background updates, merge the objects instead of replacing
+      setPageSettings(prev => ({
+        ...prev,
+        ...settings,
+        background: {
+          ...prev.background,
+          ...settings.background
+        }
+      }));
+    } else {
+      // For other settings, just spread them in
+      setPageSettings(prev => ({
+        ...prev,
+        ...settings
+      }));
+    }
+    
+    // Deselect any component when editing page settings
+    if (selectedComponent && !isEditingPage) {
+      setSelectedComponent(null);
+    }
+    
+    toast({
+      title: "Page settings updated",
+      description: "The page background has been updated.",
+      duration: 2000
+    });
+  };
+
   const resetEditor = () => {
     setComponentsState([]);
     setSelectedComponent(null);
     setHistory([[]]);
     setHistoryIndex(0);
+    setPageSettings({
+      background: {
+        type: 'color',
+        color: '#ffffff'
+      },
+      width: 'contained',
+      maxWidth: 1200
+    });
   };
 
   // Get default content based on component type
@@ -907,6 +963,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     viewportMode,
     history,
     historyIndex,
+    pageSettings,
+    isEditingPage,
     
     setComponents,
     setSelectedComponent,
@@ -914,11 +972,14 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     setTutorialActive,
     setTourStep,
     setViewportMode,
+    setIsEditingPage,
     
     addComponent,
     updateComponent,
     removeComponent,
     moveComponent,
+    
+    updatePageSettings,
     
     undo,
     redo,

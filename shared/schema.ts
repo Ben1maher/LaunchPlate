@@ -170,7 +170,24 @@ export interface Component {
   style: Record<string, any>;
 }
 
+export interface PageSettings {
+  background: {
+    type: 'color' | 'gradient' | 'image';
+    color?: string;
+    gradientStart?: string;
+    gradientEnd?: string;
+    imageUrl?: string;
+    overlay?: string;
+    overlayOpacity?: number;
+  };
+  width?: 'full' | 'contained';
+  maxWidth?: number;
+  fontFamily?: string;
+  customStyles?: Record<string, any>;
+}
+
 export interface PageComponent {
   id: string;
   components: Component[];
+  settings?: PageSettings;
 }
