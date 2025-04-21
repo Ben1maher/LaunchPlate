@@ -1,19 +1,355 @@
 import { useState, useEffect, useRef } from "react";
 import { useEditor } from "../../context/EditorContext";
-import { Component, ComponentType } from "@shared/schema";
+import { Component, ComponentType, PageSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getComponentData } from "./componentData";
-import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image } from "lucide-react";
+import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image, Palette, Layers, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ColorPicker } from "@/components/ui/color-picker";
 
+// Page Background Settings Component
+function PageBackgroundSettings({ 
+  pageSettings, 
+  updatePageSettings 
+}: { 
+  pageSettings: PageSettings, 
+  updatePageSettings: (settings: Partial<PageSettings>) => void 
+}) {
+  const { toast } = useToast();
+  const [backgroundType, setBackgroundType] = useState<'color' | 'gradient' | 'image'>(
+    pageSettings.background.type || 'color'
+  );
+  const [imageUrl, setImageUrl] = useState(pageSettings.background.imageUrl || '');
+
+  // Update background type and initialize defaults for that type
+  const handleBackgroundTypeChange = (type: 'color' | 'gradient' | 'image') => {
+    setBackgroundType(type);
+    
+    // Set default values for the selected type
+    switch(type) {
+      case 'color':
+        updatePageSettings({
+          background: {
+            type: 'color',
+            color: pageSettings.background.color || '#ffffff'
+          }
+        });
+        break;
+      case 'gradient':
+        updatePageSettings({
+          background: {
+            type: 'gradient',
+            gradientStart: pageSettings.background.gradientStart || '#4F46E5',
+            gradientEnd: pageSettings.background.gradientEnd || '#10B981'
+          }
+        });
+        break;
+      case 'image':
+        updatePageSettings({
+          background: {
+            type: 'image',
+            imageUrl: pageSettings.background.imageUrl || '',
+            overlay: pageSettings.background.overlay || 'rgba(0,0,0,0.4)',
+            overlayOpacity: pageSettings.background.overlayOpacity || 0.4
+          }
+        });
+        break;
+    }
+  };
+
+  // Handle image URL input
+  const handleImageUrlChange = (url: string) => {
+    setImageUrl(url);
+  };
+
+  // Apply image URL
+  const applyImageUrl = () => {
+    if (!imageUrl) {
+      toast({
+        title: "Missing image URL",
+        description: "Please enter an image URL to apply",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Test if the image URL is valid
+    const img = new Image();
+    img.onload = () => {
+      updatePageSettings({
+        background: {
+          ...pageSettings.background,
+          imageUrl
+        }
+      });
+      toast({
+        title: "Background image updated",
+        description: "The page background image has been updated."
+      });
+    };
+    img.onerror = () => {
+      toast({
+        title: "Invalid image URL",
+        description: "Could not load the image. Please check the URL and try again.",
+        variant: "destructive"
+      });
+    };
+    img.src = imageUrl;
+  };
+
+  // Handle file upload for background image
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please select an image file (JPG, PNG, GIF, etc.)",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // For this example, we'll create a data URL
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setImageUrl(dataUrl);
+        updatePageSettings({
+          background: {
+            ...pageSettings.background,
+            type: 'image',
+            imageUrl: dataUrl
+          }
+        });
+        toast({
+          title: "Background image uploaded",
+          description: "The page background image has been updated."
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
+  return (
+    <>
+      <div>
+        <label className="text-xs text-gray-600 block mb-1">Background Type</label>
+        <div className="grid grid-cols-3 gap-2">
+          <Button
+            variant={backgroundType === 'color' ? 'default' : 'outline'}
+            size="sm"
+            className="w-full"
+            onClick={() => handleBackgroundTypeChange('color')}
+          >
+            <Palette className="h-4 w-4 mr-1" />
+            Color
+          </Button>
+          <Button
+            variant={backgroundType === 'gradient' ? 'default' : 'outline'}
+            size="sm"
+            className="w-full"
+            onClick={() => handleBackgroundTypeChange('gradient')}
+          >
+            <Layers className="h-4 w-4 mr-1" />
+            Gradient
+          </Button>
+          <Button
+            variant={backgroundType === 'image' ? 'default' : 'outline'}
+            size="sm"
+            className="w-full"
+            onClick={() => handleBackgroundTypeChange('image')}
+          >
+            <Image className="h-4 w-4 mr-1" />
+            Image
+          </Button>
+        </div>
+      </div>
+
+      {/* Color Background */}
+      {backgroundType === 'color' && (
+        <div>
+          <label className="text-xs text-gray-600 block mb-1">Background Color</label>
+          <div className="flex items-center gap-2">
+            <ColorPicker
+              value={pageSettings.background.color || '#ffffff'}
+              onChange={(color) => updatePageSettings({ 
+                background: { ...pageSettings.background, color } 
+              })}
+            />
+            <Input 
+              value={pageSettings.background.color || '#ffffff'}
+              onChange={(e) => updatePageSettings({ 
+                background: { ...pageSettings.background, color: e.target.value } 
+              })}
+              className="text-sm flex-1"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Gradient Background */}
+      {backgroundType === 'gradient' && (
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Gradient Start Color</label>
+            <div className="flex items-center gap-2">
+              <ColorPicker
+                value={pageSettings.background.gradientStart || '#4F46E5'}
+                onChange={(color) => updatePageSettings({ 
+                  background: { ...pageSettings.background, gradientStart: color } 
+                })}
+              />
+              <Input 
+                value={pageSettings.background.gradientStart || '#4F46E5'}
+                onChange={(e) => updatePageSettings({ 
+                  background: { ...pageSettings.background, gradientStart: e.target.value } 
+                })}
+                className="text-sm flex-1"
+              />
+            </div>
+          </div>
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Gradient End Color</label>
+            <div className="flex items-center gap-2">
+              <ColorPicker
+                value={pageSettings.background.gradientEnd || '#10B981'}
+                onChange={(color) => updatePageSettings({ 
+                  background: { ...pageSettings.background, gradientEnd: color } 
+                })}
+              />
+              <Input 
+                value={pageSettings.background.gradientEnd || '#10B981'}
+                onChange={(e) => updatePageSettings({ 
+                  background: { ...pageSettings.background, gradientEnd: e.target.value } 
+                })}
+                className="text-sm flex-1"
+              />
+            </div>
+          </div>
+          <div className="h-10 mt-2 rounded" style={{ 
+            background: `linear-gradient(135deg, ${pageSettings.background.gradientStart || '#4F46E5'}, ${pageSettings.background.gradientEnd || '#10B981'})` 
+          }} />
+        </div>
+      )}
+
+      {/* Image Background */}
+      {backgroundType === 'image' && (
+        <div className="space-y-4">
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Image URL</label>
+            <div className="flex gap-2">
+              <Input 
+                value={imageUrl}
+                onChange={(e) => handleImageUrlChange(e.target.value)}
+                placeholder="https://example.com/image.jpg"
+                className="text-sm flex-1"
+              />
+              <Button 
+                size="sm" 
+                className="whitespace-nowrap"
+                onClick={applyImageUrl}
+                disabled={!imageUrl}
+              >
+                Apply
+              </Button>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Enter a URL or upload an image below
+            </p>
+          </div>
+          
+          <div>
+            <label className="text-xs text-gray-600 block mb-1">Upload Image</label>
+            <div className="border border-gray-200 rounded-md p-4 text-center bg-gray-50">
+              <label className="cursor-pointer">
+                <div className="flex flex-col items-center">
+                  <Upload className="h-5 w-5 text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-600">Click to upload</span>
+                  <span className="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</span>
+                </div>
+                <input 
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </div>
+          
+          {pageSettings.background.imageUrl && (
+            <div>
+              <label className="text-xs text-gray-600 block mb-1">Overlay Color</label>
+              <div className="flex items-center gap-2">
+                <ColorPicker
+                  value={pageSettings.background.overlay || 'rgba(0,0,0,0.4)'}
+                  onChange={(color) => updatePageSettings({ 
+                    background: { ...pageSettings.background, overlay: color } 
+                  })}
+                  opacity
+                />
+                <div className="flex-1">
+                  <label className="text-xs text-gray-600 block mb-1">Overlay Opacity</label>
+                  <Input 
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={pageSettings.background.overlayOpacity || 0.4}
+                    onChange={(e) => updatePageSettings({ 
+                      background: { 
+                        ...pageSettings.background, 
+                        overlayOpacity: parseFloat(e.target.value) 
+                      } 
+                    })}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {pageSettings.background.imageUrl && (
+            <div className="relative h-20 overflow-hidden rounded">
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: `url(${pageSettings.background.imageUrl})` }}
+              />
+              <div 
+                className="absolute inset-0"
+                style={{ 
+                  backgroundColor: pageSettings.background.overlay || 'rgba(0,0,0,0.4)',
+                  opacity: pageSettings.background.overlayOpacity || 0.4
+                }}
+              />
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function PropertiesPanel() {
-  const { selectedComponent, updateComponent, removeComponent, components, moveComponent } = useEditor();
+  const { 
+    selectedComponent, 
+    updateComponent, 
+    removeComponent, 
+    components, 
+    moveComponent,
+    pageSettings,
+    updatePageSettings,
+    isEditingPage,
+    setIsEditingPage
+  } = useEditor();
   const [activeTab, setActiveTab] = useState("general");
 
   // Get the index of the selected component in the components array
@@ -26,6 +362,101 @@ export default function PropertiesPanel() {
     setActiveTab("general");
   }, [selectedComponent?.id]);
 
+  // If we're in page editing mode but no component is selected
+  if (isEditingPage && !selectedComponent) {
+    return (
+      <div className="w-72 bg-white border-l border-gray-200 flex flex-col">
+        <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <h2 className="font-semibold text-sm uppercase text-gray-600">Page Settings</h2>
+          <div className="flex space-x-1">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-7 w-7"
+              onClick={() => setIsEditingPage(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+        
+        {/* Page Settings Content */}
+        <Tabs defaultValue="background" className="flex-1 flex flex-col">
+          <div className="px-3 pt-3 border-b border-gray-200 flex-shrink-0">
+            <TabsList className="grid grid-cols-3 h-9">
+              <TabsTrigger value="background" className="text-xs">Background</TabsTrigger>
+              <TabsTrigger value="layout" className="text-xs">Layout</TabsTrigger>
+              <TabsTrigger value="advanced" className="text-xs">Advanced</TabsTrigger>
+            </TabsList>
+          </div>
+          
+          <div className="flex-1 min-h-0 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 12rem)' }}>
+            {/* Background Tab */}
+            <TabsContent value="background" className="p-4 m-0 space-y-4">
+              <PageBackgroundSettings 
+                pageSettings={pageSettings} 
+                updatePageSettings={updatePageSettings} 
+              />
+            </TabsContent>
+            
+            {/* Layout Tab */}
+            <TabsContent value="layout" className="p-4 m-0 space-y-4">
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Content Width</label>
+                <Select
+                  value={pageSettings.width || 'contained'}
+                  onValueChange={(value) => updatePageSettings({ width: value as 'full' | 'contained' })}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Select width" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="contained">Contained</SelectItem>
+                    <SelectItem value="full">Full Width</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {pageSettings.width === 'contained' && (
+                <div>
+                  <label className="text-xs text-gray-600 block mb-1">Max Width (px)</label>
+                  <Input
+                    type="number"
+                    value={pageSettings.maxWidth || 1200}
+                    onChange={(e) => updatePageSettings({ maxWidth: parseInt(e.target.value) })}
+                    className="text-sm"
+                  />
+                </div>
+              )}
+            </TabsContent>
+            
+            {/* Advanced Tab */}
+            <TabsContent value="advanced" className="p-4 m-0 space-y-4">
+              <div>
+                <label className="text-xs text-gray-600 block mb-1">Font Family</label>
+                <Select
+                  value={pageSettings.fontFamily || 'system-ui'}
+                  onValueChange={(value) => updatePageSettings({ fontFamily: value })}
+                >
+                  <SelectTrigger className="text-sm">
+                    <SelectValue placeholder="Select font" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="system-ui">System UI</SelectItem>
+                    <SelectItem value="sans-serif">Sans Serif</SelectItem>
+                    <SelectItem value="serif">Serif</SelectItem>
+                    <SelectItem value="monospace">Monospace</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
+          </div>
+        </Tabs>
+      </div>
+    );
+  }
+
+  // If no component is selected and not in page editing mode
   if (!selectedComponent) {
     return (
       <div className="w-72 bg-white border-l border-gray-200 flex flex-col">
@@ -45,6 +476,14 @@ export default function PropertiesPanel() {
           </div>
           <h3 className="text-gray-700 font-medium mb-1">No Element Selected</h3>
           <p className="text-gray-500 text-sm mb-6">Select an element on the canvas to edit its properties</p>
+          <Button 
+            variant="default" 
+            className="gap-1 mb-3"
+            onClick={() => setIsEditingPage(true)}
+          >
+            <Settings className="h-4 w-4" />
+            Edit Page Settings
+          </Button>
           <Button variant="link" className="text-primary-500 gap-1">
             <i className="ri-information-line"></i>
             Learn how to edit properties

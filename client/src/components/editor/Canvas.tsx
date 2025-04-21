@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useEditor } from "../../context/EditorContext";
 import ComponentRenderer from "./ComponentRenderer";
 import { Component, ComponentType } from "@shared/schema";
-import { Smartphone, Tablet, Monitor, LayoutGrid, ZoomIn, ZoomOut, ArrowUp, ArrowDown, Trash2, Pencil } from "lucide-react";
+import { Smartphone, Tablet, Monitor, LayoutGrid, ZoomIn, ZoomOut, ArrowUp, ArrowDown, Trash2, Pencil, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function Canvas() {
@@ -15,7 +15,10 @@ export default function Canvas() {
     moveComponent,
     removeComponent,
     viewportMode,
-    setViewportMode
+    setViewportMode,
+    pageSettings,
+    isEditingPage,
+    setIsEditingPage
   } = useEditor();
   
   const [zoomLevel, setZoomLevel] = useState(100);
@@ -237,6 +240,22 @@ export default function Canvas() {
                 'w-full'
               }`}
             >
+              {/* Page Settings Button */}
+              <div className="absolute top-2 right-2 z-50">
+                <Button
+                  variant={isEditingPage ? "default" : "outline"}
+                  size="sm"
+                  className="flex items-center gap-1 shadow-sm"
+                  onClick={() => {
+                    setIsEditingPage(!isEditingPage);
+                    setSelectedComponent(null);
+                  }}
+                >
+                  <Settings className="h-3.5 w-3.5" />
+                  Page Settings
+                </Button>
+              </div>
+
               {/* Page Canvas */}
               <div 
                 className={`min-h-[80vh] border-4 ${
@@ -248,6 +267,21 @@ export default function Canvas() {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
+                style={{
+                  ...(pageSettings.background.type === 'color' && {
+                    backgroundColor: pageSettings.background.color
+                  }),
+                  ...(pageSettings.background.type === 'gradient' && {
+                    background: `linear-gradient(135deg, ${pageSettings.background.gradientStart || '#4F46E5'}, ${pageSettings.background.gradientEnd || '#10B981'})`
+                  }),
+                  ...(pageSettings.background.type === 'image' && pageSettings.background.imageUrl && {
+                    backgroundImage: `url("${pageSettings.background.imageUrl}")`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    position: 'relative'
+                  })
+                }}
               >
                 {isEmpty ? (
                   // Improved Empty State with better instructions and less text
