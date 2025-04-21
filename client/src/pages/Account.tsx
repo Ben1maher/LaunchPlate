@@ -119,7 +119,7 @@ export default function AccountPage() {
       
       // Refresh subscription data
       queryClient.invalidateQueries({ queryKey: ['/api/subscription'] });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error canceling subscription:', error);
       toast({
         title: 'Cancellation Failed',
@@ -147,7 +147,9 @@ export default function AccountPage() {
     return null; // Will be redirected by useEffect
   }
   
-  const getTierName = (tier: string) => {
+  const getTierName = (tier: string | null) => {
+    if (tier === null) return 'Free';
+    
     switch (tier) {
       case 'guest': return 'Guest';
       case 'free': return 'Free';
@@ -317,7 +319,7 @@ export default function AccountPage() {
                     <div>
                       <div className="text-sm font-medium text-muted-foreground mb-1">Current Plan</div>
                       <div className="flex items-center">
-                        <div className="text-xl font-semibold">{getTierName(user.accountType)}</div>
+                        <div className="text-xl font-semibold">{getTierName(user.accountType || '')}</div>
                         {subscriptionData?.hasActiveSubscription ? (
                           <span className="ml-2 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">
                             Active

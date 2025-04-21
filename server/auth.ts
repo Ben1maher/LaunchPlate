@@ -207,18 +207,22 @@ export function setupAuth(app: Express) {
   });
 
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-      if (!user) {
-        return res.status(401).json({ message: info?.message || "Invalid credentials" });
+    passport.authenticate(
+      "local", 
+      // Explicitly type the parameters to satisfy TypeScript
+      (err: Error | null, user: Express.User | false | null, info: { message: string } | undefined) => {
+        if (err) return next(err);
+        if (!user) {
+          return res.status(401).json({ message: info?.message || "Invalid credentials" });
+        }
+        req.login(user, (loginErr) => {
+          if (loginErr) return next(loginErr);
+          // Don't send the password back to the client
+          const { password, ...userWithoutPassword } = user as any;
+          return res.json(userWithoutPassword);
+        });
       }
-      req.login(user, (loginErr) => {
-        if (loginErr) return next(loginErr);
-        // Don't send the password back to the client
-        const { password, ...userWithoutPassword } = user;
-        return res.json(userWithoutPassword);
-      });
-    })(req, res, next);
+    )(req, res, next);
   });
 
   app.post("/api/logout", (req, res, next) => {

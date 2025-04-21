@@ -140,7 +140,7 @@ export default function PricingTable() {
       if (url) {
         window.location.href = url;
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating checkout session:', error);
       toast({
         title: 'Checkout Failed',
