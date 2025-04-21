@@ -5,7 +5,7 @@ import session from "express-session";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User as SelectUser, InsertUser } from "@shared/schema";
+import { User as SelectUser, InsertUser, SubscriptionTiers, SubscriptionTier } from "@shared/schema";
 
 declare global {
   namespace Express {
@@ -26,6 +26,68 @@ async function comparePasswords(supplied: string, stored: string) {
   const hashedBuf = Buffer.from(hashed, "hex");
   const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
   return timingSafeEqual(hashedBuf, suppliedBuf);
+}
+
+// Configure user permissions based on subscription tier
+function configureTierPermissions(tier: SubscriptionTier): {
+  projectsLimit: number;
+  pagesLimit: number;
+  storage: number;
+  canDeploy: boolean;
+  canSaveTemplates: boolean;
+} {
+  switch (tier) {
+    case SubscriptionTiers.GUEST:
+      return {
+        projectsLimit: 1,
+        pagesLimit: 1,
+        storage: 5,
+        canDeploy: false,
+        canSaveTemplates: false
+      };
+    case SubscriptionTiers.FREE:
+      return {
+        projectsLimit: 3,
+        pagesLimit: 1,
+        storage: 10,
+        canDeploy: false,
+        canSaveTemplates: false
+      };
+    case SubscriptionTiers.PAID:
+      return {
+        projectsLimit: 10,
+        pagesLimit: 1,
+        storage: 50,
+        canDeploy: true,
+        canSaveTemplates: true
+      };
+    case SubscriptionTiers.PREMIUM:
+      return {
+        projectsLimit: 30,
+        pagesLimit: 3,
+        storage: 100,
+        canDeploy: true,
+        canSaveTemplates: true
+      };
+    default:
+      return configureTierPermissions(SubscriptionTiers.FREE);
+  }
+}
+
+// Get human-readable name for subscription tier
+function getTierDisplayName(tier: SubscriptionTier): string {
+  switch (tier) {
+    case SubscriptionTiers.GUEST:
+      return "Guest";
+    case SubscriptionTiers.FREE:
+      return "Free";
+    case SubscriptionTiers.PAID:
+      return "Pro";
+    case SubscriptionTiers.PREMIUM:
+      return "Premium";
+    default:
+      return "Unknown";
+  }
 }
 
 export function setupAuth(app: Express) {
@@ -109,6 +171,10 @@ export function setupAuth(app: Express) {
         });
       }
 
+      // Get the default tier permissions
+      const tierType = SubscriptionTiers.FREE;
+      const tierPermissions = configureTierPermissions(tierType);
+
       // Create the user with hashed password
       const user = await storage.createUser({
         username,
@@ -116,11 +182,16 @@ export function setupAuth(app: Express) {
         password: await hashPassword(password),
         fullName: fullName || null,
         createdAt: new Date().toISOString(),
-        accountType: "free",
-        projectsLimit: 3,
-        storage: 10,
+        accountType: tierType,
+        projectsLimit: tierPermissions.projectsLimit,
+        pagesLimit: tierPermissions.pagesLimit,
+        storage: tierPermissions.storage,
+        canDeploy: tierPermissions.canDeploy,
+        canSaveTemplates: tierPermissions.canSaveTemplates,
         avatarUrl: null,
         isActive: true,
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
       });
 
       // Log the user in
@@ -179,13 +250,35 @@ export function setupAuth(app: Express) {
       // Get user's current project count
       const projects = await storage.getUserProjects(user.id);
       
+      // Get the user's subscription tier info
+      const tierPermissions = configureTierPermissions(user.accountType as SubscriptionTier);
+      
       res.json({
+        // Project limits
         projectsCount: projects.length,
-        projectsLimit: user.projectsLimit,
+        projectsLimit: user.projectsLimit || tierPermissions.projectsLimit,
+        canCreateProject: projects.length < (user.projectsLimit || tierPermissions.projectsLimit),
+        
+        // Page limits (for premium users)
+        pagesLimit: user.pagesLimit || tierPermissions.pagesLimit,
+        
+        // Storage limits
         storageUsed: 0, // This should be calculated based on actual usage
-        storageLimit: user.storage,
+        storageLimit: user.storage || tierPermissions.storage,
+        
+        // Subscription info
         accountType: user.accountType,
-        canCreateProject: projects.length < user.projectsLimit,
+        tierName: getTierDisplayName(user.accountType as SubscriptionTier),
+        isGuest: user.accountType === SubscriptionTiers.GUEST,
+        isPaid: user.accountType === SubscriptionTiers.PAID || user.accountType === SubscriptionTiers.PREMIUM,
+        isPremium: user.accountType === SubscriptionTiers.PREMIUM,
+        
+        // Feature permissions
+        canDeploy: user.canDeploy !== null ? user.canDeploy : tierPermissions.canDeploy,
+        canSaveTemplates: user.canSaveTemplates !== null ? user.canSaveTemplates : tierPermissions.canSaveTemplates,
+        
+        // Stripe info (if applicable)
+        hasSubscription: !!user.stripeSubscriptionId,
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to get user limits" });
@@ -199,17 +292,26 @@ export function setupAuth(app: Express) {
       const guestId = randomBytes(8).toString("hex");
       const randomPassword = randomBytes(16).toString("hex");
       
+      // Get guest tier permissions
+      const tierType = SubscriptionTiers.GUEST;
+      const tierPermissions = configureTierPermissions(tierType);
+      
       const user = await storage.createUser({
         username: `guest_${guestId}`,
         email: `guest_${guestId}@launchplate.temp`,
         password: await hashPassword(randomPassword),
         fullName: "Guest User",
         createdAt: new Date().toISOString(),
-        accountType: "guest",
-        projectsLimit: 1, // Guest users can only create one project
-        storage: 5, // Limited storage for guest users
+        accountType: tierType,
+        projectsLimit: tierPermissions.projectsLimit,
+        pagesLimit: tierPermissions.pagesLimit,
+        storage: tierPermissions.storage,
+        canDeploy: tierPermissions.canDeploy,
+        canSaveTemplates: tierPermissions.canSaveTemplates,
         avatarUrl: null,
         isActive: true,
+        stripeCustomerId: null,
+        stripeSubscriptionId: null,
       });
 
       // Log the user in
