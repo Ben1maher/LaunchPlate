@@ -11,8 +11,8 @@ export default function PricingPage() {
             Choose Your Plan
           </h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            From testing our platform as a guest to unleashing the full power of LaunchPlate with
-            our Premium tier, we have a plan for every stage of your landing page journey.
+            From building a simple landing page with our free plan to creating professional
+            marketing sites with our Premium tier, we have a solution for all your needs.
           </p>
         </div>
         
@@ -58,16 +58,16 @@ export default function PricingPage() {
             <div>
               <h3 className="text-xl font-semibold mb-2">Do you offer refunds?</h3>
               <p className="text-muted-foreground">
-                We offer a 7-day money-back guarantee on all paid plans. If you're not satisfied with
-                your subscription, contact our support team within the first 7 days for a full refund.
+                Yes, we offer a 14-day money-back guarantee on all paid plans. If you're not satisfied with
+                your subscription, contact our support team within the first 14 days for a full refund.
               </p>
             </div>
             
             <div>
               <h3 className="text-xl font-semibold mb-2">What are the limitations of the free plan?</h3>
               <p className="text-muted-foreground">
-                The free plan allows you to create and save up to 3 projects, but you cannot deploy
-                your landing pages to a live URL. You're also limited to a single page per project.
+                The free plan allows you to create and save 1 project, but you cannot deploy
+                your landing page to a live URL. You're also limited to a single page per project.
               </p>
             </div>
           </div>

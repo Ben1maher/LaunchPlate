@@ -147,17 +147,10 @@ export default function PricingTable() {
   };
 
   return (
-    <div className="container py-12">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold tracking-tight mb-4">
-          Simple, Transparent Pricing
-        </h2>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Choose the plan that's right for you. All plans include access to our drag-and-drop editor.
-        </p>
-      </div>
+    <div>
+      {/* Main pricing grid */}
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {pricingTiers.map((tier) => {
           const currentTier = getCurrentTier();
           const isCurrentPlan = currentTier === tier.id;
