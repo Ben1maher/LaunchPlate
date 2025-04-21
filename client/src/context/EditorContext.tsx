@@ -193,27 +193,38 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     if (!isAuthenticated) {
       toast({
         title: "Authentication required",
-        description: "Please sign in to save your project.",
+        description: "To save your design, you need to create an account.",
         variant: "destructive",
       });
       navigate("/auth");
       throw new Error("Authentication required");
     }
+    
+    // Guest users cannot save projects
+    if (isGuest) {
+      toast({
+        title: "Account required",
+        description: "To save your design, you need to create a free account.",
+        variant: "destructive",
+      });
+      navigate("/auth");
+      throw new Error("Guest cannot save projects");
+    }
 
     try {
       // Check if the user has reached their project limit (only for free tier)
-      if (user?.accountType === "free" && !isGuest) {
+      if (user?.accountType === "free") {
         // Fetch user's current projects to check against limit
         const projectsResponse = await apiRequest('GET', `/api/projects?userId=${user.id}`);
         
         if (projectsResponse.ok) {
           const userProjects = await projectsResponse.json();
-          const projectLimit = user.projectsLimit || 3;
+          const projectLimit = user.projectsLimit || 1;
           
           if (userProjects.length >= projectLimit) {
             toast({
               title: "Project limit reached",
-              description: `Free accounts are limited to ${projectLimit} projects. Upgrade to create more projects.`,
+              description: `Free accounts are limited to ${projectLimit} project. Upgrade to create more projects.`,
               variant: "destructive",
             });
             return -1;

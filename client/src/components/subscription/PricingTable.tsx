@@ -28,26 +28,12 @@ interface PricingTier {
 // Define the pricing tiers
 const pricingTiers: PricingTier[] = [
   {
-    id: 'guest',
-    name: 'Guest',
-    description: 'Experience LaunchPlate without an account',
-    price: null,
-    features: [
-      'Create landing pages',
-      'Try out all components',
-      'Limited to one session',
-      'Cannot save projects',
-      'Cannot deploy sites',
-    ],
-    buttonText: 'Continue as Guest',
-  },
-  {
     id: 'free',
     name: 'Free',
     description: 'Perfect for beginners',
     price: 0,
     features: [
-      'Save up to 3 projects',
+      'Save 1 project',
       'Basic components library',
       'Access to templates',
       'Single page only',
@@ -59,7 +45,7 @@ const pricingTiers: PricingTier[] = [
     id: 'paid',
     name: 'Pro',
     description: 'For serious marketers',
-    price: 19.99,
+    price: 9.99,
     popular: true,
     features: [
       'Save up to 10 projects',
@@ -75,7 +61,7 @@ const pricingTiers: PricingTier[] = [
     id: 'premium',
     name: 'Premium',
     description: 'For marketing professionals',
-    price: 49.99,
+    price: 19.99,
     features: [
       'Save up to 30 projects',
       'Full component library',
@@ -271,7 +257,7 @@ export default function PricingTable() {
 
       <div className="mt-12 text-center text-sm text-muted-foreground">
         <p>
-          All plans include a 7-day free trial. No credit card required for free plan.
+          No credit card required for free plan.
           <br />
           Need a custom solution? <a href="#" className="text-primary hover:underline">Contact us</a> for custom pricing.
         </p>

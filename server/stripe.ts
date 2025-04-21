@@ -290,7 +290,7 @@ function configureTierPermissions(tier: SubscriptionTier): {
       return {
         canDeploy: false,
         canSaveTemplates: false,
-        projectsLimit: 3,
+        projectsLimit: 1,
         pagesLimit: 1,
         storage: 50, // MB
       };
@@ -317,7 +317,7 @@ function configureTierPermissions(tier: SubscriptionTier): {
       return {
         canDeploy: false,
         canSaveTemplates: false,
-        projectsLimit: 3,
+        projectsLimit: 1,
         pagesLimit: 1,
         storage: 50, // MB
       };
