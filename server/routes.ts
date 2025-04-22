@@ -348,7 +348,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Webhook handler for Stripe events
+  // Special developer route to upgrade the current user to premium status
+  // This is ONLY for development purposes and would be removed in production
+  app.post('/api/dev/upgrade-to-premium', async (req: Request, res: Response) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      // Get the premium tier permissions
+      const tierType = SubscriptionTiers.PREMIUM;
+      const tierPermissions = configureTierPermissions(tierType);
+      
+      // Update the user with premium permissions
+      const updatedUser = await storage.updateUser(req.user.id, {
+        accountType: tierType,
+        projectsLimit: tierPermissions.projectsLimit,
+        pagesLimit: tierPermissions.pagesLimit,
+        storage: tierPermissions.storage,
+        canDeploy: tierPermissions.canDeploy,
+        canSaveTemplates: tierPermissions.canSaveTemplates,
+        // This simulates an active subscription
+        stripeCustomerId: 'dev_customer_id',
+        stripeSubscriptionId: 'dev_subscription_id'
+      });
+      
+      if (!updatedUser) {
+        return res.status(400).json({ message: "Failed to upgrade user" });
+      }
+      
+      // Return the updated user (without password)
+      const { password, ...userWithoutPassword } = updatedUser;
+      res.json({
+        ...userWithoutPassword,
+        message: "Developer account upgraded to premium tier successfully"
+      });
+    } catch (error) {
+      console.error('Error upgrading developer account:', error);
+      res.status(500).json({ message: "Failed to upgrade developer account" });
+    }
+  });
+  
   app.post('/api/webhook/stripe', express.raw({type: 'application/json'}), async (req: Request, res: Response) => {
     const sig = req.headers['stripe-signature'] as string;
     
