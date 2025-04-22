@@ -457,23 +457,8 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       };
       setPageSettings(newPageSettings);
       
-      // If background color is updated, update all components to match the new background color
-      if (settings.background && settings.background.type === 'color' && settings.background.color) {
-        const bgColor = settings.background.color; // Store in a variable to avoid the TypeScript error
-        const updatedComponents = components.map(component => {
-          // Update the background color of each component
-          return {
-            ...component,
-            style: {
-              ...component.style,
-              backgroundColor: bgColor
-            }
-          };
-        });
-        
-        // Apply the updates to all components
-        setComponents(updatedComponents);
-      }
+      // We no longer automatically update component backgrounds when page background changes
+      // Each component should maintain its own background styling independently
     } else {
       // For other settings, just spread them in
       newPageSettings = {

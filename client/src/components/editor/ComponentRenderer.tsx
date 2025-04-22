@@ -140,13 +140,15 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
     <div 
       className={`relative component-wrapper group hover:outline hover:outline-1 hover:outline-gray-200 ${
         isSelected ? 'outline outline-2 outline-primary selected' : ''
-      } hover:bg-transparent isolation-auto`}
+      } hover:bg-transparent`}
       // Set isolation to ensure component styles aren't affected by parent styles
       style={{ 
         pointerEvents: 'all',
         isolation: 'isolate',
         zIndex: 1,
-        position: 'relative'
+        position: 'relative',
+        all: 'initial', // Reset all properties
+        contain: 'content' // Contain the styling to this element
       }} 
       onClick={onClick}
       data-component-id={component.id}

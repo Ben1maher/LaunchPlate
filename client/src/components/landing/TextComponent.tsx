@@ -30,22 +30,37 @@ export default function TextComponent({ component }: TextComponentProps) {
   };
   
   // Handle background styles (solid color, gradient, or image)
+  // Apply background styles with the highest specificity and isolation
   if (style.backgroundType === 'gradient' && style.background) {
-    // Use !important to ensure component gradient overrides page background
+    // Override all background properties to ensure clean gradient application
     containerStyle.background = `${style.background} !important`;
+    containerStyle.backgroundColor = 'transparent !important';
+    containerStyle.backgroundImage = 'none !important';
+    // Add a pseudo-element to ensure the gradient background is rendered on top
+    containerStyle.position = 'relative';
+    containerStyle.isolation = 'isolate';
   } else if (style.backgroundType === 'image' && style.backgroundImage) {
-    // Use !important to ensure component image overrides page background
-    containerStyle.backgroundImage = `url(${style.backgroundImage}) !important`;
-    containerStyle.backgroundSize = style.backgroundSize || 'cover';
-    containerStyle.backgroundPosition = style.backgroundPosition || 'center';
-    containerStyle.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+    // Override all background properties for image
+    containerStyle.backgroundImage = `url("${style.backgroundImage}") !important`;
+    containerStyle.backgroundColor = 'transparent !important';
+    containerStyle.background = 'none !important';
+    containerStyle.backgroundSize = `${style.backgroundSize || 'cover'} !important`;
+    containerStyle.backgroundPosition = `${style.backgroundPosition || 'center'} !important`;
+    containerStyle.backgroundRepeat = `${style.backgroundRepeat || 'no-repeat'} !important`;
+    containerStyle.position = 'relative';
+    containerStyle.isolation = 'isolate';
   } else if (style.backgroundColor) {
-    // Use !important to ensure component color overrides page background
+    // Override all background properties for solid color
     containerStyle.backgroundColor = `${style.backgroundColor} !important`;
+    containerStyle.background = 'none !important';
+    containerStyle.backgroundImage = 'none !important';
+    containerStyle.position = 'relative';
+    containerStyle.isolation = 'isolate';
   } else {
-    // If no background is specified, use a semi-transparent white
-    // This creates a clear distinction between components without looking too harsh
-    containerStyle.backgroundColor = `rgba(255, 255, 255, 0.1)`;
+    // Default transparent background
+    containerStyle.backgroundColor = 'transparent';
+    containerStyle.background = 'none';
+    containerStyle.backgroundImage = 'none';
   }
 
   // For heading component
