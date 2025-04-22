@@ -2,8 +2,10 @@ import {
   users, type User, type InsertUser,
   templates, type Template, type InsertTemplate,
   projects, type Project, type InsertProject,
-  type PageComponent, type Component
+  type PageComponent, type Component,
+  SubscriptionTiers
 } from "@shared/schema";
+import { configureTierPermissions } from "./auth";
 import session from "express-session";
 import createMemoryStore from "memorystore";
 
@@ -58,6 +60,28 @@ export class MemStorage implements IStorage {
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000 // 24h - how often expired sessions are removed
     });
+
+    // Add a developer account with premium permissions
+    const devPermissions = configureTierPermissions(SubscriptionTiers.PREMIUM);
+    const devAccount: User = {
+      id: this.userId++,
+      username: "developer",
+      email: "dev@launchplate.local",
+      password: "$2a$10$Q7X4UVDI1D/ACe0GaS1D6.VEK3YfA.KVJ9.dL6A0Qj1AEiAFsJW9S", // hashed "developer123"
+      fullName: "Developer Account",
+      createdAt: new Date().toISOString(),
+      accountType: SubscriptionTiers.PREMIUM,
+      projectsLimit: devPermissions.projectsLimit,
+      pagesLimit: devPermissions.pagesLimit,
+      storage: devPermissions.storage,
+      canDeploy: devPermissions.canDeploy,
+      canSaveTemplates: devPermissions.canSaveTemplates,
+      avatarUrl: null,
+      isActive: true,
+      stripeCustomerId: "dev_customer_id",
+      stripeSubscriptionId: "dev_subscription_id"
+    };
+    this.users.set(devAccount.id, devAccount);
 
     // Add some default templates
     this.initDefaultTemplates();
