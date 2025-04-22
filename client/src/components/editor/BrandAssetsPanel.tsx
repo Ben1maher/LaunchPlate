@@ -431,9 +431,9 @@ export default function BrandAssetsPanel() {
                             background: `linear-gradient(135deg, ${asset.value}, ${asset.secondaryValue})` 
                           }}
                           onClick={() => {
-                            // Check if we're in page editing mode
+                            // Check the current mode and what's being edited
                             if (isEditingPage) {
-                              // Update page background with this gradient
+                              // We're in page editing mode - update page background
                               updatePageSettings({
                                 background: {
                                   ...pageSettings.background,
@@ -449,7 +449,7 @@ export default function BrandAssetsPanel() {
                                 duration: 2000
                               });
                             }
-                            // If there's a selected component, update its background gradient
+                            // If not in page editing mode and there's a selected component
                             else if (selectedComponent) {
                               // Apply the gradient as background
                               const direction = 'to right'; // Default direction
