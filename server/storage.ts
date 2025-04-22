@@ -107,7 +107,25 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userId++;
-    const user: User = { ...insertUser, id };
+    // Ensure all required fields are properly set with fallbacks
+    const user: User = { 
+      id,
+      username: insertUser.username,
+      email: insertUser.email,
+      password: insertUser.password,
+      fullName: insertUser.fullName || null,
+      createdAt: insertUser.createdAt || new Date().toISOString(),
+      accountType: insertUser.accountType || "free",
+      projectsLimit: insertUser.projectsLimit || 1,
+      pagesLimit: insertUser.pagesLimit || 1,
+      storage: insertUser.storage || 10,
+      canDeploy: insertUser.canDeploy || false,
+      canSaveTemplates: insertUser.canSaveTemplates || false,
+      avatarUrl: insertUser.avatarUrl || null,
+      isActive: insertUser.isActive ?? true,
+      stripeCustomerId: insertUser.stripeCustomerId || null,
+      stripeSubscriptionId: insertUser.stripeSubscriptionId || null
+    };
     this.users.set(id, user);
     return user;
   }
@@ -197,11 +215,15 @@ export class MemStorage implements IStorage {
 
   async createProject(insertProject: InsertProject): Promise<Project> {
     const id = this.projectId++;
+    // Ensure all required fields are properly set with fallbacks
     const project: Project = { 
-      ...insertProject, 
       id,
+      name: insertProject.name,
+      createdAt: insertProject.createdAt || new Date().toISOString(),
       userId: insertProject.userId || 0,
       description: insertProject.description || null,
+      components: insertProject.components || [],
+      additionalPages: insertProject.additionalPages || null,
       updatedAt: new Date().toISOString(),
       published: insertProject.published ?? false,
       publishedUrl: insertProject.publishedUrl || null
