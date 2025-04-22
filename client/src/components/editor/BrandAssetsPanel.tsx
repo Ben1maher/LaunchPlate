@@ -91,7 +91,7 @@ export default function BrandAssetsPanel() {
     }
 
     // Test if the image URL is valid
-    const img = new Image();
+    const img = new Image() as HTMLImageElement;
     img.onload = () => {
       addBrandAsset({
         name: newImageName.trim(),
@@ -153,7 +153,7 @@ export default function BrandAssetsPanel() {
                       <label className="text-xs text-gray-500 mb-1 block">Color Value</label>
                       <div className="flex gap-2">
                         <ColorPicker 
-                          value={newColor}
+                          color={newColor}
                           onChange={setNewColor}
                         />
                         <Input 
@@ -190,7 +190,7 @@ export default function BrandAssetsPanel() {
                       <label className="text-xs text-gray-500 mb-1 block">Start Color</label>
                       <div className="flex gap-2 mb-2">
                         <ColorPicker 
-                          value={newGradientStart}
+                          color={newGradientStart}
                           onChange={setNewGradientStart}
                         />
                         <Input 
@@ -204,7 +204,7 @@ export default function BrandAssetsPanel() {
                       <label className="text-xs text-gray-500 mb-1 block">End Color</label>
                       <div className="flex gap-2">
                         <ColorPicker 
-                          value={newGradientEnd}
+                          color={newGradientEnd}
                           onChange={setNewGradientEnd}
                         />
                         <Input 
@@ -293,7 +293,7 @@ export default function BrandAssetsPanel() {
               )}
             </TabsTrigger>
             <TabsTrigger value="gradients" className="flex gap-1 items-center">
-              <ColorSwatch className="h-3.5 w-3.5" />
+              <Paintbrush className="h-3.5 w-3.5" />
               Gradients
               {gradientAssets.length > 0 && (
                 <Badge variant="secondary" className="ml-1 text-xs">
@@ -401,7 +401,7 @@ export default function BrandAssetsPanel() {
                 </div>
               ) : (
                 <div className="text-center p-6 text-gray-500">
-                  <ColorSwatch className="h-10 w-10 mx-auto mb-2 opacity-20" />
+                  <Paintbrush className="h-10 w-10 mx-auto mb-2 opacity-20" />
                   <p className="text-sm">No gradients saved yet</p>
                   <p className="text-xs">Click the Add Asset button to get started</p>
                 </div>

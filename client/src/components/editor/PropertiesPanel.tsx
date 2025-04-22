@@ -179,7 +179,7 @@ function PageBackgroundSettings({
           <label className="text-xs text-gray-600 block mb-1">Background Color</label>
           <div className="flex items-center gap-2">
             <ColorPicker
-              value={pageSettings.background.color || '#ffffff'}
+              color={pageSettings.background.color || '#ffffff'}
               onChange={(color) => updatePageSettings({ 
                 background: { ...pageSettings.background, color } 
               })}
