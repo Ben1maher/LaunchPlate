@@ -79,7 +79,7 @@ function PageBackgroundSettings({
     }
 
     // Test if the image URL is valid
-    const img = new Image();
+    const img = new Image() as HTMLImageElement;
     img.onload = () => {
       updatePageSettings({
         background: {
@@ -202,7 +202,7 @@ function PageBackgroundSettings({
             <label className="text-xs text-gray-600 block mb-1">Gradient Start Color</label>
             <div className="flex items-center gap-2">
               <ColorPicker
-                value={pageSettings.background.gradientStart || '#4F46E5'}
+                color={pageSettings.background.gradientStart || '#4F46E5'}
                 onChange={(color) => updatePageSettings({ 
                   background: { ...pageSettings.background, gradientStart: color } 
                 })}
@@ -220,7 +220,7 @@ function PageBackgroundSettings({
             <label className="text-xs text-gray-600 block mb-1">Gradient End Color</label>
             <div className="flex items-center gap-2">
               <ColorPicker
-                value={pageSettings.background.gradientEnd || '#10B981'}
+                color={pageSettings.background.gradientEnd || '#10B981'}
                 onChange={(color) => updatePageSettings({ 
                   background: { ...pageSettings.background, gradientEnd: color } 
                 })}
@@ -290,7 +290,7 @@ function PageBackgroundSettings({
               <label className="text-xs text-gray-600 block mb-1">Overlay Color</label>
               <div className="flex items-center gap-2">
                 <ColorPicker
-                  value={pageSettings.background.overlay || 'rgba(0,0,0,0.4)'}
+                  color={pageSettings.background.overlay || 'rgba(0,0,0,0.4)'}
                   onChange={(color) => updatePageSettings({ 
                     background: { ...pageSettings.background, overlay: color } 
                   })}

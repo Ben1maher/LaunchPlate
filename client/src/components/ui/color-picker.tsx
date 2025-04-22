@@ -8,13 +8,15 @@ interface ColorPickerProps {
   onChange: (color: string) => void;
   className?: string;
   presetColors?: string[];
+  opacity?: boolean;
 }
 
 export function ColorPicker({ 
   color, 
   onChange, 
   className = "", 
-  presetColors = ['#FFFFFF', '#000000', '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#607D8B'] 
+  presetColors = ['#FFFFFF', '#000000', '#F44336', '#E91E63', '#9C27B0', '#673AB7', '#3F51B5', '#2196F3', '#03A9F4', '#00BCD4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722', '#795548', '#607D8B'],
+  opacity = false
 }: ColorPickerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentColor, setCurrentColor] = useState(color || '#FFFFFF');
