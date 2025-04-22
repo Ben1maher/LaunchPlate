@@ -2757,27 +2757,23 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       const gradientName = prompt('Enter a name for this gradient', defaultName);
                       if (gradientName) {
                         // Save directly to the EditorContext
-                        // Get access to the global editor context
-                        const editorContext = document.querySelector('[data-editor-context]');
-                        if (editorContext) {
-                          // Dispatch a custom event that EditorContext can listen for
-                          const event = new CustomEvent('editor:addBrandAsset', {
-                            detail: {
-                              name: gradientName.trim(),
-                              type: 'gradient',
-                              value: startColor,
-                              secondaryValue: endColor
-                            }
-                          });
-                          editorContext.dispatchEvent(event);
+                        // Use the EditorContext directly
+                        const { addBrandAsset } = useEditor();
+                        
+                        // Add the asset to brand assets collection
+                        addBrandAsset({
+                          name: gradientName.trim(),
+                          type: 'gradient',
+                          value: startColor,
+                          secondaryValue: endColor
+                        });
                           
-                          // Show toast notification
-                          toast({
-                            title: "Gradient saved",
-                            description: `"${gradientName.trim()}" has been added to your brand assets.`,
-                            duration: 3000
-                          });
-                        }
+                        // Show toast notification
+                        toast({
+                          title: "Gradient saved",
+                          description: `"${gradientName.trim()}" has been added to your brand assets.`,
+                          duration: 3000
+                        });
                       }
                     }}
                   >
