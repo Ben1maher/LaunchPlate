@@ -9,7 +9,7 @@ export default function TextComponent({ component }: TextComponentProps) {
   const { type, content, style } = component;
   
   // Generate inline style object with proper margin and padding handling
-  const containerStyle = {
+  const containerStyle: any = {
     // Handle individual padding values if specified, otherwise use the general padding
     paddingTop: style.paddingTop || style.padding?.split(' ')[0] || '0',
     paddingRight: style.paddingRight || (style.padding?.split(' ')[1] || style.padding?.split(' ')[0] || '0'),
@@ -24,11 +24,22 @@ export default function TextComponent({ component }: TextComponentProps) {
     
     fontFamily: style.fontFamily,
     textAlign: style.textAlign || 'left',
-    backgroundColor: style.backgroundColor,
     borderRadius: style.borderRadius,
     border: style.border,
     boxShadow: style.boxShadow,
   };
+  
+  // Handle background styles (solid color, gradient, or image)
+  if (style.backgroundType === 'gradient' && style.background) {
+    containerStyle.background = style.background;
+  } else if (style.backgroundType === 'image' && style.backgroundImage) {
+    containerStyle.backgroundImage = `url(${style.backgroundImage})`;
+    containerStyle.backgroundSize = style.backgroundSize || 'cover';
+    containerStyle.backgroundPosition = style.backgroundPosition || 'center';
+    containerStyle.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+  } else {
+    containerStyle.backgroundColor = style.backgroundColor;
+  }
 
   // For heading component
   if (type === 'heading') {
