@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function BrandAssetsPanel() {
-  const { brandAssets, addBrandAsset, removeBrandAsset } = useEditor();
+  const { brandAssets, addBrandAsset, removeBrandAsset, selectedComponent, updateComponent } = useEditor();
   const { toast } = useToast();
   const [newColorName, setNewColorName] = useState("");
   const [newColor, setNewColor] = useState("#3b82f6");
@@ -337,7 +337,6 @@ export default function BrandAssetsPanel() {
                           style={{ backgroundColor: asset.value }}
                           onClick={() => {
                             // If there's a selected component in the editor context, update its background color
-                            const { selectedComponent, updateComponent } = useEditor();
                             if (selectedComponent) {
                               updateComponent(selectedComponent.id, {
                                 style: {
@@ -407,7 +406,6 @@ export default function BrandAssetsPanel() {
                           }}
                           onClick={() => {
                             // If there's a selected component in the editor context, update its background gradient
-                            const { selectedComponent, updateComponent } = useEditor();
                             if (selectedComponent) {
                               // Apply the gradient as background
                               const direction = 'to right'; // Default direction
@@ -487,7 +485,6 @@ export default function BrandAssetsPanel() {
                           className="h-16 w-24 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary hover:ring-opacity-50 transition-all"
                           onClick={() => {
                             // If there's a selected component in the editor context, update its background image
-                            const { selectedComponent, updateComponent } = useEditor();
                             if (selectedComponent) {
                               updateComponent(selectedComponent.id, {
                                 style: {
