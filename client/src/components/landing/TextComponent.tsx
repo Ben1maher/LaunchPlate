@@ -27,6 +27,10 @@ export default function TextComponent({ component }: TextComponentProps) {
     borderRadius: style.borderRadius,
     border: style.border,
     boxShadow: style.boxShadow,
+    
+    // Ensure styling is contained to this component only 
+    position: 'relative',
+    isolation: 'isolate',
   };
   
   // Handle background styles (solid color, gradient, or image)
