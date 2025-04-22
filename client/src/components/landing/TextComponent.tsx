@@ -31,14 +31,17 @@ export default function TextComponent({ component }: TextComponentProps) {
   
   // Handle background styles (solid color, gradient, or image)
   if (style.backgroundType === 'gradient' && style.background) {
-    containerStyle.background = style.background;
+    // Use !important to ensure component gradient overrides page background
+    containerStyle.background = `${style.background} !important`;
   } else if (style.backgroundType === 'image' && style.backgroundImage) {
-    containerStyle.backgroundImage = `url(${style.backgroundImage})`;
+    // Use !important to ensure component image overrides page background
+    containerStyle.backgroundImage = `url(${style.backgroundImage}) !important`;
     containerStyle.backgroundSize = style.backgroundSize || 'cover';
     containerStyle.backgroundPosition = style.backgroundPosition || 'center';
     containerStyle.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
-  } else {
-    containerStyle.backgroundColor = style.backgroundColor;
+  } else if (style.backgroundColor) {
+    // Use !important to ensure component color overrides page background
+    containerStyle.backgroundColor = `${style.backgroundColor} !important`;
   }
 
   // For heading component

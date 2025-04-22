@@ -140,10 +140,13 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
     <div 
       className={`relative component-wrapper group hover:outline hover:outline-1 hover:outline-gray-200 ${
         isSelected ? 'outline outline-2 outline-primary selected' : ''
-      } hover:bg-transparent`}
-      // Don't override component backgrounds, only set pointer events
+      } hover:bg-transparent isolation-auto`}
+      // Set isolation to ensure component styles aren't affected by parent styles
       style={{ 
-        pointerEvents: 'all'
+        pointerEvents: 'all',
+        isolation: 'isolate',
+        zIndex: 1,
+        position: 'relative'
       }} 
       onClick={onClick}
       data-component-id={component.id}
