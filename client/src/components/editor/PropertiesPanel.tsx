@@ -647,9 +647,10 @@ export default function PropertiesPanel() {
       {/* Properties Tabs */}
       <Tabs defaultValue="general" value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
         <div className="px-3 pt-3 border-b border-gray-200 flex-shrink-0">
-          <TabsList className="grid grid-cols-3 h-9">
+          <TabsList className="grid grid-cols-4 h-9">
             <TabsTrigger value="general" className="text-xs">General</TabsTrigger>
             <TabsTrigger value="style" className="text-xs">Style</TabsTrigger>
+            <TabsTrigger value="brand" className="text-xs">Brand Assets</TabsTrigger>
             <TabsTrigger value="advanced" className="text-xs">Advanced</TabsTrigger>
           </TabsList>
         </div>
@@ -663,6 +664,11 @@ export default function PropertiesPanel() {
           {/* Style Tab */}
           <TabsContent value="style" className="p-0 m-0 h-full overflow-y-auto">
             <RenderStyleProperties component={selectedComponent} updateComponent={updateComponent} />
+          </TabsContent>
+
+          {/* Brand Assets Tab */}
+          <TabsContent value="brand" className="p-0 m-0">
+            <BrandAssetsPanel />
           </TabsContent>
           
           {/* Advanced Tab */}
