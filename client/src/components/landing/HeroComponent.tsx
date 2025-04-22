@@ -65,40 +65,44 @@ export default function HeroComponent({
   // Copy base style to final style object (to be modified)
   let styleObj: React.CSSProperties = { ...baseStyleObj };
   
-  // Apply the appropriate background styling based on the type
-  // This will override any background properties in the style object
+  // Add style isolation to prevent inheritance from parent components
+  styleObj.position = 'relative';
+  styleObj.isolation = 'isolate';
+  styleObj.zIndex = 1;
+  
+  // Apply the appropriate background styling based on the type with !important flags
   if (style.backgroundType === 'gradient') {
     // If the background property is directly set (e.g., by the PropertiesPanel component)
     if (style.background) {
-      styleObj.background = style.background;
+      styleObj.background = `${style.background} !important`;
     } 
     // Otherwise, construct it from gradient properties
     else if (style.gradientStartColor && style.gradientEndColor) {
-      styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+      styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor}) !important`;
     }
     
-    // Clear other background properties to avoid conflicts
-    delete styleObj.backgroundImage;
-    delete styleObj.backgroundColor;
+    // Forcefully clear other background properties to avoid conflicts
+    styleObj.backgroundImage = 'none !important';
+    styleObj.backgroundColor = 'transparent !important';
   } else if (style.backgroundType === 'image' && style.backgroundImage) {
     console.log('Applying background image:', style.backgroundImage);
     
-    // Explicitly set these properties for background image
-    styleObj.backgroundImage = `url(${style.backgroundImage})`;
-    styleObj.backgroundSize = style.backgroundSize || 'cover';
-    styleObj.backgroundPosition = style.backgroundPosition || 'center';
-    styleObj.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+    // Explicitly set these properties for background image with !important flags
+    styleObj.backgroundImage = `url(${style.backgroundImage}) !important`;
+    styleObj.backgroundSize = `${style.backgroundSize || 'cover'} !important`;
+    styleObj.backgroundPosition = `${style.backgroundPosition || 'center'} !important`;
+    styleObj.backgroundRepeat = `${style.backgroundRepeat || 'no-repeat'} !important`;
     
     // Clear potentially conflicting properties
-    delete styleObj.background;
-    delete styleObj.backgroundColor;
+    styleObj.background = 'none !important';
+    styleObj.backgroundColor = 'transparent !important';
   } else {
-    // Default to solid color background
-    styleObj.backgroundColor = style.backgroundColor || '#f9fafb';
+    // Default to solid color background with !important flag
+    styleObj.backgroundColor = `${style.backgroundColor || '#f9fafb'} !important`;
     
     // Clear other background properties to avoid conflicts
-    delete styleObj.backgroundImage;
-    delete styleObj.background;
+    styleObj.backgroundImage = 'none !important';
+    styleObj.background = 'none !important';
   }
 
   // Heading styles with mobile responsiveness

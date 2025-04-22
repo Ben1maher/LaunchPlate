@@ -34,32 +34,33 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   // Copy base style to final style object (to be modified)
   let styleObj: React.CSSProperties = { ...baseStyleObj };
   
-  // Apply the appropriate background styling based on the type
+  // Apply the appropriate background styling based on the type with !important flags
   if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
-    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+    // Use !important flag to ensure the gradient is applied
+    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor}) !important`;
     
-    // Clear other background properties to avoid conflicts
-    delete styleObj.backgroundImage;
-    delete styleObj.backgroundColor;
+    // Forcefully clear other background properties to avoid conflicts
+    styleObj.backgroundImage = 'none !important';
+    styleObj.backgroundColor = 'transparent !important';
   } else if (style.backgroundType === 'image' && style.backgroundImage) {
     console.log('Header: Applying background image:', style.backgroundImage);
     
-    // Explicitly set these properties for background image
-    styleObj.backgroundImage = `url(${style.backgroundImage})`;
-    styleObj.backgroundSize = style.backgroundSize || 'cover';
-    styleObj.backgroundPosition = style.backgroundPosition || 'center';
-    styleObj.backgroundRepeat = style.backgroundRepeat || 'no-repeat';
+    // Explicitly set these properties for background image with !important
+    styleObj.backgroundImage = `url(${style.backgroundImage}) !important`;
+    styleObj.backgroundSize = `${style.backgroundSize || 'cover'} !important`;
+    styleObj.backgroundPosition = `${style.backgroundPosition || 'center'} !important`;
+    styleObj.backgroundRepeat = `${style.backgroundRepeat || 'no-repeat'} !important`;
     
     // Clear potentially conflicting properties
-    delete styleObj.background;
-    delete styleObj.backgroundColor;
+    styleObj.background = 'none !important';
+    styleObj.backgroundColor = 'transparent !important';
   } else {
-    // Default to solid color background
-    styleObj.backgroundColor = style.backgroundColor || '#ffffff';
+    // Default to solid color background with !important
+    styleObj.backgroundColor = `${style.backgroundColor || '#ffffff'} !important`;
     
     // Clear other background properties to avoid conflicts
-    delete styleObj.backgroundImage;
-    delete styleObj.background;
+    styleObj.backgroundImage = 'none !important';
+    styleObj.background = 'none !important';
   };
   
   // CTA button styling
@@ -103,6 +104,11 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
       window.removeEventListener('resize', checkResponsiveView);
     };
   }, [viewportMode]);
+  
+  // Add style isolation to prevent inheritance from parent components
+  styleObj.position = 'relative';
+  styleObj.isolation = 'isolate';
+  styleObj.zIndex = 1;
   
   return (
     <nav className="bg-white shadow-sm relative" style={styleObj}>
