@@ -11,7 +11,16 @@ import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export default function BrandAssetsPanel() {
-  const { brandAssets, addBrandAsset, removeBrandAsset, selectedComponent, updateComponent } = useEditor();
+  const { 
+    brandAssets, 
+    addBrandAsset, 
+    removeBrandAsset, 
+    selectedComponent, 
+    updateComponent,
+    pageSettings,
+    updatePageSettings,
+    isEditingPage
+  } = useEditor();
   const { toast } = useToast();
   const [newColorName, setNewColorName] = useState("");
   const [newColor, setNewColor] = useState("#3b82f6");
@@ -336,8 +345,25 @@ export default function BrandAssetsPanel() {
                           className="h-12 rounded-md cursor-pointer transition-all hover:ring-2 hover:ring-primary hover:ring-opacity-50" 
                           style={{ backgroundColor: asset.value }}
                           onClick={() => {
-                            // If there's a selected component in the editor context, update its background color
-                            if (selectedComponent) {
+                            // Check if we're in page editing mode
+                            if (isEditingPage) {
+                              // Update page background with this color
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'color',
+                                  color: asset.value
+                                }
+                              });
+                              
+                              toast({
+                                title: "Color applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            } 
+                            // If there's a selected component, update its background color
+                            else if (selectedComponent) {
                               updateComponent(selectedComponent.id, {
                                 style: {
                                   ...selectedComponent.style,
@@ -405,8 +431,26 @@ export default function BrandAssetsPanel() {
                             background: `linear-gradient(135deg, ${asset.value}, ${asset.secondaryValue})` 
                           }}
                           onClick={() => {
-                            // If there's a selected component in the editor context, update its background gradient
-                            if (selectedComponent) {
+                            // Check if we're in page editing mode
+                            if (isEditingPage) {
+                              // Update page background with this gradient
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'gradient',
+                                  gradientStart: asset.value,
+                                  gradientEnd: asset.secondaryValue
+                                }
+                              });
+                              
+                              toast({
+                                title: "Gradient applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            }
+                            // If there's a selected component, update its background gradient
+                            else if (selectedComponent) {
                               // Apply the gradient as background
                               const direction = 'to right'; // Default direction
                               const gradient = `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue})`;
@@ -484,8 +528,27 @@ export default function BrandAssetsPanel() {
                         <div 
                           className="h-16 w-24 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary hover:ring-opacity-50 transition-all"
                           onClick={() => {
-                            // If there's a selected component in the editor context, update its background image
-                            if (selectedComponent) {
+                            // Check if we're in page editing mode
+                            if (isEditingPage) {
+                              // Update page background with this image
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'image',
+                                  imageUrl: asset.value,
+                                  overlay: pageSettings.background.overlay || 'rgba(0,0,0,0.4)',
+                                  overlayOpacity: pageSettings.background.overlayOpacity || 0.4
+                                }
+                              });
+                              
+                              toast({
+                                title: "Image applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            }
+                            // If there's a selected component, update its background image
+                            else if (selectedComponent) {
                               updateComponent(selectedComponent.id, {
                                 style: {
                                   ...selectedComponent.style,
