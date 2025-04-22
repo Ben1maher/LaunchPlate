@@ -68,7 +68,7 @@ export class MemStorage implements IStorage {
       id: devId,
       username: "developer",
       email: "dev@launchplate.local",
-      password: "$2a$10$Q7X4UVDI1D/ACe0GaS1D6.VEK3YfA.KVJ9.dL6A0Qj1AEiAFsJW9S", // hashed "developer123"
+      password: "2ce31fa0ed6b82c3d308ff0053a8eab5ea03fd7983eeafb515f309d68a2c65003ead206bf43603b3c99fe81b5945a7e46487afc4553d60a62361c428316cd052.4710b872e8ef405d69f17dbfe4fca4fe", // hashed "developer123"
       fullName: "Developer Account",
       createdAt: new Date().toISOString(),
       accountType: "premium", // Premium tier 
