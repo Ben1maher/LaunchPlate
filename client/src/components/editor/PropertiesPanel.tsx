@@ -2823,21 +2823,85 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="text-xs text-gray-600 block mb-1">Padding</label>
-            <Input
-              value={component.style.padding || '16px'}
-              onChange={(e) => updateStyle('padding', e.target.value)}
-              className="text-sm"
-              placeholder="16px"
-            />
+            <div className="grid grid-cols-4 gap-2">
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Top</label>
+                <Input
+                  value={component.style.paddingTop || '16px'}
+                  onChange={(e) => updateStyle('paddingTop', e.target.value)}
+                  className="text-sm"
+                  placeholder="16px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Right</label>
+                <Input
+                  value={component.style.paddingRight || '16px'}
+                  onChange={(e) => updateStyle('paddingRight', e.target.value)}
+                  className="text-sm"
+                  placeholder="16px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Bottom</label>
+                <Input
+                  value={component.style.paddingBottom || '16px'}
+                  onChange={(e) => updateStyle('paddingBottom', e.target.value)}
+                  className="text-sm"
+                  placeholder="16px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Left</label>
+                <Input
+                  value={component.style.paddingLeft || '16px'}
+                  onChange={(e) => updateStyle('paddingLeft', e.target.value)}
+                  className="text-sm"
+                  placeholder="16px"
+                />
+              </div>
+            </div>
           </div>
           <div>
             <label className="text-xs text-gray-600 block mb-1">Margin</label>
-            <Input
-              value={component.style.margin || '0px'}
-              onChange={(e) => updateStyle('margin', e.target.value)}
-              className="text-sm"
-              placeholder="0px"
-            />
+            <div className="grid grid-cols-4 gap-2">
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Top</label>
+                <Input
+                  value={component.style.marginTop || '0px'}
+                  onChange={(e) => updateStyle('marginTop', e.target.value)}
+                  className="text-sm"
+                  placeholder="0px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Right</label>
+                <Input
+                  value={component.style.marginRight || '0px'}
+                  onChange={(e) => updateStyle('marginRight', e.target.value)}
+                  className="text-sm"
+                  placeholder="0px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Bottom</label>
+                <Input
+                  value={component.style.marginBottom || '0px'}
+                  onChange={(e) => updateStyle('marginBottom', e.target.value)}
+                  className="text-sm"
+                  placeholder="0px"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-gray-500 block mb-1 text-center">Left</label>
+                <Input
+                  value={component.style.marginLeft || '0px'}
+                  onChange={(e) => updateStyle('marginLeft', e.target.value)}
+                  className="text-sm"
+                  placeholder="0px"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
