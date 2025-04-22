@@ -360,12 +360,13 @@ export function EditorProvider({ children }: { children: ReactNode }) {
         }
       }
       
-      // Save the project
+      // Save the project with brand assets
       const response = await apiRequest('POST', '/api/projects', {
         userId: user?.id,
         name,
         description,
         components,
+        brandAssets, // Include brand assets with the project
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         published: false
@@ -1188,9 +1189,11 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <EditorContext.Provider value={value}>
-      {children}
-    </EditorContext.Provider>
+    <div ref={editorContextRef} data-editor-context="true">
+      <EditorContext.Provider value={value}>
+        {children}
+      </EditorContext.Provider>
+    </div>
   );
 }
 
