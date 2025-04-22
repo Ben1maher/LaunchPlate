@@ -425,7 +425,8 @@ export default function PropertiesPanel() {
     pageSettings,
     updatePageSettings,
     isEditingPage,
-    setIsEditingPage
+    setIsEditingPage,
+    addBrandAsset
   } = useEditor();
   const [activeTab, setActiveTab] = useState("general");
 
@@ -2755,6 +2756,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       // Prompt for a name
                       const gradientName = prompt('Enter a name for this gradient', defaultName);
                       if (gradientName) {
+                        // Use the addBrandAsset we already have from the outer scope
                         addBrandAsset({
                           name: gradientName.trim(),
                           type: 'gradient',
