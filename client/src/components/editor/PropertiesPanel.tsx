@@ -2494,7 +2494,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
   const [bgUploadError, setBgUploadError] = useState<string | null>(null);
   const bgFileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const { addBrandAsset } = useEditor();
+  const { addBrandAsset, isEditingPage } = useEditor();
 
   const updateStyle = (key: string, value: any) => {
     updateComponent(component.id, {
@@ -2748,6 +2748,17 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <ColorPicker
                   color={component.style.gradientStartColor || '#4F46E5'}
                   onChange={(color) => {
+                    // Check if we're in page editing mode
+                    if (isEditingPage) {
+                      console.log("Warning: Trying to update component gradient while in page editing mode");
+                      toast({
+                        title: "Cannot update component",
+                        description: "Please exit page editing mode to modify component styles.",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    
                     // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const endColor = component.style.gradientEndColor || '#0EA5E9';
@@ -2773,6 +2784,17 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <ColorPicker
                   color={component.style.gradientEndColor || '#0EA5E9'}
                   onChange={(color) => {
+                    // Check if we're in page editing mode
+                    if (isEditingPage) {
+                      console.log("Warning: Trying to update component gradient while in page editing mode");
+                      toast({
+                        title: "Cannot update component",
+                        description: "Please exit page editing mode to modify component styles.",
+                        variant: "destructive"
+                      });
+                      return;
+                    }
+                    
                     // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const startColor = component.style.gradientStartColor || '#4F46E5';
@@ -2808,6 +2830,8 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     size="sm"
                     className="text-xs"
                     onClick={() => {
+                      // Even if we're in page editing mode, we can still save to brand assets
+                      // as it doesn't affect the component styling
                       const startColor = component.style.gradientStartColor || '#4F46E5';
                       const endColor = component.style.gradientEndColor || '#0EA5E9';
                       
