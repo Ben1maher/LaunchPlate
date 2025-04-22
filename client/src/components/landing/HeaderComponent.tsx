@@ -30,34 +30,53 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   // Copy base style to final style object (to be modified)
   let styleObj: React.CSSProperties = { ...baseStyleObj };
   
-  // Apply the appropriate background styling based on the type with !important flags
-  if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
-    // Use !important flag to ensure the gradient is applied
-    styleObj.background = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor}) !important`;
+  // Check for the 'background' property first as it might be set directly with a gradient
+  if (style.background && style.backgroundType === 'gradient') {
+    console.log('Header: Using direct background gradient:', style.background);
+    // Use the background as is - it's already a full CSS gradient
+    styleObj.background = `${style.background} !important`;
     
-    // Forcefully clear other background properties to avoid conflicts
+    // These are essential to avoid conflicts
+    styleObj.backgroundColor = 'transparent !important';
+    styleObj.backgroundImage = 'none !important';
+  } 
+  // Fallback to construct gradient from individual properties
+  else if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
+    console.log('Header: Constructing gradient from:', style.gradientStartColor, style.gradientEndColor);
+    
+    // Construct the gradient
+    const gradientCSS = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+    styleObj.background = `${gradientCSS} !important`;
+    
+    // Clear all competing properties
     styleObj.backgroundImage = 'none !important';
     styleObj.backgroundColor = 'transparent !important';
-  } else if (style.backgroundType === 'image' && style.backgroundImage) {
+  } 
+  // Handle background images
+  else if (style.backgroundType === 'image' && style.backgroundImage) {
     console.log('Header: Applying background image:', style.backgroundImage);
     
-    // Explicitly set these properties for background image with !important
+    // Handle background image
     styleObj.backgroundImage = `url(${style.backgroundImage}) !important`;
     styleObj.backgroundSize = `${style.backgroundSize || 'cover'} !important`;
     styleObj.backgroundPosition = `${style.backgroundPosition || 'center'} !important`;
     styleObj.backgroundRepeat = `${style.backgroundRepeat || 'no-repeat'} !important`;
     
-    // Clear potentially conflicting properties
+    // Clear competing properties
     styleObj.background = 'none !important';
     styleObj.backgroundColor = 'transparent !important';
-  } else {
-    // Default to solid color background with !important
+  } 
+  // Default to solid color
+  else {
+    console.log('Header: Using background color:', style.backgroundColor || '#ffffff');
+    
+    // Default to solid color
     styleObj.backgroundColor = `${style.backgroundColor || '#ffffff'} !important`;
     
-    // Clear other background properties to avoid conflicts
+    // Clear competing properties
     styleObj.backgroundImage = 'none !important';
     styleObj.background = 'none !important';
-  };
+  }
   
   // CTA button styling
   const ctaButtonStyle = {
@@ -107,7 +126,7 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   styleObj.zIndex = 1;
   
   return (
-    <nav className="bg-white shadow-sm relative" style={styleObj}>
+    <nav className="shadow-sm relative" style={styleObj}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}

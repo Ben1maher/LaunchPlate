@@ -2660,19 +2660,43 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   console.log("Applying gradient:", gradient);
                   console.log("Component style before update:", component.style);
                   
-                  // Update style properties directly to ensure all values are set
-                  const updatedStyle = {
-                    ...component.style,
-                    backgroundType: value,
-                    gradientStartColor: startColor,
-                    gradientEndColor: endColor,
-                    gradientDirection: direction,
-                    // Add !important flag to ensure it only affects this component
-                    background: `${gradient} !important`,
-                    // Clear potentially conflicting properties
-                    backgroundColor: null, 
-                    backgroundImage: null
-                  };
+                  // Create special values for header components
+                  let updatedStyle;
+                  
+                  // For header components, we need special handling
+                  if (component.type.includes('header')) {
+                    console.log('Header: Setting gradient in PropertiesPanel');
+                    updatedStyle = {
+                      ...component.style,
+                      backgroundType: 'gradient', // Must be explicit for header
+                      gradientStartColor: startColor,
+                      gradientEndColor: endColor,
+                      gradientDirection: direction,
+                      // Make sure this has !important and is a complete gradient string
+                      background: `linear-gradient(${direction}, ${startColor}, ${endColor}) !important`,
+                      // Must be explicit with !important
+                      backgroundColor: 'transparent !important',
+                      backgroundImage: 'none !important',
+                      // Add style isolation properties
+                      position: 'relative',
+                      isolation: 'isolate',
+                      zIndex: 1
+                    };
+                  } else {
+                    // For other components, use the standard style
+                    updatedStyle = {
+                      ...component.style,
+                      backgroundType: value,
+                      gradientStartColor: startColor,
+                      gradientEndColor: endColor,
+                      gradientDirection: direction,
+                      // Add !important flag to ensure it only affects this component
+                      background: `${gradient} !important`,
+                      // Clear potentially conflicting properties
+                      backgroundColor: null, 
+                      backgroundImage: null
+                    };
+                  }
                   
                   console.log("Component style after update:", updatedStyle);
                   
