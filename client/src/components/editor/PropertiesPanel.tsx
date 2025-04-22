@@ -2497,15 +2497,23 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
   const { addBrandAsset, isEditingPage } = useEditor();
 
   const updateStyle = (key: string, value: any) => {
-    // Special handling for background properties to ensure they override page styles
+    // Special handling for background properties to ensure they only affect this component
     let styleUpdates: Record<string, any> = {
       ...component.style,
       [key]: value
     };
     
-    // Ensure background is set properly to override page background
+    // Ensure background properties are handled correctly for isolation
     if (key === 'backgroundColor') {
-      styleUpdates.background = value; // Use explicit background property for color
+      // Only set the backgroundColor property, not the background property
+      styleUpdates.backgroundType = 'color';
+      
+      // Apply the color with !important to ensure it overrides the page background
+      styleUpdates.backgroundColor = `${value} !important`;
+      
+      // Clear any conflicting background properties
+      styleUpdates.background = null;
+      styleUpdates.backgroundImage = null;
     }
     
     updateComponent(component.id, {
@@ -2618,10 +2626,11 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     gradientStartColor: startColor,
                     gradientEndColor: endColor,
                     gradientDirection: direction,
-                    background: gradient,
+                    // Add !important flag to ensure it only affects this component
+                    background: `${gradient} !important`,
                     // Clear potentially conflicting properties
-                    backgroundColor: undefined, 
-                    backgroundImage: undefined
+                    backgroundColor: null, 
+                    backgroundImage: null
                   };
                   
                   console.log("Component style after update:", updatedStyle);
@@ -2634,16 +2643,15 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   // Default color if switching to solid color
                   const color = component.style.backgroundColor || '#F9FAFB';
                   
-                  // Update style properties
+                  // Update style properties with isolation to prevent affecting page
                   updateComponent(component.id, {
                     style: {
                       ...component.style,
                       backgroundType: value,
-                      backgroundColor: color,
-                      // Make sure we set background property to color to ensure it overrides page settings
-                      background: color,
-                      // Clear potentially conflicting properties
-                      backgroundImage: undefined
+                      backgroundColor: `${color} !important`,
+                      // Clear potentially conflicting properties to isolate styling
+                      background: null,
+                      backgroundImage: null
                     }
                   });
                 } else if (value === 'image') {
@@ -2692,9 +2700,12 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   updateComponent(component.id, {
                     style: {
                       ...component.style,
-                      backgroundColor: color,
-                      // Make sure we also set the background to ensure it overrides any page settings
-                      background: color
+                      backgroundColor: `${color} !important`,
+                      // Clear other background properties to avoid conflicts
+                      background: null,
+                      backgroundImage: null,
+                      // Mark this as an isolated style
+                      backgroundType: 'color'
                     }
                   });
                 }}
@@ -2722,7 +2733,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       style: {
                         ...component.style,
                         gradientDirection: value,
-                        background: gradient
+                        background: `${gradient} !important`,
+                        // Clear potentially conflicting properties
+                        backgroundColor: null,
+                        backgroundImage: null
                       }
                     });
                   }}
