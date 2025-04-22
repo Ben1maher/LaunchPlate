@@ -91,7 +91,7 @@ export default function BrandAssetsPanel() {
     }
 
     // Test if the image URL is valid
-    const img = new Image() as HTMLImageElement;
+    const img = document.createElement('img') as HTMLImageElement;
     img.onload = () => {
       addBrandAsset({
         name: newImageName.trim(),
