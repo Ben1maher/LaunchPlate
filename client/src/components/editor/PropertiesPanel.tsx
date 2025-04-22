@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useEditor } from "../../context/EditorContext";
+import { BrandAsset } from "../../context/EditorContext";
 import { Component, ComponentType, PageSettings } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -2739,6 +2740,39 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     background: `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor || '#4F46E5'}, ${component.style.gradientEndColor || '#0EA5E9'})` 
                   }}
                 ></div>
+                <div className="flex justify-end mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={() => {
+                      const startColor = component.style.gradientStartColor || '#4F46E5';
+                      const endColor = component.style.gradientEndColor || '#0EA5E9';
+                      
+                      // Generate default name from the colors
+                      const defaultName = `Gradient ${startColor.substring(1, 4)}..${endColor.substring(1, 4)}`;
+                      
+                      // Prompt for a name
+                      const gradientName = prompt('Enter a name for this gradient', defaultName);
+                      if (gradientName) {
+                        addBrandAsset({
+                          name: gradientName.trim(),
+                          type: 'gradient',
+                          value: startColor,
+                          secondaryValue: endColor
+                        });
+                        
+                        toast({
+                          title: "Gradient saved",
+                          description: `"${gradientName.trim()}" has been added to your brand assets.`,
+                          duration: 3000
+                        });
+                      }
+                    }}
+                  >
+                    Save to Brand Assets
+                  </Button>
+                </div>
               </div>
             </div>
           )}

@@ -123,9 +123,9 @@ export default function BrandAssetsPanel() {
   };
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="space-y-4 p-3">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Brand Assets</h2>
+        <h2 className="text-lg font-semibold">Brand Assets</h2>
         <Dialog>
           <DialogTrigger asChild>
             <Button size="sm" className="gap-1">
@@ -332,10 +332,35 @@ export default function BrandAssetsPanel() {
                       className="group relative border rounded-md p-2 hover:border-primary transition-colors"
                     >
                       <div className="flex flex-col gap-1">
-                        <div 
-                          className="h-12 rounded-md" 
+                        <button 
+                          className="h-12 rounded-md cursor-pointer transition-all hover:ring-2 hover:ring-primary hover:ring-opacity-50" 
                           style={{ backgroundColor: asset.value }}
-                        ></div>
+                          onClick={() => {
+                            // If there's a selected component in the editor context, update its background color
+                            const { selectedComponent, updateComponent } = useEditor();
+                            if (selectedComponent) {
+                              updateComponent(selectedComponent.id, {
+                                style: {
+                                  ...selectedComponent.style,
+                                  backgroundType: 'color',
+                                  backgroundColor: asset.value,
+                                  // Remove gradient properties if they exist
+                                  background: undefined,
+                                  gradientStartColor: undefined,
+                                  gradientEndColor: undefined,
+                                  gradientDirection: undefined
+                                }
+                              });
+                              
+                              toast({
+                                title: "Color applied",
+                                description: `Applied "${asset.name}" to the selected component.`,
+                                duration: 2000
+                              });
+                            }
+                          }}
+                          title={`Apply "${asset.name}" to selected component`}
+                        ></button>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="text-xs font-medium truncate max-w-[100px]">{asset.name}</div>
@@ -375,12 +400,41 @@ export default function BrandAssetsPanel() {
                       className="group relative border rounded-md p-2 hover:border-primary transition-colors"
                     >
                       <div className="flex flex-col gap-1">
-                        <div 
-                          className="h-12 rounded-md" 
+                        <button 
+                          className="h-12 rounded-md w-full cursor-pointer transition-all hover:ring-2 hover:ring-primary hover:ring-opacity-50" 
                           style={{ 
                             background: `linear-gradient(135deg, ${asset.value}, ${asset.secondaryValue})` 
                           }}
-                        ></div>
+                          onClick={() => {
+                            // If there's a selected component in the editor context, update its background gradient
+                            const { selectedComponent, updateComponent } = useEditor();
+                            if (selectedComponent) {
+                              // Apply the gradient as background
+                              const direction = 'to right'; // Default direction
+                              const gradient = `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue})`;
+                              
+                              updateComponent(selectedComponent.id, {
+                                style: {
+                                  ...selectedComponent.style,
+                                  backgroundType: 'gradient',
+                                  gradientStartColor: asset.value,
+                                  gradientEndColor: asset.secondaryValue,
+                                  gradientDirection: direction,
+                                  background: gradient,
+                                  // Remove solid background if it exists
+                                  backgroundColor: undefined
+                                }
+                              });
+                              
+                              toast({
+                                title: "Gradient applied",
+                                description: `Applied "${asset.name}" to the selected component.`,
+                                duration: 2000
+                              });
+                            }
+                          }}
+                          title={`Apply "${asset.name}" to selected component`}
+                        ></button>
                         <div className="flex items-center justify-between">
                           <div>
                             <div className="text-xs font-medium truncate max-w-[140px]">{asset.name}</div>
@@ -430,7 +484,36 @@ export default function BrandAssetsPanel() {
                     >
                       <div className="flex gap-3">
                         <div 
-                          className="h-16 w-24 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden"
+                          className="h-16 w-24 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary hover:ring-opacity-50 transition-all"
+                          onClick={() => {
+                            // If there's a selected component in the editor context, update its background image
+                            const { selectedComponent, updateComponent } = useEditor();
+                            if (selectedComponent) {
+                              updateComponent(selectedComponent.id, {
+                                style: {
+                                  ...selectedComponent.style,
+                                  backgroundType: 'image',
+                                  backgroundImage: asset.value,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat',
+                                  // Remove other background properties
+                                  backgroundColor: undefined,
+                                  background: undefined,
+                                  gradientStartColor: undefined,
+                                  gradientEndColor: undefined,
+                                  gradientDirection: undefined
+                                }
+                              });
+                              
+                              toast({
+                                title: "Image applied",
+                                description: `Applied "${asset.name}" to the selected component.`,
+                                duration: 2000
+                              });
+                            }
+                          }}
+                          title={`Apply "${asset.name}" to selected component`}
                         >
                           <img 
                             src={asset.value}
