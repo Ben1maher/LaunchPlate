@@ -2497,14 +2497,35 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
   const { addBrandAsset, isEditingPage } = useEditor();
 
   const updateStyle = (key: string, value: any) => {
+    // Log updates for header components to debug
+    if (component.type.includes('header')) {
+      console.log(`Header component style update: ${key} = ${value}`);
+      console.log('Current style:', component.style);
+    }
+    
     // Special handling for background properties to ensure they only affect this component
     let styleUpdates: Record<string, any> = {
       ...component.style,
       [key]: value
     };
     
-    // Ensure background properties are handled correctly for isolation
-    if (key === 'backgroundColor') {
+    // Handle header components specifically
+    if (component.type.includes('header')) {
+      // For header components, always ensure !important flags are used
+      if (key === 'backgroundColor') {
+        // Set background type to 'color' and apply !important flags
+        styleUpdates = {
+          ...styleUpdates,
+          backgroundType: 'color',
+          backgroundColor: `${value} !important`,
+          // Forcefully clear other competing background properties
+          background: 'none !important',
+          backgroundImage: 'none !important'
+        };
+      }
+    }
+    // For other components, use regular background property handling
+    else if (key === 'backgroundColor') {
       // Only set the backgroundColor property, not the background property
       styleUpdates.backgroundType = 'color';
       
@@ -2516,9 +2537,15 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
       styleUpdates.backgroundImage = null;
     }
     
+    // Apply updates
     updateComponent(component.id, {
       style: styleUpdates
     });
+    
+    // For debugging - log the updates we're making
+    if (component.type.includes('header')) {
+      console.log('Updated style for header component:', styleUpdates);
+    }
   };
   
   // Handle background image upload

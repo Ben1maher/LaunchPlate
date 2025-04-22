@@ -19,17 +19,13 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   const ctaUrl = content.ctaUrl || '#';
   const showCta = type === 'header-1';
   
-  // Start with a clean style object
+  // Start with a clean style object 
   const baseStyleObj: React.CSSProperties = {
     borderBottom: style.borderBottom || '1px solid #e5e7eb'
   };
   
-  // Add other styles from component.style
-  Object.keys(style).forEach(key => {
-    if (key !== 'borderBottom') {
-      (baseStyleObj as any)[key] = style[key];
-    }
-  });
+  // DO NOT copy ALL styles from component.style - this was causing issues
+  // Only selectively copy the ones we need
   
   // Copy base style to final style object (to be modified)
   let styleObj: React.CSSProperties = { ...baseStyleObj };
