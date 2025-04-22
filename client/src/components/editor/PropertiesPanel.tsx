@@ -7,11 +7,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getComponentData } from "./componentData";
-import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image, Palette, Layers, Globe } from "lucide-react";
+import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Upload, Image, Palette, Layers, Globe, Paintbrush } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ColorPicker } from "@/components/ui/color-picker";
 import { Slider } from "@/components/ui/slider";
+import BrandAssetsPanel from "./BrandAssetsPanel";
 
 // Visual Spacing Control Component
 interface SpacingControlProps {
@@ -458,9 +459,10 @@ export default function PropertiesPanel() {
         {/* Page Settings Content */}
         <Tabs defaultValue="background" className="flex-1 flex flex-col">
           <div className="px-3 pt-3 border-b border-gray-200 flex-shrink-0">
-            <TabsList className="grid grid-cols-3 h-9">
+            <TabsList className="grid grid-cols-4 h-9">
               <TabsTrigger value="background" className="text-xs">Background</TabsTrigger>
               <TabsTrigger value="layout" className="text-xs">Layout</TabsTrigger>
+              <TabsTrigger value="brand" className="text-xs">Brand Assets</TabsTrigger>
               <TabsTrigger value="advanced" className="text-xs">Advanced</TabsTrigger>
             </TabsList>
           </div>
@@ -503,6 +505,11 @@ export default function PropertiesPanel() {
                   />
                 </div>
               )}
+            </TabsContent>
+            
+            {/* Brand Assets Tab */}
+            <TabsContent value="brand" className="p-0 m-0">
+              <BrandAssetsPanel />
             </TabsContent>
             
             {/* Advanced Tab */}
@@ -558,6 +565,20 @@ export default function PropertiesPanel() {
           >
             <Settings className="h-4 w-4" />
             Edit Page Settings
+          </Button>
+          <Button 
+            variant="outline" 
+            className="gap-1 mb-3"
+            onClick={() => {
+              setIsEditingPage(true);
+              const tabsElement = document.querySelector('[value="brand"]');
+              if (tabsElement) {
+                (tabsElement as HTMLElement).click();
+              }
+            }}
+          >
+            <Paintbrush className="h-4 w-4" />
+            Manage Brand Assets
           </Button>
           <Button variant="link" className="text-primary-500 gap-1">
             <i className="ri-information-line"></i>
@@ -1086,9 +1107,14 @@ function RenderGeneralProperties({ component, updateComponent }: { component: Co
           
           <div>
             <label className="text-xs text-gray-600 block mb-1">Heading Level</label>
+            <div className="mb-1 text-xs text-gray-500">Current level: {component.content.level || 'h2'}</div>
             <Select
+              defaultValue={component.content.level || 'h2'}
               value={component.content.level || 'h2'}
-              onValueChange={(value) => updateContent('level', value)}
+              onValueChange={(value) => {
+                console.log("Heading level changed to:", value);
+                updateContent('level', value);
+              }}
             >
               <SelectTrigger className="text-sm">
                 <SelectValue placeholder="Select level" />
