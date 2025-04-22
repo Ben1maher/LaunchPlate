@@ -2632,8 +2632,9 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       ...component.style,
                       backgroundType: value,
                       backgroundColor: color,
+                      // Make sure we set background property to color to ensure it overrides page settings
+                      background: color,
                       // Clear potentially conflicting properties
-                      background: undefined,
                       backgroundImage: undefined
                     }
                   });
@@ -2652,8 +2653,9 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       backgroundPosition: component.style.backgroundPosition || 'center',
                       backgroundRepeat: component.style.backgroundRepeat || 'no-repeat',
                       // Clear potentially conflicting properties
-                      backgroundColor: undefined,
-                      background: undefined
+                      backgroundColor: undefined
+                      // Note: we don't clear "background" property for image
+                      // as we'll use it to set the background-image CSS property
                     }
                   });
                 }
@@ -2676,7 +2678,18 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               <label className="text-xs text-gray-600 block mb-1">Color</label>
               <ColorPicker
                 color={component.style.backgroundColor || '#F9FAFB'}
-                onChange={(color) => updateStyle('backgroundColor', color)}
+                onChange={(color) => {
+                  // Make sure we update the specific component's background color
+                  // rather than using the generic updateStyle function
+                  updateComponent(component.id, {
+                    style: {
+                      ...component.style,
+                      backgroundColor: color,
+                      // Make sure we also set the background to ensure it overrides any page settings
+                      background: color
+                    }
+                  });
+                }}
               />
             </div>
           )}
