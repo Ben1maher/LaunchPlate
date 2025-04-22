@@ -161,19 +161,16 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       style: getDefaultStyleForType(type),
     };
     
-    // Apply page background color to component if appropriate
+    // Apply page background color to all components by default
     if (pageSettings.background.type === 'color' && pageSettings.background.color) {
-      // For components where inheriting background makes sense
-      if (['heading', 'text-block', 'button', 'form', 'feature-grid', 'stats-bar', 'pricing-cards'].includes(type)) {
-        // Apply page background color to the component
-        newComponent = {
-          ...newComponent,
-          style: {
-            ...newComponent.style,
-            backgroundColor: pageSettings.background.color
-          }
-        };
-      }
+      // Apply page background color to the component
+      newComponent = {
+        ...newComponent,
+        style: {
+          ...newComponent.style,
+          backgroundColor: pageSettings.background.color
+        }
+      };
     }
 
     const newComponents = [...components];
