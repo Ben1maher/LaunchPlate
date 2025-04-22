@@ -2736,19 +2736,48 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               <ColorPicker
                 color={component.style.backgroundColor || '#F9FAFB'}
                 onChange={(color) => {
-                  // Make sure we update the specific component's background color
-                  // rather than using the generic updateStyle function
-                  updateComponent(component.id, {
-                    style: {
+                  // Special handling for header components
+                  if (component.type.includes('header')) {
+                    console.log('HeaderComponent: Updating background color to:', color);
+                    
+                    // Make a completely new style object for header components to avoid inheritance issues
+                    const newHeaderStyle = {
+                      // Keep all original styles except background-related ones
                       ...component.style,
+                      // Set the background color with !important to override page styles
                       backgroundColor: `${color} !important`,
-                      // Clear other background properties to avoid conflicts
-                      background: null,
-                      backgroundImage: null,
-                      // Mark this as an isolated style
-                      backgroundType: 'color'
-                    }
-                  });
+                      // Explicitly reset all other background properties with !important
+                      background: 'none !important',
+                      backgroundImage: 'none !important',
+                      // Mark as color background type
+                      backgroundType: 'color',
+                      // Add style isolation properties
+                      position: 'relative',
+                      isolation: 'isolate',
+                      zIndex: 1
+                    };
+                    
+                    console.log('HeaderComponent: New style object:', newHeaderStyle);
+                    
+                    // Directly update the component
+                    updateComponent(component.id, {
+                      style: newHeaderStyle
+                    });
+                  }
+                  // Normal handling for other components
+                  else {
+                    updateComponent(component.id, {
+                      style: {
+                        ...component.style,
+                        backgroundColor: `${color} !important`,
+                        // Clear other background properties to avoid conflicts
+                        background: null,
+                        backgroundImage: null,
+                        // Mark this as an isolated style
+                        backgroundType: 'color'
+                      }
+                    });
+                  }
                 }}
               />
             </div>
@@ -2769,17 +2798,46 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     console.log("Updating gradient direction:", value);
                     console.log("New gradient:", gradient);
                     
-                    // Update all related gradient properties at once
-                    updateComponent(component.id, {
-                      style: {
+                    // Special handling for header components
+                    if (component.type.includes('header')) {
+                      console.log('HeaderComponent: Updating gradient direction to:', value);
+                      
+                      // Create a complete style object with all isolation properties
+                      const newHeaderStyle = {
                         ...component.style,
                         gradientDirection: value,
+                        backgroundType: 'gradient',
                         background: `${gradient} !important`,
-                        // Clear potentially conflicting properties
-                        backgroundColor: null,
-                        backgroundImage: null
-                      }
-                    });
+                        // Clear potentially conflicting properties with !important
+                        backgroundColor: 'transparent !important',
+                        backgroundImage: 'none !important',
+                        // Add style isolation properties
+                        position: 'relative',
+                        isolation: 'isolate',
+                        zIndex: 1
+                      };
+                      
+                      console.log('HeaderComponent: New gradient style:', newHeaderStyle);
+                      
+                      // Update with complete style object
+                      updateComponent(component.id, {
+                        style: newHeaderStyle
+                      });
+                    } 
+                    // For other components
+                    else {  
+                      // Update all related gradient properties at once
+                      updateComponent(component.id, {
+                        style: {
+                          ...component.style,
+                          gradientDirection: value,
+                          background: `${gradient} !important`,
+                          // Clear potentially conflicting properties
+                          backgroundColor: null,
+                          backgroundImage: null
+                        }
+                      });
+                    }
                   }}
                 >
                   <SelectTrigger className="text-sm">
@@ -2809,17 +2867,46 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     console.log("Updating gradient start color:", color);
                     console.log("New gradient:", gradient);
                     
-                    // Update all related gradient properties at once
-                    updateComponent(component.id, {
-                      style: {
+                    // Special handling for header components
+                    if (component.type.includes('header')) {
+                      console.log('HeaderComponent: Updating gradient start color to:', color);
+                      
+                      // Complete style object with isolation properties
+                      const newHeaderStyle = {
                         ...component.style,
                         gradientStartColor: color,
+                        backgroundType: 'gradient',
                         background: `${gradient} !important`,
-                        // Clear potentially conflicting properties
-                        backgroundColor: null,
-                        backgroundImage: null
-                      }
-                    });
+                        // Force clear conflicting properties
+                        backgroundColor: 'transparent !important',
+                        backgroundImage: 'none !important',
+                        // Add style isolation
+                        position: 'relative',
+                        isolation: 'isolate',
+                        zIndex: 1
+                      };
+                      
+                      console.log('HeaderComponent: New gradient style:', newHeaderStyle);
+                      
+                      // Apply the complete style update
+                      updateComponent(component.id, {
+                        style: newHeaderStyle
+                      });
+                    }
+                    // For other components
+                    else {
+                      // Update all related gradient properties at once
+                      updateComponent(component.id, {
+                        style: {
+                          ...component.style,
+                          gradientStartColor: color,
+                          background: `${gradient} !important`,
+                          // Clear potentially conflicting properties
+                          backgroundColor: null,
+                          backgroundImage: null
+                        }
+                      });
+                    }
                   }}
                 />
               </div>
@@ -2837,17 +2924,46 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     console.log("Updating gradient end color:", color);
                     console.log("New gradient:", gradient);
                     
-                    // Update all related gradient properties at once
-                    updateComponent(component.id, {
-                      style: {
+                    // Special handling for header components
+                    if (component.type.includes('header')) {
+                      console.log('HeaderComponent: Updating gradient end color to:', color);
+                      
+                      // Complete style object with isolation properties
+                      const newHeaderStyle = {
                         ...component.style,
                         gradientEndColor: color,
+                        backgroundType: 'gradient',
                         background: `${gradient} !important`,
-                        // Clear potentially conflicting properties
-                        backgroundColor: null,
-                        backgroundImage: null
-                      }
-                    });
+                        // Force clear conflicting properties
+                        backgroundColor: 'transparent !important',
+                        backgroundImage: 'none !important',
+                        // Add style isolation
+                        position: 'relative',
+                        isolation: 'isolate',
+                        zIndex: 1
+                      };
+                      
+                      console.log('HeaderComponent: New gradient style:', newHeaderStyle);
+                      
+                      // Apply the complete style update
+                      updateComponent(component.id, {
+                        style: newHeaderStyle
+                      });
+                    }
+                    // For other components
+                    else {
+                      // Update all related gradient properties at once
+                      updateComponent(component.id, {
+                        style: {
+                          ...component.style,
+                          gradientEndColor: color,
+                          background: `${gradient} !important`,
+                          // Clear potentially conflicting properties
+                          backgroundColor: null,
+                          backgroundImage: null
+                        }
+                      });
+                    }
                   }}
                 />
               </div>
