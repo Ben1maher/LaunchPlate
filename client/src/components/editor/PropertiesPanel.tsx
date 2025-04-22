@@ -2497,11 +2497,19 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
   const { addBrandAsset, isEditingPage } = useEditor();
 
   const updateStyle = (key: string, value: any) => {
+    // Special handling for background properties to ensure they override page styles
+    let styleUpdates: Record<string, any> = {
+      ...component.style,
+      [key]: value
+    };
+    
+    // Ensure background is set properly to override page background
+    if (key === 'backgroundColor') {
+      styleUpdates.background = value; // Use explicit background property for color
+    }
+    
     updateComponent(component.id, {
-      style: {
-        ...component.style,
-        [key]: value
-      }
+      style: styleUpdates
     });
   };
   

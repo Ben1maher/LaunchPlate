@@ -42,6 +42,10 @@ export default function TextComponent({ component }: TextComponentProps) {
   } else if (style.backgroundColor) {
     // Use !important to ensure component color overrides page background
     containerStyle.backgroundColor = `${style.backgroundColor} !important`;
+  } else {
+    // If no background is specified, use a semi-transparent white
+    // This creates a clear distinction between components without looking too harsh
+    containerStyle.backgroundColor = `rgba(255, 255, 255, 0.1)`;
   }
 
   // For heading component
