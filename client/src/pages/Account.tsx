@@ -132,38 +132,6 @@ export default function AccountPage() {
     logoutMutation.mutate();
   };
   
-  // Developer mode - Quick premium upgrade
-  const handleDevPremiumUpgrade = async () => {
-    try {
-      const res = await apiRequest('POST', '/api/dev/upgrade-to-premium');
-      
-      if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.message || 'Failed to upgrade to premium');
-      }
-      
-      const updatedUser = await res.json();
-      
-      toast({
-        title: 'Developer Mode',
-        description: 'Successfully upgraded to Premium tier for testing.',
-        variant: 'default',
-      });
-      
-      // Refresh user data
-      queryClient.invalidateQueries({ queryKey: ['/api/user'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/user/limits'] });
-      queryClient.invalidateQueries({ queryKey: ['/api/subscription'] });
-    } catch (error: any) {
-      console.error('Error upgrading to premium:', error);
-      toast({
-        title: 'Upgrade Failed',
-        description: error.message || 'Failed to upgrade your account',
-        variant: 'destructive',
-      });
-    }
-  };
-  
   if (isLoading || subscriptionLoading || limitsLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -214,10 +182,9 @@ export default function AccountPage() {
         </div>
         
         <Tabs defaultValue="overview">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-2 mb-8">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="subscription">Subscription</TabsTrigger>
-            <TabsTrigger value="developer">Developer</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview">
@@ -417,54 +384,7 @@ export default function AccountPage() {
             </Card>
           </TabsContent>
           
-          <TabsContent value="developer">
-            <Card>
-              <CardHeader>
-                <CardTitle>Developer Tools</CardTitle>
-                <CardDescription>Special functions for development and testing</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="border-b pb-4">
-                  <h3 className="font-medium mb-2">Premium Testing</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Instantly upgrade your account to Premium tier for testing all features. 
-                    This is only for development purposes.
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    <Button 
-                      onClick={handleDevPremiumUpgrade}
-                      variant="secondary"
-                    >
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      Upgrade to Premium (Developer Mode)
-                    </Button>
-                  </div>
-                </div>
-                
-                <div>
-                  <h3 className="font-medium mb-2">Account Status</h3>
-                  <div className="grid gap-3">
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground mb-1">Account Type</div>
-                      <div>{getTierName(user.accountType || '')}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground mb-1">User ID</div>
-                      <div>{user.id}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground mb-1">Stripe Customer ID</div>
-                      <div>{user.stripeCustomerId || 'None'}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-muted-foreground mb-1">Stripe Subscription ID</div>
-                      <div>{user.stripeSubscriptionId || 'None'}</div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+
         </Tabs>
       </div>
     </div>

@@ -61,27 +61,28 @@ export class MemStorage implements IStorage {
       checkPeriod: 86400000 // 24h - how often expired sessions are removed
     });
 
-    // Add a developer account with premium permissions
-    const devPermissions = configureTierPermissions(SubscriptionTiers.PREMIUM);
-    const devAccount: User = {
-      id: this.userId++,
+    // Add a developer account that automatically has premium tier access
+    // Use username: developer, password: developer123
+    const devId = this.userId++;
+    const devUser: User = {
+      id: devId,
       username: "developer",
       email: "dev@launchplate.local",
       password: "$2a$10$Q7X4UVDI1D/ACe0GaS1D6.VEK3YfA.KVJ9.dL6A0Qj1AEiAFsJW9S", // hashed "developer123"
       fullName: "Developer Account",
       createdAt: new Date().toISOString(),
-      accountType: SubscriptionTiers.PREMIUM,
-      projectsLimit: devPermissions.projectsLimit,
-      pagesLimit: devPermissions.pagesLimit,
-      storage: devPermissions.storage,
-      canDeploy: devPermissions.canDeploy,
-      canSaveTemplates: devPermissions.canSaveTemplates,
+      accountType: "premium", // Premium tier 
+      projectsLimit: 30,      // Premium tier limit
+      pagesLimit: 3,          // Premium tier limit
+      storage: 100,           // Premium tier limit in MB
+      canDeploy: true,        // Premium tier capability
+      canSaveTemplates: true, // Premium tier capability
       avatarUrl: null,
       isActive: true,
       stripeCustomerId: "dev_customer_id",
       stripeSubscriptionId: "dev_subscription_id"
     };
-    this.users.set(devAccount.id, devAccount);
+    this.users.set(devId, devUser);
 
     // Add some default templates
     this.initDefaultTemplates();
