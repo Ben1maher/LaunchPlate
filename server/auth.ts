@@ -29,7 +29,7 @@ async function comparePasswords(supplied: string, stored: string) {
 }
 
 // Configure user permissions based on subscription tier
-function configureTierPermissions(tier: SubscriptionTier): {
+export function configureTierPermissions(tier: SubscriptionTier): {
   projectsLimit: number;
   pagesLimit: number;
   storage: number;

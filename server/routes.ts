@@ -6,7 +6,7 @@ import { insertTemplateSchema, insertProjectSchema, SubscriptionTiers, Subscript
 import multer from "multer";
 import path from "path";
 import fs from "fs";
-import { setupAuth } from "./auth";
+import { setupAuth, configureTierPermissions } from "./auth";
 import { 
   createSubscriptionCheckoutSession,
   getUserSubscription,
