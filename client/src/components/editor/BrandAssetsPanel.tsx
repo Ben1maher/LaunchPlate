@@ -38,6 +38,8 @@ export default function BrandAssetsPanel() {
       return;
     }
 
+    console.log("Adding brand color asset:", { name: newColorName.trim(), type: 'color', value: newColor });
+    
     addBrandAsset({
       name: newColorName.trim(),
       type: 'color',
@@ -59,6 +61,13 @@ export default function BrandAssetsPanel() {
       return;
     }
 
+    console.log("Adding brand gradient asset:", { 
+      name: newGradientName.trim(), 
+      type: 'gradient', 
+      value: newGradientStart,
+      secondaryValue: newGradientEnd
+    });
+    
     addBrandAsset({
       name: newGradientName.trim(),
       type: 'gradient',
