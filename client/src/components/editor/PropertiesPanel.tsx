@@ -98,6 +98,7 @@ function PageBackgroundSettings({
   updatePageSettings: (settings: Partial<PageSettings>) => void 
 }) {
   const { toast } = useToast();
+  const { addBrandAsset } = useEditor();
   const [backgroundType, setBackgroundType] = useState<'color' | 'gradient' | 'image'>(
     pageSettings.background.type || 'color'
   );
@@ -311,9 +312,45 @@ function PageBackgroundSettings({
               />
             </div>
           </div>
-          <div className="h-10 mt-2 rounded" style={{ 
-            background: `linear-gradient(135deg, ${pageSettings.background.gradientStart || '#4F46E5'}, ${pageSettings.background.gradientEnd || '#10B981'})` 
-          }} />
+          <div className="mt-2 space-y-2">
+            <div className="h-10 rounded" style={{ 
+              background: `linear-gradient(135deg, ${pageSettings.background.gradientStart || '#4F46E5'}, ${pageSettings.background.gradientEnd || '#10B981'})` 
+            }} />
+            
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-sm"
+              onClick={() => {
+                const startColor = pageSettings.background.gradientStart || '#4F46E5';
+                const endColor = pageSettings.background.gradientEnd || '#10B981';
+                
+                // Generate default name from the colors
+                const defaultName = `Gradient ${startColor.substring(1, 4)}..${endColor.substring(1, 4)}`;
+                
+                // Prompt for a name
+                const gradientName = prompt('Enter a name for this gradient', defaultName);
+                if (gradientName) {
+                  // Add the asset to brand assets collection
+                  addBrandAsset({
+                    name: gradientName.trim(),
+                    type: 'gradient',
+                    value: startColor,
+                    secondaryValue: endColor
+                  });
+                  
+                  // Show toast notification
+                  toast({
+                    title: "Gradient saved",
+                    description: `"${gradientName.trim()}" has been added to your brand assets.`,
+                    duration: 3000
+                  });
+                }
+              }}
+            >
+              Save to Brand Assets
+            </Button>
+          </div>
         </div>
       )}
 
@@ -2457,6 +2494,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
   const [bgUploadError, setBgUploadError] = useState<string | null>(null);
   const bgFileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { addBrandAsset } = useEditor();
 
   const updateStyle = (key: string, value: any) => {
     updateComponent(component.id, {
@@ -2756,10 +2794,6 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       // Prompt for a name
                       const gradientName = prompt('Enter a name for this gradient', defaultName);
                       if (gradientName) {
-                        // Save directly to the EditorContext
-                        // Use the EditorContext directly
-                        const { addBrandAsset } = useEditor();
-                        
                         // Add the asset to brand assets collection
                         addBrandAsset({
                           name: gradientName.trim(),
