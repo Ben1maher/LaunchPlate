@@ -11,6 +11,81 @@ import { ChevronRight, X, Copy, Trash, Settings, ArrowUp, ArrowDown, Move, Uploa
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ColorPicker } from "@/components/ui/color-picker";
+import { Slider } from "@/components/ui/slider";
+
+// Visual Spacing Control Component
+interface SpacingControlProps {
+  value: string;
+  onChange: (value: string) => void;
+  label: string;
+  color: string;
+  min?: number;
+  max?: number;
+  defaultValue?: string;
+}
+
+function SpacingControl({ 
+  value, 
+  onChange, 
+  label, 
+  color,
+  min = 0,
+  max = 100,
+  defaultValue = '0px'
+}: SpacingControlProps) {
+  // Parse the current value (e.g., "16px" -> 16)
+  const parseValue = (val: string): number => {
+    const num = parseInt(val);
+    return isNaN(num) ? 0 : num;
+  };
+
+  // Format the value for display (e.g., 16 -> "16px")
+  const formatValue = (num: number): string => {
+    return `${num}px`;
+  };
+
+  const numericValue = parseValue(value || defaultValue);
+  
+  // Handle slider change
+  const handleSliderChange = (newValue: number[]) => {
+    onChange(formatValue(newValue[0]));
+  };
+
+  // Handle direct input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    // If they're typing a number without units, keep it that way until they're done
+    if (/^\d+$/.test(inputValue)) {
+      onChange(`${inputValue}px`);
+    } else {
+      onChange(inputValue);
+    }
+  };
+
+  return (
+    <div className="space-y-1">
+      <label className="text-xs text-gray-500 block text-center">{label}</label>
+      <div className="flex gap-2">
+        <div className="flex-grow">
+          <Slider
+            value={[numericValue]}
+            min={min}
+            max={max}
+            step={1}
+            onValueChange={handleSliderChange}
+            className={`${color}`}
+          />
+        </div>
+        <Input
+          type="text"
+          value={value || defaultValue}
+          onChange={handleInputChange}
+          className={`text-sm w-16 flex-shrink-0 ${color}`}
+        />
+      </div>
+    </div>
+  );
+}
 
 // Page Background Settings Component
 function PageBackgroundSettings({ 
@@ -2819,89 +2894,167 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
       
       {/* Spacing */}
       <div>
-        <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">Spacing</h3>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs text-gray-600 block mb-1">Padding</label>
-            <div className="grid grid-cols-4 gap-2">
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Top</label>
-                <Input
+        <h3 className="text-xs font-semibold uppercase text-gray-500 mb-3">SPACING</h3>
+        <div className="space-y-6">
+          {/* Visual Spacing Preview */}
+          <div className="relative h-48 border border-dashed border-gray-300 rounded-md bg-gray-50">
+            <div className="absolute inset-0 flex items-center justify-center">
+              {/* Margin Indicator */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div 
+                  className="w-5/6 h-5/6 relative border-2 border-dashed border-blue-300 flex items-center justify-center"
+                  style={{
+                    marginTop: component.style.marginTop || '0px',
+                    marginRight: component.style.marginRight || '0px',
+                    marginBottom: component.style.marginBottom || '0px',
+                    marginLeft: component.style.marginLeft || '0px',
+                  }}
+                >
+                  <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] px-1 bg-white text-blue-500">Margin</span>
+                  
+                  {/* Padding Indicator */}
+                  <div 
+                    className="w-full h-full border-2 border-blue-500 flex items-center justify-center bg-blue-50"
+                    style={{
+                      paddingTop: component.style.paddingTop || '16px',
+                      paddingRight: component.style.paddingRight || '16px',
+                      paddingBottom: component.style.paddingBottom || '16px',
+                      paddingLeft: component.style.paddingLeft || '16px',
+                    }}
+                  >
+                    <span className="absolute -top-3 left-1/2 transform -translate-x-1/2 text-[10px] px-1 bg-white text-blue-600">Padding</span>
+                    <div className="w-full h-full bg-blue-100 flex items-center justify-center border border-blue-200">
+                      <span className="text-xs text-blue-800 font-medium">Content</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Controls */}
+          <div className="grid grid-cols-2 gap-6">
+            {/* Padding Controls */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-medium text-gray-700">Padding</label>
+                <span className="text-[10px] text-gray-500 px-1.5 py-0.5 bg-gray-100 rounded">Inner Space</span>
+              </div>
+              <div className="space-y-3">
+                <SpacingControl
+                  label="Top"
                   value={component.style.paddingTop || '16px'}
-                  onChange={(e) => updateStyle('paddingTop', e.target.value)}
-                  className="text-sm"
-                  placeholder="16px"
+                  onChange={(value) => updateStyle('paddingTop', value)}
+                  color="bg-blue-100 border-blue-200"
+                  min={0}
+                  max={100}
+                  defaultValue="16px"
                 />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Right</label>
-                <Input
+                <SpacingControl
+                  label="Right"
                   value={component.style.paddingRight || '16px'}
-                  onChange={(e) => updateStyle('paddingRight', e.target.value)}
-                  className="text-sm"
-                  placeholder="16px"
+                  onChange={(value) => updateStyle('paddingRight', value)}
+                  color="bg-blue-100 border-blue-200"
+                  min={0}
+                  max={100}
+                  defaultValue="16px"
                 />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Bottom</label>
-                <Input
+                <SpacingControl
+                  label="Bottom"
                   value={component.style.paddingBottom || '16px'}
-                  onChange={(e) => updateStyle('paddingBottom', e.target.value)}
-                  className="text-sm"
-                  placeholder="16px"
+                  onChange={(value) => updateStyle('paddingBottom', value)}
+                  color="bg-blue-100 border-blue-200"
+                  min={0}
+                  max={100}
+                  defaultValue="16px"
+                />
+                <SpacingControl
+                  label="Left"
+                  value={component.style.paddingLeft || '16px'}
+                  onChange={(value) => updateStyle('paddingLeft', value)}
+                  color="bg-blue-100 border-blue-200"
+                  min={0}
+                  max={100}
+                  defaultValue="16px"
                 />
               </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Left</label>
-                <Input
-                  value={component.style.paddingLeft || '16px'}
-                  onChange={(e) => updateStyle('paddingLeft', e.target.value)}
-                  className="text-sm"
-                  placeholder="16px"
+            </div>
+            
+            {/* Margin Controls */}
+            <div className="space-y-3">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-medium text-gray-700">Margin</label>
+                <span className="text-[10px] text-gray-500 px-1.5 py-0.5 bg-gray-100 rounded">Outer Space</span>
+              </div>
+              <div className="space-y-3">
+                <SpacingControl
+                  label="Top"
+                  value={component.style.marginTop || '0px'}
+                  onChange={(value) => updateStyle('marginTop', value)}
+                  color="bg-blue-50 border-blue-100"
+                  min={0}
+                  max={100}
+                  defaultValue="0px"
+                />
+                <SpacingControl
+                  label="Right"
+                  value={component.style.marginRight || '0px'}
+                  onChange={(value) => updateStyle('marginRight', value)}
+                  color="bg-blue-50 border-blue-100"
+                  min={0}
+                  max={100}
+                  defaultValue="0px"
+                />
+                <SpacingControl
+                  label="Bottom"
+                  value={component.style.marginBottom || '0px'}
+                  onChange={(value) => updateStyle('marginBottom', value)}
+                  color="bg-blue-50 border-blue-100"
+                  min={0}
+                  max={100}
+                  defaultValue="0px"
+                />
+                <SpacingControl
+                  label="Left"
+                  value={component.style.marginLeft || '0px'}
+                  onChange={(value) => updateStyle('marginLeft', value)}
+                  color="bg-blue-50 border-blue-100"
+                  min={0}
+                  max={100}
+                  defaultValue="0px"
                 />
               </div>
             </div>
           </div>
-          <div>
-            <label className="text-xs text-gray-600 block mb-1">Margin</label>
-            <div className="grid grid-cols-4 gap-2">
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Top</label>
-                <Input
-                  value={component.style.marginTop || '0px'}
-                  onChange={(e) => updateStyle('marginTop', e.target.value)}
-                  className="text-sm"
-                  placeholder="0px"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Right</label>
-                <Input
-                  value={component.style.marginRight || '0px'}
-                  onChange={(e) => updateStyle('marginRight', e.target.value)}
-                  className="text-sm"
-                  placeholder="0px"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Bottom</label>
-                <Input
-                  value={component.style.marginBottom || '0px'}
-                  onChange={(e) => updateStyle('marginBottom', e.target.value)}
-                  className="text-sm"
-                  placeholder="0px"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-gray-500 block mb-1 text-center">Left</label>
-                <Input
-                  value={component.style.marginLeft || '0px'}
-                  onChange={(e) => updateStyle('marginLeft', e.target.value)}
-                  className="text-sm"
-                  placeholder="0px"
-                />
-              </div>
-            </div>
+          
+          {/* Quick Presets */}
+          <div className="flex flex-wrap gap-2">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                updateStyle('paddingTop', '16px');
+                updateStyle('paddingRight', '16px');
+                updateStyle('paddingBottom', '16px');
+                updateStyle('paddingLeft', '16px');
+              }}
+              className="text-xs"
+            >
+              Reset Padding
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                updateStyle('marginTop', '0px');
+                updateStyle('marginRight', '0px');
+                updateStyle('marginBottom', '0px');
+                updateStyle('marginLeft', '0px');
+              }}
+              className="text-xs"
+            >
+              Reset Margin
+            </Button>
           </div>
         </div>
       </div>
