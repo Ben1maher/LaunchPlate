@@ -354,22 +354,44 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   };
 
   const updatePageSettings = (settings: Partial<PageSettings>) => {
+    let newPageSettings: PageSettings;
+    
     if (settings.background && typeof settings.background === 'object') {
       // For background updates, merge the objects instead of replacing
-      setPageSettings(prev => ({
-        ...prev,
+      newPageSettings = {
+        ...pageSettings,
         ...settings,
         background: {
-          ...prev.background,
+          ...pageSettings.background,
           ...settings.background
         }
-      }));
+      };
+      setPageSettings(newPageSettings);
+      
+      // If background color is updated, update all components to match the new background color
+      if (settings.background && settings.background.type === 'color' && settings.background.color) {
+        const bgColor = settings.background.color; // Store in a variable to avoid the TypeScript error
+        const updatedComponents = components.map(component => {
+          // Update the background color of each component
+          return {
+            ...component,
+            style: {
+              ...component.style,
+              backgroundColor: bgColor
+            }
+          };
+        });
+        
+        // Apply the updates to all components
+        setComponents(updatedComponents);
+      }
     } else {
       // For other settings, just spread them in
-      setPageSettings(prev => ({
-        ...prev,
+      newPageSettings = {
+        ...pageSettings,
         ...settings
-      }));
+      };
+      setPageSettings(newPageSettings);
     }
     
     // Deselect any component when editing page settings
