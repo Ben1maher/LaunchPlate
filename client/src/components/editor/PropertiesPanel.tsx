@@ -2756,19 +2756,28 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       // Prompt for a name
                       const gradientName = prompt('Enter a name for this gradient', defaultName);
                       if (gradientName) {
-                        // Use the addBrandAsset we already have from the outer scope
-                        addBrandAsset({
-                          name: gradientName.trim(),
-                          type: 'gradient',
-                          value: startColor,
-                          secondaryValue: endColor
-                        });
-                        
-                        toast({
-                          title: "Gradient saved",
-                          description: `"${gradientName.trim()}" has been added to your brand assets.`,
-                          duration: 3000
-                        });
+                        // Save directly to the EditorContext
+                        // Get access to the global editor context
+                        const editorContext = document.querySelector('[data-editor-context]');
+                        if (editorContext) {
+                          // Dispatch a custom event that EditorContext can listen for
+                          const event = new CustomEvent('editor:addBrandAsset', {
+                            detail: {
+                              name: gradientName.trim(),
+                              type: 'gradient',
+                              value: startColor,
+                              secondaryValue: endColor
+                            }
+                          });
+                          editorContext.dispatchEvent(event);
+                          
+                          // Show toast notification
+                          toast({
+                            title: "Gradient saved",
+                            description: `"${gradientName.trim()}" has been added to your brand assets.`,
+                            duration: 3000
+                          });
+                        }
                       }
                     }}
                   >

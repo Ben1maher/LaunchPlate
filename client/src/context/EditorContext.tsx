@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
@@ -87,8 +87,67 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     maxWidth: 1200
   });
   
+  // Default brand assets for each template
+  const defaultBrandAssets: BrandAsset[] = [
+    // Colors
+    {
+      id: 'default-primary',
+      name: 'Primary Blue',
+      type: 'color',
+      value: '#3B82F6',
+      createdAt: new Date()
+    },
+    {
+      id: 'default-secondary',
+      name: 'Secondary Teal',
+      type: 'color',
+      value: '#14B8A6',
+      createdAt: new Date()
+    },
+    {
+      id: 'default-accent',
+      name: 'Accent Indigo',
+      type: 'color',
+      value: '#6366F1',
+      createdAt: new Date()
+    },
+    {
+      id: 'default-neutral',
+      name: 'Neutral Gray',
+      type: 'color',
+      value: '#6B7280',
+      createdAt: new Date()
+    },
+    
+    // Gradients
+    {
+      id: 'default-gradient-1',
+      name: 'Blue Ocean',
+      type: 'gradient',
+      value: '#3B82F6',
+      secondaryValue: '#2DD4BF',
+      createdAt: new Date()
+    },
+    {
+      id: 'default-gradient-2',
+      name: 'Sunset Vibes',
+      type: 'gradient',
+      value: '#F59E0B',
+      secondaryValue: '#EF4444',
+      createdAt: new Date()
+    },
+    {
+      id: 'default-gradient-3',
+      name: 'Purple Haze',
+      type: 'gradient',
+      value: '#8B5CF6',
+      secondaryValue: '#EC4899',
+      createdAt: new Date()
+    }
+  ];
+  
   // Brand assets for reusable colors, gradients, and images
-  const [brandAssets, setBrandAssets] = useState<BrandAsset[]>([]);
+  const [brandAssets, setBrandAssets] = useState<BrandAsset[]>(defaultBrandAssets);
   
   // History for undo/redo functionality
   const [history, setHistory] = useState<Component[][]>([[]]);
@@ -98,6 +157,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   const { user, isAuthenticated, isGuest } = useAuth();
   const [_, navigate] = useLocation();
   
+  // Create a ref for the editor context element
+  const editorContextRef = React.useRef<HTMLDivElement>(null);
+
   // Hero image update event listener
   useEffect(() => {
     const handleHeroImageUpdate = (e: Event) => {
@@ -124,12 +186,30 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       }
     };
     
-    // Add event listener
+    // Brand asset add event handler
+    const handleAddBrandAsset = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const assetDetails = customEvent.detail;
+      
+      if (assetDetails) {
+        addBrandAsset(assetDetails);
+      }
+    };
+    
+    // Add event listeners
     document.addEventListener('hero:updateImage', handleHeroImageUpdate);
+    
+    if (editorContextRef.current) {
+      editorContextRef.current.addEventListener('editor:addBrandAsset', handleAddBrandAsset);
+    }
     
     // Cleanup
     return () => {
       document.removeEventListener('hero:updateImage', handleHeroImageUpdate);
+      
+      if (editorContextRef.current) {
+        editorContextRef.current.removeEventListener('editor:addBrandAsset', handleAddBrandAsset);
+      }
     };
   }, [components, toast]);
 
@@ -336,6 +416,14 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       }
       
       setComponents(project.components);
+      
+      // If the project has saved brand assets, load those instead of the defaults
+      if (project.brandAssets && Array.isArray(project.brandAssets) && project.brandAssets.length > 0) {
+        setBrandAssets(project.brandAssets);
+      } else {
+        // For older projects without brand assets, keep using the defaults
+        setBrandAssets(defaultBrandAssets);
+      }
       
       toast({
         title: "Project loaded",
