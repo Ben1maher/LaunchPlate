@@ -2602,18 +2602,6 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   
                   console.log("Applying gradient:", gradient);
                   console.log("Component style before update:", component.style);
-                  console.log("isEditingPage:", isEditingPage);
-                  
-                  // Make sure we're not in page editing mode
-                  if (isEditingPage) {
-                    console.log("Warning: Trying to update component background while in page editing mode");
-                    toast({
-                      title: "Cannot update component",
-                      description: "Please exit page editing mode to modify component backgrounds.",
-                      variant: "destructive"
-                    });
-                    return;
-                  }
                   
                   // Update style properties directly to ensure all values are set
                   const updatedStyle = {
@@ -2699,18 +2687,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <label className="text-xs text-gray-600 block mb-1">Gradient Direction</label>
                 <Select
                   value={component.style.gradientDirection || 'to right'}
-                  onValueChange={(value) => {
-                    // Check if we're in page editing mode
-                    if (isEditingPage) {
-                      console.log("Warning: Trying to update component gradient while in page editing mode");
-                      toast({
-                        title: "Cannot update component",
-                        description: "Please exit page editing mode to modify component styles.",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    
+                  onValueChange={(value) => {                    
                     // Create the full style update with new direction
                     const startColor = component.style.gradientStartColor || '#4F46E5';
                     const endColor = component.style.gradientEndColor || '#0EA5E9';
@@ -2748,17 +2725,6 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <ColorPicker
                   color={component.style.gradientStartColor || '#4F46E5'}
                   onChange={(color) => {
-                    // Check if we're in page editing mode
-                    if (isEditingPage) {
-                      console.log("Warning: Trying to update component gradient while in page editing mode");
-                      toast({
-                        title: "Cannot update component",
-                        description: "Please exit page editing mode to modify component styles.",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    
                     // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const endColor = component.style.gradientEndColor || '#0EA5E9';
@@ -2783,18 +2749,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                 <label className="text-xs text-gray-600 block mb-1">End Color</label>
                 <ColorPicker
                   color={component.style.gradientEndColor || '#0EA5E9'}
-                  onChange={(color) => {
-                    // Check if we're in page editing mode
-                    if (isEditingPage) {
-                      console.log("Warning: Trying to update component gradient while in page editing mode");
-                      toast({
-                        title: "Cannot update component",
-                        description: "Please exit page editing mode to modify component styles.",
-                        variant: "destructive"
-                      });
-                      return;
-                    }
-                    
+                  onChange={(color) => {                    
                     // Create the full style update
                     const direction = component.style.gradientDirection || 'to right';
                     const startColor = component.style.gradientStartColor || '#4F46E5';
