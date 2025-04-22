@@ -2566,11 +2566,25 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
         backgroundRepeat: component.style.backgroundRepeat || 'no-repeat'
       };
       
+      // Format the background image and clear any conflicting background properties
+      const finalStyles = newStyles.backgroundImage 
+        ? {
+            backgroundType: 'image',
+            backgroundImage: `${newStyles.backgroundImage} !important`,
+            backgroundSize: component.style.backgroundSize || 'cover',
+            backgroundPosition: component.style.backgroundPosition || 'center',
+            backgroundRepeat: component.style.backgroundRepeat || 'no-repeat',
+            // Clear conflicting background properties
+            backgroundColor: undefined,
+            background: undefined
+          }
+        : newStyles;
+      
       // Apply all style updates at once
       updateComponent(component.id, {
         style: {
           ...component.style,
-          ...newStyles
+          ...finalStyles
         }
       });
       
@@ -2773,7 +2787,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       style: {
                         ...component.style,
                         gradientStartColor: color,
-                        background: gradient
+                        background: `${gradient} !important`,
+                        // Clear potentially conflicting properties
+                        backgroundColor: null,
+                        backgroundImage: null
                       }
                     });
                   }}
@@ -2798,7 +2815,10 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       style: {
                         ...component.style,
                         gradientEndColor: color,
-                        background: gradient
+                        background: `${gradient} !important`,
+                        // Clear potentially conflicting properties
+                        backgroundColor: null,
+                        backgroundImage: null
                       }
                     });
                   }}
@@ -2908,34 +2928,28 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     // Remove 'url()' if the user pastes a CSS background-image value
                     const cleanUrl = url.replace(/^url\(['"]?|['"]?\)$/g, '');
                     
-                    // Update all related properties at once
-                    const newStyles: Partial<Record<string, any>> = {
-                      backgroundImage: cleanUrl
+                    // Prepare final background image styles with any existing defaults
+                    const imageStyles: Partial<Record<string, any>> = {
+                      backgroundType: 'image',
+                      backgroundImage: `url(${cleanUrl}) !important`,
+                      backgroundSize: component.style.backgroundSize || 'cover',
+                      backgroundPosition: component.style.backgroundPosition || 'center',
+                      backgroundRepeat: component.style.backgroundRepeat || 'no-repeat',
+                      // Clear potentially conflicting background properties
+                      backgroundColor: undefined,
+                      background: undefined
                     };
                     
-                    // If adding a URL, make sure backgroundType is set to 'image'
-                    if (cleanUrl && component.style.backgroundType !== 'image') {
-                      newStyles.backgroundType = 'image';
-                      
-                      // Set default background properties if not already set
-                      if (!component.style.backgroundSize) {
-                        newStyles.backgroundSize = 'cover';
-                      }
-                      if (!component.style.backgroundPosition) {
-                        newStyles.backgroundPosition = 'center';
-                      }
-                      if (!component.style.backgroundRepeat) {
-                        newStyles.backgroundRepeat = 'no-repeat';
-                      }
+                    // Apply the styles only if we have a valid URL
+                    if (cleanUrl) {
+                      // Apply all style updates at once
+                      updateComponent(component.id, {
+                        style: {
+                          ...component.style,
+                          ...imageStyles
+                        }
+                      });
                     }
-                    
-                    // Apply all style updates at once
-                    updateComponent(component.id, {
-                      style: {
-                        ...component.style,
-                        ...newStyles
-                      }
-                    });
                   }}
                   placeholder="https://example.com/image.jpg"
                   className="text-sm"
