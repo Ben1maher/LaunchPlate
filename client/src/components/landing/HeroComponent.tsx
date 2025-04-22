@@ -18,20 +18,49 @@ export default function HeroComponent({
   // Extract component data
   const { type, content, style } = component;
   
-  // Start with a clean style object
+  // Start with a clean style object with proper margin and padding handling
   const baseStyleObj: React.CSSProperties = {
     position: 'relative' as 'relative',
     overflow: 'hidden',
-    padding: style.padding || '64px 16px'
+    
+    // Handle individual padding values if specified, otherwise use the general padding
+    paddingTop: style.paddingTop || style.padding?.split(' ')[0] || '64px',
+    paddingRight: style.paddingRight || (style.padding?.split(' ')[1] || style.padding?.split(' ')[0] || '16px'),
+    paddingBottom: style.paddingBottom || (style.padding?.split(' ')[2] || style.padding?.split(' ')[0] || '64px'),
+    paddingLeft: style.paddingLeft || (style.padding?.split(' ')[3] || style.padding?.split(' ')[1] || style.padding?.split(' ')[0] || '16px'),
+    
+    // Handle individual margin values if specified
+    marginTop: style.marginTop || '0',
+    marginRight: style.marginRight || '0',
+    marginBottom: style.marginBottom || '0',
+    marginLeft: style.marginLeft || '0',
   };
   
-  // Add other styles from component.style
-  // Ensure we don't copy over properties that might conflict with TypeScript typings
-  Object.keys(style).forEach(key => {
-    if (key !== 'position' && key !== 'overflow') {
-      (baseStyleObj as any)[key] = style[key];
-    }
-  });
+  // Add only specific style properties we want to apply
+  // Instead of copying all properties, we'll manually apply the ones that are safe
+  // This ensures margin/padding settings aren't overwritten by the generic properties
+  
+  // Apply color styles
+  if (style.color) baseStyleObj.color = style.color;
+  if (style.backgroundColor) baseStyleObj.backgroundColor = style.backgroundColor;
+  
+  // Apply border styles
+  if (style.border) baseStyleObj.border = style.border;
+  if (style.borderRadius) baseStyleObj.borderRadius = style.borderRadius;
+  if (style.borderWidth) baseStyleObj.borderWidth = style.borderWidth;
+  if (style.borderStyle) baseStyleObj.borderStyle = style.borderStyle;
+  if (style.borderColor) baseStyleObj.borderColor = style.borderColor;
+  
+  // Apply text styles
+  if (style.fontSize) baseStyleObj.fontSize = style.fontSize;
+  if (style.fontWeight) baseStyleObj.fontWeight = style.fontWeight;
+  if (style.fontFamily) baseStyleObj.fontFamily = style.fontFamily;
+  if (style.textAlign) baseStyleObj.textAlign = style.textAlign;
+  if (style.lineHeight) baseStyleObj.lineHeight = style.lineHeight;
+  
+  // Apply shadow and effects
+  if (style.boxShadow) baseStyleObj.boxShadow = style.boxShadow;
+  if (style.opacity) baseStyleObj.opacity = style.opacity;
   
   // Copy base style to final style object (to be modified)
   let styleObj: React.CSSProperties = { ...baseStyleObj };

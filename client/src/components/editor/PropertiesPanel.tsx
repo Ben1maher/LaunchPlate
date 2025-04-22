@@ -79,7 +79,7 @@ function PageBackgroundSettings({
     }
 
     // Test if the image URL is valid
-    const img = new Image() as HTMLImageElement;
+    const img = new Image(0, 0) as HTMLImageElement;
     img.onload = () => {
       updatePageSettings({
         background: {
