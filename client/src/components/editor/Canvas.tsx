@@ -205,6 +205,21 @@ export default function Canvas() {
             <LayoutGrid className="h-3 w-3" />
             Grid Lines
           </Button>
+          
+          <div className="h-5 border-r border-gray-300"></div>
+          
+          <Button
+            variant={isEditingPage ? 'default' : 'outline'}
+            size="sm"
+            className="text-xs h-7 gap-1"
+            onClick={() => {
+              setIsEditingPage(!isEditingPage);
+              setSelectedComponent(null);
+            }}
+          >
+            <Settings className="h-3 w-3" />
+            Page Settings
+          </Button>
         </div>
       </div>
       
@@ -240,22 +255,6 @@ export default function Canvas() {
                 'w-full'
               }`}
             >
-              {/* Page Settings Button */}
-              <div className="absolute top-2 right-2 z-50">
-                <Button
-                  variant={isEditingPage ? "default" : "outline"}
-                  size="sm"
-                  className="flex items-center gap-1 shadow-sm"
-                  onClick={() => {
-                    setIsEditingPage(!isEditingPage);
-                    setSelectedComponent(null);
-                  }}
-                >
-                  <Settings className="h-3.5 w-3.5" />
-                  Page Settings
-                </Button>
-              </div>
-
               {/* Page Canvas */}
               <div 
                 className={`min-h-[80vh] border-4 ${

@@ -11,6 +11,17 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { apiRequest } from '@/lib/queryClient';
 
+// Define brand asset types
+export interface BrandAsset {
+  id: string;
+  name: string;
+  type: 'color' | 'gradient' | 'image';
+  value: string;
+  // For gradients
+  secondaryValue?: string;
+  createdAt: Date;
+}
+
 interface EditorContextType {
   components: Component[];
   selectedComponent: Component | null;
@@ -22,6 +33,7 @@ interface EditorContextType {
   historyIndex: number;
   pageSettings: PageSettings;
   isEditingPage: boolean;
+  brandAssets: BrandAsset[];
   
   setComponents: (components: Component[]) => void;
   setSelectedComponent: (component: Component | null) => void;
@@ -37,6 +49,9 @@ interface EditorContextType {
   moveComponent: (fromIndex: number, toIndex: number) => void;
   
   updatePageSettings: (settings: Partial<PageSettings>) => void;
+  
+  addBrandAsset: (asset: Omit<BrandAsset, 'id' | 'createdAt'>) => void;
+  removeBrandAsset: (id: string) => void;
   
   undo: () => void;
   redo: () => void;
@@ -71,6 +86,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     width: 'contained',
     maxWidth: 1200
   });
+  
+  // Brand assets for reusable colors, gradients, and images
+  const [brandAssets, setBrandAssets] = useState<BrandAsset[]>([]);
   
   // History for undo/redo functionality
   const [history, setHistory] = useState<Component[][]>([[]]);
@@ -135,12 +153,28 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   };
 
   const addComponent = (type: ComponentType, index?: number, customComponent?: Component) => {
-    const newComponent: Component = customComponent || {
+    // Create the base component
+    let newComponent: Component = customComponent || {
       id: uuidv4(),
       type,
       content: getDefaultContentForType(type),
       style: getDefaultStyleForType(type),
     };
+    
+    // Apply page background color to component if appropriate
+    if (pageSettings.background.type === 'color' && pageSettings.background.color) {
+      // For components where inheriting background makes sense
+      if (['heading', 'text-block', 'button', 'form', 'feature-grid', 'stats-bar', 'pricing-cards'].includes(type)) {
+        // Apply page background color to the component
+        newComponent = {
+          ...newComponent,
+          style: {
+            ...newComponent.style,
+            backgroundColor: pageSettings.background.color
+          }
+        };
+      }
+    }
 
     const newComponents = [...components];
     if (index !== undefined) {
@@ -353,6 +387,40 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  // Brand assets management
+  const addBrandAsset = (asset: Omit<BrandAsset, 'id' | 'createdAt'>) => {
+    const newAsset: BrandAsset = {
+      ...asset,
+      id: uuidv4(),
+      createdAt: new Date()
+    };
+    
+    setBrandAssets(prevAssets => [...prevAssets, newAsset]);
+    
+    toast({
+      title: "Brand asset saved",
+      description: `"${asset.name}" has been added to your brand assets.`,
+      duration: 2000
+    });
+  };
+  
+  const removeBrandAsset = (id: string) => {
+    setBrandAssets(prevAssets => {
+      const assetToRemove = prevAssets.find(asset => asset.id === id);
+      const filteredAssets = prevAssets.filter(asset => asset.id !== id);
+      
+      if (assetToRemove) {
+        toast({
+          title: "Brand asset removed",
+          description: `"${assetToRemove.name}" has been removed from your brand assets.`,
+          duration: 2000
+        });
+      }
+      
+      return filteredAssets;
+    });
+  };
+
   const resetEditor = () => {
     setComponentsState([]);
     setSelectedComponent(null);
@@ -366,6 +434,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
       width: 'contained',
       maxWidth: 1200
     });
+    setBrandAssets([]);
   };
 
   // Get default content based on component type
@@ -965,6 +1034,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     historyIndex,
     pageSettings,
     isEditingPage,
+    brandAssets,
     
     setComponents,
     setSelectedComponent,
@@ -980,6 +1050,9 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     moveComponent,
     
     updatePageSettings,
+    
+    addBrandAsset,
+    removeBrandAsset,
     
     undo,
     redo,
