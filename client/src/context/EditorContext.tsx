@@ -408,13 +408,21 @@ export function EditorProvider({ children }: { children: ReactNode }) {
 
   // Brand assets management
   const addBrandAsset = (asset: Omit<BrandAsset, 'id' | 'createdAt'>) => {
+    console.log("EditorContext - Adding brand asset:", asset);
+    
     const newAsset: BrandAsset = {
       ...asset,
       id: uuidv4(),
       createdAt: new Date()
     };
     
-    setBrandAssets(prevAssets => [...prevAssets, newAsset]);
+    console.log("EditorContext - Created new asset:", newAsset);
+    
+    setBrandAssets(prevAssets => {
+      const updatedAssets = [...prevAssets, newAsset];
+      console.log("EditorContext - Updated brand assets:", updatedAssets);
+      return updatedAssets;
+    });
     
     toast({
       title: "Brand asset saved",
@@ -424,9 +432,16 @@ export function EditorProvider({ children }: { children: ReactNode }) {
   };
   
   const removeBrandAsset = (id: string) => {
+    console.log("EditorContext - Removing brand asset with ID:", id);
+    
     setBrandAssets(prevAssets => {
+      console.log("EditorContext - Current assets before removal:", prevAssets);
+      
       const assetToRemove = prevAssets.find(asset => asset.id === id);
       const filteredAssets = prevAssets.filter(asset => asset.id !== id);
+      
+      console.log("EditorContext - Asset to remove:", assetToRemove);
+      console.log("EditorContext - Updated assets after removal:", filteredAssets);
       
       if (assetToRemove) {
         toast({

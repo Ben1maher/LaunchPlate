@@ -2542,6 +2542,8 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               value={component.style.backgroundType || 'color'}
               onValueChange={(value) => {
                 // Update background type
+                updateStyle('backgroundType', value);
+                
                 // Apply appropriate styling based on the new background type
                 if (value === 'gradient') {
                   // Set default gradient colors if not already set
@@ -2553,20 +2555,26 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   const gradient = `linear-gradient(${direction}, ${startColor}, ${endColor})`;
                   
                   console.log("Applying gradient:", gradient);
+                  console.log("Component style before update:", component.style);
                   
-                  // Update style properties
+                  // Update style properties directly to ensure all values are set
+                  const updatedStyle = {
+                    ...component.style,
+                    backgroundType: value,
+                    gradientStartColor: startColor,
+                    gradientEndColor: endColor,
+                    gradientDirection: direction,
+                    background: gradient,
+                    // Clear potentially conflicting properties
+                    backgroundColor: undefined, 
+                    backgroundImage: undefined
+                  };
+                  
+                  console.log("Component style after update:", updatedStyle);
+                  
+                  // Update the component with all the style changes at once
                   updateComponent(component.id, {
-                    style: {
-                      ...component.style,
-                      backgroundType: value,
-                      gradientStartColor: startColor,
-                      gradientEndColor: endColor,
-                      gradientDirection: direction,
-                      background: gradient,
-                      // Clear potentially conflicting properties
-                      backgroundColor: undefined,
-                      backgroundImage: undefined
-                    }
+                    style: updatedStyle
                   });
                 } else if (value === 'color') {
                   // Default color if switching to solid color
@@ -2639,6 +2647,9 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     const endColor = component.style.gradientEndColor || '#0EA5E9';
                     const gradient = `linear-gradient(${value}, ${startColor}, ${endColor})`;
                     
+                    console.log("Updating gradient direction:", value);
+                    console.log("New gradient:", gradient);
+                    
                     // Update all related gradient properties at once
                     updateComponent(component.id, {
                       style: {
@@ -2697,6 +2708,9 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                     const direction = component.style.gradientDirection || 'to right';
                     const startColor = component.style.gradientStartColor || '#4F46E5';
                     const gradient = `linear-gradient(${direction}, ${startColor}, ${color})`;
+                    
+                    console.log("Updating gradient end color:", color);
+                    console.log("New gradient:", gradient);
                     
                     // Update all related gradient properties at once
                     updateComponent(component.id, {
