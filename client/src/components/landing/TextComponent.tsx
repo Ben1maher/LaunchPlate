@@ -8,13 +8,26 @@ interface TextComponentProps {
 export default function TextComponent({ component }: TextComponentProps) {
   const { type, content, style } = component;
   
-  // Generate inline style object
+  // Generate inline style object with proper margin and padding handling
   const containerStyle = {
-    padding: style.padding || '0',
-    margin: style.margin || '1rem 0',
+    // Handle individual padding values if specified, otherwise use the general padding
+    paddingTop: style.paddingTop || style.padding?.split(' ')[0] || '0',
+    paddingRight: style.paddingRight || (style.padding?.split(' ')[1] || style.padding?.split(' ')[0] || '0'),
+    paddingBottom: style.paddingBottom || (style.padding?.split(' ')[2] || style.padding?.split(' ')[0] || '0'),
+    paddingLeft: style.paddingLeft || (style.padding?.split(' ')[3] || style.padding?.split(' ')[1] || style.padding?.split(' ')[0] || '0'),
+    
+    // Handle individual margin values if specified, otherwise use the general margin
+    marginTop: style.marginTop || style.margin?.split(' ')[0] || '0',
+    marginRight: style.marginRight || (style.margin?.split(' ')[1] || style.margin?.split(' ')[0] || '0'),
+    marginBottom: style.marginBottom || (style.margin?.split(' ')[2] || style.margin?.split(' ')[0] || '1rem'),
+    marginLeft: style.marginLeft || (style.margin?.split(' ')[3] || style.margin?.split(' ')[1] || style.margin?.split(' ')[0] || '0'),
+    
     fontFamily: style.fontFamily,
     textAlign: style.textAlign || 'left',
-    ...style
+    backgroundColor: style.backgroundColor,
+    borderRadius: style.borderRadius,
+    border: style.border,
+    boxShadow: style.boxShadow,
   };
 
   // For heading component
