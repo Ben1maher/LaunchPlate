@@ -364,18 +364,50 @@ export default function BrandAssetsPanel() {
                             } 
                             // If there's a selected component, update its background color
                             else if (selectedComponent) {
-                              updateComponent(selectedComponent.id, {
-                                style: {
+                              console.log('Applying color from brand asset to component:', selectedComponent.type);
+                              
+                              // Special handling for header components
+                              if (selectedComponent.type.includes('header')) {
+                                console.log('Applying header color:', asset.value);
+                                
+                                // Complete style object with all necessary isolation properties
+                                const headerStyle = {
                                   ...selectedComponent.style,
                                   backgroundType: 'color',
-                                  backgroundColor: asset.value,
-                                  // Remove gradient properties if they exist
-                                  background: undefined,
+                                  backgroundColor: `${asset.value} !important`,
+                                  // Force clear potentially conflicting properties
+                                  background: 'none !important',
+                                  backgroundImage: 'none !important',
+                                  // Remove gradient properties
                                   gradientStartColor: undefined,
                                   gradientEndColor: undefined,
-                                  gradientDirection: undefined
-                                }
-                              });
+                                  gradientDirection: undefined,
+                                  // Add style isolation
+                                  position: 'relative',
+                                  isolation: 'isolate',
+                                  zIndex: 1
+                                };
+                                
+                                updateComponent(selectedComponent.id, {
+                                  style: headerStyle
+                                });
+                              }
+                              // Regular components
+                              else {
+                                updateComponent(selectedComponent.id, {
+                                  style: {
+                                    ...selectedComponent.style,
+                                    backgroundType: 'color',
+                                    backgroundColor: `${asset.value} !important`,
+                                    // Remove gradient properties if they exist
+                                    background: 'none !important',
+                                    backgroundImage: 'none !important',
+                                    gradientStartColor: undefined,
+                                    gradientEndColor: undefined,
+                                    gradientDirection: undefined
+                                  }
+                                });
+                              }
                               
                               toast({
                                 title: "Color applied",
@@ -451,22 +483,56 @@ export default function BrandAssetsPanel() {
                             }
                             // If not in page editing mode and there's a selected component
                             else if (selectedComponent) {
-                              // Apply the gradient as background
-                              const direction = 'to right'; // Default direction
-                              const gradient = `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue})`;
+                              console.log('Applying gradient from brand asset to component:', selectedComponent.type);
                               
-                              updateComponent(selectedComponent.id, {
-                                style: {
+                              // Special handling for header components to prevent page-wide changes
+                              if (selectedComponent.type.includes('header')) {
+                                // Direction and complete gradient string with !important
+                                const direction = 'to right'; // Default direction
+                                const gradient = `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue}) !important`;
+                                
+                                console.log('Applying header gradient:', gradient);
+                                
+                                // Complete style object with all necessary isolation properties
+                                const headerStyle = {
                                   ...selectedComponent.style,
                                   backgroundType: 'gradient',
                                   gradientStartColor: asset.value,
                                   gradientEndColor: asset.secondaryValue,
                                   gradientDirection: direction,
                                   background: gradient,
-                                  // Remove solid background if it exists
-                                  backgroundColor: undefined
-                                }
-                              });
+                                  // Force clear potentially conflicting properties
+                                  backgroundColor: 'transparent !important',
+                                  backgroundImage: 'none !important',
+                                  // Add style isolation
+                                  position: 'relative',
+                                  isolation: 'isolate',
+                                  zIndex: 1
+                                };
+                                
+                                updateComponent(selectedComponent.id, {
+                                  style: headerStyle
+                                });
+                              } 
+                              // Regular components
+                              else {
+                                // Apply the gradient as background
+                                const direction = 'to right'; // Default direction
+                                const gradient = `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue})`;
+                                
+                                updateComponent(selectedComponent.id, {
+                                  style: {
+                                    ...selectedComponent.style,
+                                    backgroundType: 'gradient',
+                                    gradientStartColor: asset.value,
+                                    gradientEndColor: asset.secondaryValue,
+                                    gradientDirection: direction,
+                                    background: `${gradient} !important`,
+                                    // Remove solid background if it exists
+                                    backgroundColor: undefined
+                                  }
+                                });
+                              }
                               
                               toast({
                                 title: "Gradient applied",
@@ -549,22 +615,56 @@ export default function BrandAssetsPanel() {
                             }
                             // If there's a selected component, update its background image
                             else if (selectedComponent) {
-                              updateComponent(selectedComponent.id, {
-                                style: {
+                              console.log('Applying image from brand asset to component:', selectedComponent.type);
+                              
+                              // Special handling for header components
+                              if (selectedComponent.type.includes('header')) {
+                                console.log('Applying header image:', asset.value);
+                                
+                                // Complete style object with all necessary isolation properties
+                                const headerStyle = {
                                   ...selectedComponent.style,
                                   backgroundType: 'image',
-                                  backgroundImage: asset.value,
-                                  backgroundSize: 'cover',
-                                  backgroundPosition: 'center',
-                                  backgroundRepeat: 'no-repeat',
-                                  // Remove other background properties
-                                  backgroundColor: undefined,
-                                  background: undefined,
+                                  backgroundImage: `url(${asset.value}) !important`,
+                                  backgroundSize: 'cover !important',
+                                  backgroundPosition: 'center !important',
+                                  backgroundRepeat: 'no-repeat !important',
+                                  // Force clear conflicting properties
+                                  backgroundColor: 'transparent !important',
+                                  background: 'none !important',
+                                  // Remove gradient properties
                                   gradientStartColor: undefined,
                                   gradientEndColor: undefined,
-                                  gradientDirection: undefined
-                                }
-                              });
+                                  gradientDirection: undefined,
+                                  // Add style isolation
+                                  position: 'relative',
+                                  isolation: 'isolate',
+                                  zIndex: 1
+                                };
+                                
+                                updateComponent(selectedComponent.id, {
+                                  style: headerStyle
+                                });
+                              }
+                              // Regular components
+                              else {
+                                updateComponent(selectedComponent.id, {
+                                  style: {
+                                    ...selectedComponent.style,
+                                    backgroundType: 'image',
+                                    backgroundImage: `url(${asset.value}) !important`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat',
+                                    // Remove other background properties
+                                    backgroundColor: undefined,
+                                    background: undefined,
+                                    gradientStartColor: undefined,
+                                    gradientEndColor: undefined,
+                                    gradientDirection: undefined
+                                  }
+                                });
+                              }
                               
                               toast({
                                 title: "Image applied",
