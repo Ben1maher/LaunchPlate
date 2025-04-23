@@ -345,25 +345,9 @@ export default function BrandAssetsPanel() {
                           className="h-12 rounded-md cursor-pointer transition-all hover:ring-2 hover:ring-primary hover:ring-opacity-50" 
                           style={{ backgroundColor: asset.value }}
                           onClick={() => {
-                            // Check if we're in page editing mode
-                            if (isEditingPage) {
-                              // Update page background with this color
-                              updatePageSettings({
-                                background: {
-                                  ...pageSettings.background,
-                                  type: 'color',
-                                  color: asset.value
-                                }
-                              });
-                              
-                              toast({
-                                title: "Color applied",
-                                description: `Applied "${asset.name}" to the page background.`,
-                                duration: 2000
-                              });
-                            } 
-                            // If there's a selected component, update its background color
-                            else if (selectedComponent) {
+                            // First check if we have a selected component, regardless of editing mode
+                            // This ensures we prioritize component styling over page styling
+                            if (selectedComponent) {
                               console.log('Applying color from brand asset to component:', selectedComponent.type);
                               
                               // Special handling for header components
@@ -426,6 +410,31 @@ export default function BrandAssetsPanel() {
                                 duration: 2000
                               });
                             }
+                            // If no component is selected but we're in page editing mode, update page background
+                            else if (isEditingPage) {
+                              // Update page background with this color
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'color',
+                                  color: asset.value
+                                }
+                              });
+                              
+                              toast({
+                                title: "Color applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            }
+                            else {
+                              toast({
+                                title: "No target selected",
+                                description: "Please select a component first or activate page settings.",
+                                variant: "destructive",
+                                duration: 3000
+                              });
+                            }
                           }}
                           title={`Apply "${asset.name}" to selected component`}
                         ></button>
@@ -474,26 +483,9 @@ export default function BrandAssetsPanel() {
                             background: `linear-gradient(135deg, ${asset.value}, ${asset.secondaryValue})` 
                           }}
                           onClick={() => {
-                            // Check the current mode and what's being edited
-                            if (isEditingPage) {
-                              // We're in page editing mode - update page background
-                              updatePageSettings({
-                                background: {
-                                  ...pageSettings.background,
-                                  type: 'gradient',
-                                  gradientStart: asset.value,
-                                  gradientEnd: asset.secondaryValue
-                                }
-                              });
-                              
-                              toast({
-                                title: "Gradient applied",
-                                description: `Applied "${asset.name}" to the page background.`,
-                                duration: 2000
-                              });
-                            }
-                            // If not in page editing mode and there's a selected component
-                            else if (selectedComponent) {
+                            // First check if we have a selected component, regardless of editing mode
+                            // This ensures we prioritize component styling over page styling
+                            if (selectedComponent) {
                               console.log('Applying gradient from brand asset to component:', selectedComponent.type);
                               
                               // Special handling for header components to prevent page-wide changes
@@ -556,6 +548,32 @@ export default function BrandAssetsPanel() {
                                 duration: 2000
                               });
                             }
+                            // If no component is selected but we're in page editing mode, update page background
+                            else if (isEditingPage) {
+                              // Update page background with this gradient
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'gradient',
+                                  gradientStart: asset.value,
+                                  gradientEnd: asset.secondaryValue
+                                }
+                              });
+                              
+                              toast({
+                                title: "Gradient applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            }
+                            else {
+                              toast({
+                                title: "No target selected",
+                                description: "Please select a component first or activate page settings.",
+                                variant: "destructive",
+                                duration: 3000
+                              });
+                            }
                           }}
                           title={`Apply "${asset.name}" to selected component`}
                         ></button>
@@ -610,27 +628,9 @@ export default function BrandAssetsPanel() {
                         <div 
                           className="h-16 w-24 rounded-md bg-gray-100 flex-shrink-0 overflow-hidden cursor-pointer hover:ring-2 hover:ring-primary hover:ring-opacity-50 transition-all"
                           onClick={() => {
-                            // Check if we're in page editing mode
-                            if (isEditingPage) {
-                              // Update page background with this image
-                              updatePageSettings({
-                                background: {
-                                  ...pageSettings.background,
-                                  type: 'image',
-                                  imageUrl: asset.value,
-                                  overlay: pageSettings.background.overlay || 'rgba(0,0,0,0.4)',
-                                  overlayOpacity: pageSettings.background.overlayOpacity || 0.4
-                                }
-                              });
-                              
-                              toast({
-                                title: "Image applied",
-                                description: `Applied "${asset.name}" to the page background.`,
-                                duration: 2000
-                              });
-                            }
-                            // If there's a selected component, update its background image
-                            else if (selectedComponent) {
+                            // First check if we have a selected component, regardless of editing mode
+                            // This ensures we prioritize component styling over page styling
+                            if (selectedComponent) {
                               console.log('Applying image from brand asset to component:', selectedComponent.type);
                               
                               // Special handling for header components
@@ -691,6 +691,33 @@ export default function BrandAssetsPanel() {
                                 title: "Image applied",
                                 description: `Applied "${asset.name}" to the selected component.`,
                                 duration: 2000
+                              });
+                            }
+                            // If no component is selected but we're in page editing mode, update page background
+                            else if (isEditingPage) {
+                              // Update page background with this image
+                              updatePageSettings({
+                                background: {
+                                  ...pageSettings.background,
+                                  type: 'image',
+                                  imageUrl: asset.value,
+                                  overlay: pageSettings.background.overlay || 'rgba(0,0,0,0.4)',
+                                  overlayOpacity: pageSettings.background.overlayOpacity || 0.4
+                                }
+                              });
+                              
+                              toast({
+                                title: "Image applied",
+                                description: `Applied "${asset.name}" to the page background.`,
+                                duration: 2000
+                              });
+                            }
+                            else {
+                              toast({
+                                title: "No target selected",
+                                description: "Please select a component first or activate page settings.",
+                                variant: "destructive",
+                                duration: 3000
                               });
                             }
                           }}
