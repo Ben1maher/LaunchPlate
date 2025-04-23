@@ -485,8 +485,8 @@ export class MemStorage implements IStorage {
       },
       {
         userId: 0, // System templates have userId 0
-        name: "Basic Landing Page",
-        description: "A simple, clean landing page with essential sections for any product or service",
+        name: "Modern Landing Page",
+        description: "A clean, modern landing page with optimized spacing and visual hierarchy inspired by leading SaaS websites",
         thumbnail: "",
         components: [
           {
@@ -500,13 +500,19 @@ export class MemStorage implements IStorage {
                 { text: "Pricing", url: "#pricing" },
                 { text: "Contact", url: "#contact" }
               ],
-              ctaText: "Sign Up",
+              ctaText: "Get Started",
               ctaUrl: "#signup"
             },
             style: {
               backgroundColor: "#ffffff",
-              padding: "16px",
-              borderBottom: "1px solid #e5e7eb"
+              padding: "20px 24px",
+              borderBottom: "1px solid #e5e7eb",
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+              color: "#111827",
+              fontFamily: "Inter, sans-serif",
+              position: "sticky",
+              top: "0",
+              zIndex: "10"
             }
           },
           {
@@ -514,16 +520,21 @@ export class MemStorage implements IStorage {
             type: "hero-split",
             content: {
               heading: "Create Landing Pages That Convert",
-              subheading: "Build beautiful, responsive landing pages without any coding skills required.",
-              primaryButtonText: "Get Started",
+              subheading: "Build beautiful, responsive landing pages without any coding skills required. Launch your next project faster and with more confidence.",
+              primaryButtonText: "Get Started Free",
               primaryButtonUrl: "#get-started",
-              secondaryButtonText: "Learn More",
-              secondaryButtonUrl: "#learn-more",
-              imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c"
+              secondaryButtonText: "Watch Demo",
+              secondaryButtonUrl: "#demo",
+              imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3"
             },
             style: {
-              backgroundColor: "#f9fafb",
-              padding: "64px 16px"
+              backgroundColor: "#f8fafc",
+              backgroundImage: "radial-gradient(circle at 80% 60%, rgba(59, 130, 246, 0.08), transparent 40%), radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08), transparent 40%)",
+              padding: "100px 24px",
+              minHeight: "650px",
+              fontFamily: "Inter, sans-serif",
+              color: "#111827",
+              borderBottom: "1px solid #e5e7eb"
             }
           },
           {
@@ -808,7 +819,7 @@ export class MemStorage implements IStorage {
       {
         userId: 0,
         name: "Startup Launch",
-        description: "A modern, vibrant template perfect for startup product launches",
+        description: "A modern, vibrant template inspired by Stripe's design, perfect for SaaS and startup product launches",
         thumbnail: "",
         components: [
           {
