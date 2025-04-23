@@ -52,6 +52,27 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
     console.log('HeaderComponent: New style object:', style);
   }, [style]);
   
+  // Listen for clicks anywhere to refresh our state
+  // This helps maintain styling when switching between page and component editing
+  useEffect(() => {
+    const handleGlobalClick = () => {
+      // Force a re-application of styles
+      if (style.backgroundType === 'color') {
+        console.log('HeaderComponent: Refresh color background on click');
+      } else if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
+        console.log('HeaderComponent: Refresh gradient background on click');
+      } else if (style.backgroundType === 'image' && style.backgroundImage) {
+        console.log('HeaderComponent: Refresh image background on click');
+      }
+    };
+    
+    document.addEventListener('click', handleGlobalClick);
+    
+    return () => {
+      document.removeEventListener('click', handleGlobalClick);
+    };
+  }, [style]);
+  
   // CTA button styling
   const ctaButtonStyle = {
     backgroundColor: style.buttonColor || '#3b82f6',

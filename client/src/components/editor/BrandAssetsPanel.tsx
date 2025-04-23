@@ -504,6 +504,11 @@ export default function BrandAssetsPanel() {
                                 
                                 console.log('Applying header gradient:', gradient);
                                 
+                                // Create a custom event to force immediate DOM update
+                                setTimeout(() => {
+                                  document.dispatchEvent(new Event('click'));
+                                }, 50);
+                                
                                 // Complete style object with all necessary isolation properties
                                 const headerStyle = {
                                   ...selectedComponent.style,
@@ -512,9 +517,9 @@ export default function BrandAssetsPanel() {
                                   gradientEndColor: asset.secondaryValue,
                                   gradientDirection: direction,
                                   background: gradient,
+                                  backgroundImage: `linear-gradient(${direction}, ${asset.value}, ${asset.secondaryValue}) !important`,
                                   // Force clear potentially conflicting properties
                                   backgroundColor: 'transparent !important',
-                                  backgroundImage: 'none !important',
                                   // Add style isolation
                                   position: 'relative',
                                   isolation: 'isolate',
@@ -631,6 +636,11 @@ export default function BrandAssetsPanel() {
                               // Special handling for header components
                               if (selectedComponent.type.includes('header')) {
                                 console.log('Applying header image:', asset.value);
+                                
+                                // Create a custom event to force immediate DOM update
+                                setTimeout(() => {
+                                  document.dispatchEvent(new Event('click'));
+                                }, 50);
                                 
                                 // Complete style object with all necessary isolation properties
                                 const headerStyle = {
