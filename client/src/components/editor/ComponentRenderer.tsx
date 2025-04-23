@@ -136,6 +136,20 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
     return renderComponent();
   }
 
+  // Add debugging for header components
+  if (component.type.includes('header')) {
+    console.log('ComponentRenderer: Rendering header component with style:', component.style);
+    if (component.style.backgroundType === 'color') {
+      console.log('ComponentRenderer: Header has color background:', component.style.backgroundColor);
+    } else if (component.style.backgroundType === 'gradient') {
+      console.log('ComponentRenderer: Header has gradient background:', 
+        component.style.gradientStartColor, 
+        component.style.gradientEndColor);
+    } else if (component.style.backgroundType === 'image') {
+      console.log('ComponentRenderer: Header has image background:', component.style.backgroundImage);
+    }
+  }
+
   return (
     <div 
       className={`relative component-wrapper group hover:outline hover:outline-1 hover:outline-gray-200 ${
@@ -149,7 +163,28 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
         position: 'relative',
         // Removed all:initial and contain:content as they interfere with outline
         display: 'block',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
+        // Apply special background styling for header components directly at the wrapper level with !important flags
+        ...(component.type.includes('header') && component.style.backgroundType === 'color' && {
+          backgroundColor: `${component.style.backgroundColor || '#ffffff'} !important`,
+          background: 'none !important',
+          backgroundImage: 'none !important',
+        }),
+        ...(component.type.includes('header') && component.style.backgroundType === 'gradient' && {
+          background: `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor}, ${component.style.gradientEndColor}) !important`,
+          backgroundImage: `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor}, ${component.style.gradientEndColor}) !important`,
+          backgroundColor: 'transparent !important',
+        }),
+        ...(component.type.includes('header') && component.style.backgroundType === 'image' && {
+          backgroundImage: `${component.style.backgroundImage?.startsWith('url(') 
+            ? component.style.backgroundImage 
+            : `url(${component.style.backgroundImage})`} !important`,
+          backgroundSize: `${component.style.backgroundSize || 'cover'} !important`,
+          backgroundPosition: `${component.style.backgroundPosition || 'center'} !important`,
+          backgroundRepeat: `${component.style.backgroundRepeat || 'no-repeat'} !important`,
+          backgroundColor: 'transparent !important',
+          background: 'none !important',
+        })
       }} 
       onClick={onClick}
       data-component-id={component.id}
