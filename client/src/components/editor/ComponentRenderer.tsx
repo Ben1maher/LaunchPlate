@@ -146,13 +146,16 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
       // Only do this for header components
       if (!component.type.includes('header')) return;
       
-      // Create a style element if it doesn't exist
-      let styleEl = document.getElementById(`header-style-${component.id}`);
-      if (!styleEl) {
-        styleEl = document.createElement('style');
-        styleEl.id = `header-style-${component.id}`;
-        document.head.appendChild(styleEl);
+      // Force clear any existing styles for this header to prevent conflicts
+      const existingStyleEl = document.getElementById(`header-style-${component.id}`);
+      if (existingStyleEl) {
+        document.head.removeChild(existingStyleEl);
       }
+      
+      // Create a brand new style element
+      const styleEl = document.createElement('style');
+      styleEl.id = `header-style-${component.id}`;
+      document.head.appendChild(styleEl);
       
       // Function to update the CSS content
       const updateHeaderStyles = () => {
@@ -228,8 +231,16 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
         }
       };
       
-      // Add event listener
+      // Listen for editing mode changes to refresh styling
+      const handleEditingModeChange = () => {
+        console.log('ComponentRenderer: Detected editing mode change, refreshing header styles');
+        // Force immediate style refresh
+        updateHeaderStyles();
+      };
+      
+      // Add event listeners
       document.addEventListener('header-color-change', handleHeaderColorChange as EventListener);
+      document.addEventListener('click', handleEditingModeChange);
       
       // Cleanup on unmount
       return () => {
@@ -237,6 +248,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
           document.head.removeChild(styleEl);
         }
         document.removeEventListener('header-color-change', handleHeaderColorChange as EventListener);
+        document.removeEventListener('click', handleEditingModeChange);
       };
     }, [component.id, component.type, component.style]);
   }

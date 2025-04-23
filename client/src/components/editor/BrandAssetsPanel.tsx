@@ -370,11 +370,16 @@ export default function BrandAssetsPanel() {
                               if (selectedComponent.type.includes('header')) {
                                 console.log('Applying header color:', asset.value);
                                 
-                                // Create a custom event to trigger an immediate DOM update
+                                // Create a custom event to trigger an immediate DOM update for the component
                                 const event = new CustomEvent('header-color-change', {
                                   detail: { id: selectedComponent.id, color: asset.value }
                                 });
                                 document.dispatchEvent(event);
+                                
+                                // Force all clicks to refresh component styling
+                                setTimeout(() => {
+                                  document.dispatchEvent(new Event('click'));
+                                }, 50);
                                 
                                 // Complete style object with all necessary isolation properties
                                 const headerStyle = {

@@ -19,11 +19,38 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   const ctaUrl = content.ctaUrl || '#';
   const showCta = type === 'header-1';
   
-  // Simplified style object - we'll let the parent ComponentRenderer handle the background styling
+  // Get a clean version of the color value without !important tags
+  const getCleanColor = (color: string | undefined) => {
+    return color?.replace(' !important', '') || '';
+  };
+  
+  // Enhanced style object that includes background styling directly
+  // This serves as a fallback if the dynamic CSS styles fail
   const styleObj: React.CSSProperties = {
     borderBottom: style.borderBottom || '1px solid #e5e7eb',
-    padding: style.padding || '16px'
+    padding: style.padding || '16px',
+    // Apply background styling based on the type
+    ...(style.backgroundType === 'color' && {
+      backgroundColor: getCleanColor(style.backgroundColor) || '#ffffff',
+      background: getCleanColor(style.backgroundColor) || '#ffffff',
+    }),
+    ...(style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor && {
+      background: `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`,
+    }),
   };
+  
+  // Log any style changes for debugging
+  useEffect(() => {
+    if (style.backgroundType === 'color') {
+      console.log('HeaderComponent: Updating background color to:', getCleanColor(style.backgroundColor));
+    } else if (style.backgroundType === 'gradient') {
+      console.log('HeaderComponent: Updating background gradient to:', 
+        `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`);
+    }
+    
+    // If the style changes significantly, we need to rebuild our style object
+    console.log('HeaderComponent: New style object:', style);
+  }, [style]);
   
   // CTA button styling
   const ctaButtonStyle = {
