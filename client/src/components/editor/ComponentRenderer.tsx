@@ -154,60 +154,89 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
         document.head.appendChild(styleEl);
       }
       
-      // Create CSS content based on the style type
-      let cssContent = '';
+      // Function to update the CSS content
+      const updateHeaderStyles = () => {
+        // Create CSS content based on the style type
+        let cssContent = '';
+        
+        if (component.style.backgroundType === 'color') {
+          const color = component.style.backgroundColor?.replace(' !important', '') || '#ffffff';
+          console.log('ComponentRenderer: Applying header color style:', color);
+          
+          // For colors, we should use both background and background-color since 
+          // some browsers prioritize one over the other
+          cssContent = `
+            [data-component-id="${component.id}"] > nav {
+              background: ${color} !important;
+              background-color: ${color} !important;
+              background-image: none !important;
+            }
+          `;
+        } else if (component.style.backgroundType === 'gradient' && 
+                  component.style.gradientStartColor && 
+                  component.style.gradientEndColor) {
+          console.log('ComponentRenderer: Applying header gradient style:', 
+                     component.style.gradientStartColor, component.style.gradientEndColor);
+          const gradient = `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor}, ${component.style.gradientEndColor})`;
+          cssContent = `
+            [data-component-id="${component.id}"] > nav {
+              background: ${gradient} !important;
+              background-image: ${gradient} !important;
+              background-color: transparent !important;
+            }
+          `;
+        } else if (component.style.backgroundType === 'image' && component.style.backgroundImage) {
+          console.log('ComponentRenderer: Applying header image style:', component.style.backgroundImage);
+          const imageUrl = component.style.backgroundImage.startsWith('url(') 
+                ? component.style.backgroundImage 
+                : `url(${component.style.backgroundImage})`;
+          cssContent = `
+            [data-component-id="${component.id}"] > nav {
+              background-image: ${imageUrl} !important;
+              background-size: ${component.style.backgroundSize || 'cover'} !important;
+              background-position: ${component.style.backgroundPosition || 'center'} !important;
+              background-repeat: ${component.style.backgroundRepeat || 'no-repeat'} !important;
+              background-color: transparent !important;
+            }
+          `;
+        }
+        
+        // Set the CSS content
+        if (cssContent) {
+          styleEl.textContent = cssContent;
+          console.log('ComponentRenderer: Added CSS style tag with content:', cssContent);
+        }
+      };
       
-      if (component.style.backgroundType === 'color') {
-        console.log('ComponentRenderer: Applying header color style:', component.style.backgroundColor);
-        // For colors, we should use both background and background-color since 
-        // some browsers prioritize one over the other
-        cssContent = `
-          [data-component-id="${component.id}"] > nav {
-            background: ${component.style.backgroundColor || '#ffffff'} !important;
-            background-color: ${component.style.backgroundColor || '#ffffff'} !important;
-            background-image: none !important;
-          }
-        `;
-      } else if (component.style.backgroundType === 'gradient' && 
-                component.style.gradientStartColor && 
-                component.style.gradientEndColor) {
-        console.log('ComponentRenderer: Applying header gradient style:', 
-                   component.style.gradientStartColor, component.style.gradientEndColor);
-        const gradient = `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor}, ${component.style.gradientEndColor})`;
-        cssContent = `
-          [data-component-id="${component.id}"] > nav {
-            background: ${gradient} !important;
-            background-image: ${gradient} !important;
-            background-color: transparent !important;
-          }
-        `;
-      } else if (component.style.backgroundType === 'image' && component.style.backgroundImage) {
-        console.log('ComponentRenderer: Applying header image style:', component.style.backgroundImage);
-        const imageUrl = component.style.backgroundImage.startsWith('url(') 
-              ? component.style.backgroundImage 
-              : `url(${component.style.backgroundImage})`;
-        cssContent = `
-          [data-component-id="${component.id}"] > nav {
-            background-image: ${imageUrl} !important;
-            background-size: ${component.style.backgroundSize || 'cover'} !important;
-            background-position: ${component.style.backgroundPosition || 'center'} !important;
-            background-repeat: ${component.style.backgroundRepeat || 'no-repeat'} !important;
-            background-color: transparent !important;
-          }
-        `;
-      }
+      // Initial style update
+      updateHeaderStyles();
       
-      // Set the CSS content
-      if (cssContent) {
-        styleEl.textContent = cssContent;
-        console.log('ComponentRenderer: Added CSS style tag with content:', cssContent);
-      }
+      // Listen for custom header color change events
+      const handleHeaderColorChange = (e: CustomEvent) => {
+        if (e.detail && e.detail.id === component.id) {
+          console.log('ComponentRenderer: Received header-color-change event for', component.id, 'with color', e.detail.color);
+          
+          // Update the style element with the new color immediately
+          const color = e.detail.color;
+          styleEl.textContent = `
+            [data-component-id="${component.id}"] > nav {
+              background: ${color} !important;
+              background-color: ${color} !important;
+              background-image: none !important;
+            }
+          `;
+        }
+      };
+      
+      // Add event listener
+      document.addEventListener('header-color-change', handleHeaderColorChange as EventListener);
       
       // Cleanup on unmount
       return () => {
         if (styleEl && document.head.contains(styleEl)) {
           document.head.removeChild(styleEl);
         }
+        document.removeEventListener('header-color-change', handleHeaderColorChange as EventListener);
       };
     }, [component.id, component.type, component.style]);
   }

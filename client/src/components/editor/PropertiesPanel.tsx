@@ -2758,11 +2758,17 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
             <div>
               <label className="text-xs text-gray-600 block mb-1">Color</label>
               <ColorPicker
-                color={component.style.backgroundColor || '#F9FAFB'}
+                color={component.style.backgroundColor?.replace(' !important', '') || '#F9FAFB'}
                 onChange={(color) => {
                   // Special handling for header components
                   if (component.type.includes('header')) {
                     console.log('HeaderComponent: Updating background color to:', color);
+                    
+                    // Create a custom event to trigger a DOM update for this specific header
+                    const event = new CustomEvent('header-color-change', {
+                      detail: { id: component.id, color: color }
+                    });
+                    document.dispatchEvent(event);
                     
                     // Make a completely new style object for header components to avoid inheritance issues
                     const newHeaderStyle = {
@@ -2770,8 +2776,9 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                       ...component.style,
                       // Set the background color with !important to override page styles
                       backgroundColor: `${color} !important`,
-                      // Explicitly reset all other background properties with !important
-                      background: 'none !important',
+                      // Use the color for both background and background-color
+                      background: `${color} !important`,
+                      // Explicitly reset other background properties with !important
                       backgroundImage: 'none !important',
                       // Mark as color background type
                       backgroundType: 'color',

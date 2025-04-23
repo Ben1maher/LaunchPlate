@@ -370,13 +370,19 @@ export default function BrandAssetsPanel() {
                               if (selectedComponent.type.includes('header')) {
                                 console.log('Applying header color:', asset.value);
                                 
+                                // Create a custom event to trigger an immediate DOM update
+                                const event = new CustomEvent('header-color-change', {
+                                  detail: { id: selectedComponent.id, color: asset.value }
+                                });
+                                document.dispatchEvent(event);
+                                
                                 // Complete style object with all necessary isolation properties
                                 const headerStyle = {
                                   ...selectedComponent.style,
                                   backgroundType: 'color',
                                   backgroundColor: `${asset.value} !important`,
-                                  // Force clear potentially conflicting properties
-                                  background: 'none !important',
+                                  // Use color for both properties
+                                  background: `${asset.value} !important`,
                                   backgroundImage: 'none !important',
                                   // Remove gradient properties
                                   gradientStartColor: undefined,
