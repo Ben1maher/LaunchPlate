@@ -3395,7 +3395,7 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
             <Button 
               variant="secondary"
               size="sm"
-              className="flex items-center text-xs"
+              className="flex items-center"
               onClick={() => {
                 // First update all individual padding values
                 updateStyle('paddingTop', '16px');
@@ -3422,7 +3422,6 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   duration: 2000
                 });
               }}
-              className="text-xs"
             >
               Reset Padding
             </Button>
@@ -3455,7 +3454,6 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
                   duration: 2000
                 });
               }}
-              className="text-xs"
             >
               Reset Margin
             </Button>
