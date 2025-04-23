@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Component } from '@shared/schema';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { v4 as uuidv4 } from 'uuid';
 
 interface HeaderComponentProps {
   component: Component;
@@ -125,8 +126,78 @@ export default function HeaderComponent({ component, viewportMode }: HeaderCompo
   styleObj.isolation = 'isolate';
   styleObj.zIndex = 1;
   
+  // Generate a unique ID for this header to target it specifically with CSS
+  const headerId = useRef(`header-${component?.id || uuidv4()}`);
+  
+  // Create and inject a style element with high-specificity CSS targeting just this header
+  useEffect(() => {
+    console.log("HeaderComponent direct DOM styling: Style object", style);
+    console.log("HeaderComponent ID:", headerId.current);
+    // Create the CSS with very high specificity and !important
+    let cssText = '';
+    
+    if (style.backgroundType === 'color' && style.backgroundColor) {
+      cssText = `
+        #${headerId.current} {
+          background: ${style.backgroundColor} !important;
+          background-color: ${style.backgroundColor} !important;
+          background-image: none !important;
+        }
+      `;
+    } 
+    else if (style.backgroundType === 'gradient' && style.gradientStartColor && style.gradientEndColor) {
+      const gradient = `linear-gradient(${style.gradientDirection || 'to right'}, ${style.gradientStartColor}, ${style.gradientEndColor})`;
+      cssText = `
+        #${headerId.current} {
+          background: ${gradient} !important;
+          background-image: ${gradient} !important;
+          background-color: transparent !important;
+        }
+      `;
+    }
+    else if (style.backgroundType === 'image' && style.backgroundImage) {
+      // Make sure we have a proper url() format for the background image
+      const imageUrl = style.backgroundImage.startsWith('url(') 
+        ? style.backgroundImage 
+        : `url(${style.backgroundImage})`;
+        
+      cssText = `
+        #${headerId.current} {
+          background-image: ${imageUrl} !important;
+          background-size: ${style.backgroundSize || 'cover'} !important;
+          background-position: ${style.backgroundPosition || 'center'} !important;
+          background-repeat: ${style.backgroundRepeat || 'no-repeat'} !important;
+          background-color: transparent !important;
+        }
+      `;
+    }
+    
+    if (cssText) {
+      // Create or update style element
+      let styleEl = document.getElementById(`style-${headerId.current}`);
+      
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = `style-${headerId.current}`;
+        document.head.appendChild(styleEl);
+      }
+      
+      styleEl.textContent = cssText;
+      console.log("HeaderComponent: Applied CSS:", cssText);
+      
+      // Clean up on unmount
+      return () => {
+        if (styleEl && styleEl.parentNode) {
+          styleEl.parentNode.removeChild(styleEl);
+        }
+      };
+    }
+  }, [style.backgroundType, style.backgroundColor, style.gradientStartColor, style.gradientEndColor, 
+      style.gradientDirection, style.backgroundImage, style.backgroundSize, style.backgroundPosition, 
+      style.backgroundRepeat]);
+  
   return (
-    <nav className="shadow-sm relative" style={styleObj}>
+    <nav id={headerId.current} className="shadow-sm relative" style={{}}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
