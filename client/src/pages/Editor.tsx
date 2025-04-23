@@ -8,6 +8,7 @@ import Canvas from "../components/editor/Canvas";
 import PropertiesPanel from "../components/editor/PropertiesPanel";
 import TutorialOverlay from "../components/editor/TutorialOverlay";
 import InteractiveTour from "../components/editor/InteractiveTour";
+import { BusinessTemplate } from "../templates/business";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -73,7 +74,44 @@ export default function Editor() {
   // Function to handle template loading with content preservation
   const loadTemplateWithContentPreservation = async (templateId: string) => {
     try {
-      // Fetch template from API
+      // Special case for template ID 2 (Professional Business)
+      if (templateId === '2') {
+        // Use the new BusinessTemplate component
+        const template = {
+          id: 2,
+          name: "Professional Business",
+          description: "A modern business template with clean, modern design using Tailwind CSS",
+          thumbnail: "",
+          components: []
+        };
+        
+        // Create a custom renderer for our BusinessTemplate
+        const businessTemplateRenderer: {
+          id: string;
+          type: string;
+          content: { component: React.ComponentType<any> };
+          style: Record<string, any>;
+        } = {
+          id: "business-template",
+          type: "custom-business-template",
+          content: {
+            component: BusinessTemplate
+          },
+          style: {}
+        };
+        
+        setComponents([businessTemplateRenderer]);
+        toast({
+          title: "Template loaded",
+          description: "Modern Business template loaded successfully. Customize it to fit your needs.",
+        });
+        
+        setProjectName(`My ${template.name}`);
+        setProjectDescription(template.description || "");
+        return;
+      }
+      
+      // Regular template loading for other templates
       const response = await fetch(`/api/templates/${templateId}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch template (${response.status})`);

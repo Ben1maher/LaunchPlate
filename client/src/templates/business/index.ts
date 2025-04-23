@@ -1,0 +1,1 @@
+export { default as BusinessTemplate } from './BusinessTemplate';
