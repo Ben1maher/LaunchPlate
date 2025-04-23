@@ -56,10 +56,15 @@ function SpacingControl({
   // Handle direct input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
+    
     // If they're typing a number without units, keep it that way until they're done
     if (/^\d+$/.test(inputValue)) {
       onChange(`${inputValue}px`);
+    } else if (inputValue === "") {
+      // If they clear the input, set it to 0px
+      onChange("0px");
     } else {
+      // Otherwise just pass through the value (might include units already)
       onChange(inputValue);
     }
   };
