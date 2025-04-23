@@ -3382,10 +3382,30 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               variant="outline" 
               size="sm"
               onClick={() => {
+                // First update all individual padding values
                 updateStyle('paddingTop', '16px');
                 updateStyle('paddingRight', '16px');
                 updateStyle('paddingBottom', '16px');
                 updateStyle('paddingLeft', '16px');
+                
+                // Then update the combined padding property and force a refresh
+                updateComponent(component.id, {
+                  style: {
+                    ...component.style,
+                    padding: '16px',
+                    paddingTop: '16px',
+                    paddingRight: '16px',
+                    paddingBottom: '16px',
+                    paddingLeft: '16px'
+                  }
+                });
+                
+                // Show confirmation toast
+                toast({
+                  title: "Padding reset",
+                  description: "Padding has been reset to default values",
+                  duration: 2000
+                });
               }}
               className="text-xs"
             >
@@ -3395,10 +3415,30 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
               variant="outline" 
               size="sm"
               onClick={() => {
+                // First update all individual margin values
                 updateStyle('marginTop', '0px');
                 updateStyle('marginRight', '0px');
                 updateStyle('marginBottom', '0px');
                 updateStyle('marginLeft', '0px');
+                
+                // Then update the combined margin property and force a refresh
+                updateComponent(component.id, {
+                  style: {
+                    ...component.style,
+                    margin: '0px',
+                    marginTop: '0px',
+                    marginRight: '0px',
+                    marginBottom: '0px',
+                    marginLeft: '0px'
+                  }
+                });
+                
+                // Show confirmation toast
+                toast({
+                  title: "Margin reset",
+                  description: "Margins have been reset to default values",
+                  duration: 2000
+                });
               }}
               className="text-xs"
             >
