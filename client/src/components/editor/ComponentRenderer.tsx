@@ -159,10 +159,12 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
       
       if (component.style.backgroundType === 'color') {
         console.log('ComponentRenderer: Applying header color style:', component.style.backgroundColor);
+        // For colors, we should use both background and background-color since 
+        // some browsers prioritize one over the other
         cssContent = `
           [data-component-id="${component.id}"] > nav {
+            background: ${component.style.backgroundColor || '#ffffff'} !important;
             background-color: ${component.style.backgroundColor || '#ffffff'} !important;
-            background: none !important;
             background-image: none !important;
           }
         `;
@@ -227,7 +229,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
         // Apply special background styling for header components directly at the wrapper level with !important flags
         ...(component.type.includes('header') && component.style.backgroundType === 'color' && {
           backgroundColor: `${component.style.backgroundColor || '#ffffff'} !important`,
-          background: 'none !important',
+          background: `${component.style.backgroundColor || '#ffffff'} !important`,
           backgroundImage: 'none !important',
         }),
         ...(component.type.includes('header') && component.style.backgroundType === 'gradient' && {
