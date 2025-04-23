@@ -161,7 +161,10 @@ export type ComponentType =
   
   // Footers
   | 'footer-simple'
-  | 'footer-columns';
+  | 'footer-columns'
+  
+  // Custom templates
+  | 'custom-business-template';
 
 export interface Component {
   id: string;

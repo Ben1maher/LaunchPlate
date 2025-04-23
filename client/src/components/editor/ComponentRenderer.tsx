@@ -47,6 +47,12 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   // Render the actual component based on its type
   const renderComponent = () => {
+    // Check if this is a custom component with a React component
+    if (component.type === 'custom-business-template' && component.content.component) {
+      const CustomComponent = component.content.component;
+      return <CustomComponent />;
+    }
+    
     switch (component.type) {
       // Headers
       case 'header-1':

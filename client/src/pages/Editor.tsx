@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useLocation } from "wouter";
 import { useEditor } from "../context/EditorContext";
 import { useQuery } from "@tanstack/react-query";
-import { Template } from "@shared/schema";
+import { Template, Component, ComponentType } from "@shared/schema";
 import ComponentLibrary from "../components/editor/ComponentLibrary";
 import Canvas from "../components/editor/Canvas";
 import PropertiesPanel from "../components/editor/PropertiesPanel";
@@ -86,14 +86,9 @@ export default function Editor() {
         };
         
         // Create a custom renderer for our BusinessTemplate
-        const businessTemplateRenderer: {
-          id: string;
-          type: string;
-          content: { component: React.ComponentType<any> };
-          style: Record<string, any>;
-        } = {
+        const businessTemplateRenderer: Component = {
           id: "business-template",
-          type: "custom-business-template",
+          type: "custom-business-template" as ComponentType,
           content: {
             component: BusinessTemplate
           },
@@ -129,7 +124,7 @@ export default function Editor() {
           });
           
           // Create new components array with preserved content where possible
-          const newComponents = template.components.map(templateComponent => {
+          const newComponents = template.components.map((templateComponent: Component) => {
             const existingContent = existingContentMap.get(templateComponent.type);
             
             // If we have existing content for this component type, preserve it
