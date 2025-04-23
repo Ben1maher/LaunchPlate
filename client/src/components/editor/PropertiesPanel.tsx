@@ -70,9 +70,12 @@ function SpacingControl({
   };
 
   return (
-    <div className="space-y-1">
-      <label className="text-xs text-gray-500 block text-center">{label}</label>
-      <div className="flex gap-2">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <label className="text-xs text-gray-600 font-medium">{label}</label>
+        <div className="text-xs text-gray-400">px</div>
+      </div>
+      <div className="flex gap-2 items-center">
         <div className="flex-grow">
           <Slider
             value={[numericValue]}
@@ -87,8 +90,14 @@ function SpacingControl({
           type="text"
           value={value || defaultValue}
           onChange={handleInputChange}
-          className={`text-sm w-16 flex-shrink-0 ${color}`}
+          className={`text-sm w-16 flex-shrink-0 ${color} font-medium`}
         />
+      </div>
+      <div className="mt-1 relative h-4">
+        <div className={`absolute w-1 h-4 left-0 top-0 bg-${color.replace('text-', '')}/30 rounded-sm`}></div>
+        <div className={`absolute w-1 h-4 right-0 top-0 bg-${color.replace('text-', '')}/30 rounded-sm`}></div>
+        <div className={`absolute h-1 w-4 left-0 top-0 bg-${color.replace('text-', '')}/30 rounded-sm`}></div>
+        <div className={`absolute h-1 w-4 left-0 bottom-0 bg-${color.replace('text-', '')}/30 rounded-sm`}></div>
       </div>
     </div>
   );
@@ -3382,10 +3391,11 @@ function RenderStyleProperties({ component, updateComponent }: { component: Comp
           </div>
           
           {/* Quick Presets */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-6 border-t border-gray-200 pt-4">
             <Button 
-              variant="outline" 
+              variant="secondary"
               size="sm"
+              className="flex items-center text-xs"
               onClick={() => {
                 // First update all individual padding values
                 updateStyle('paddingTop', '16px');
