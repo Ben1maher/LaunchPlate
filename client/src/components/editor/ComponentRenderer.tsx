@@ -99,7 +99,7 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
       case 'columns-2':
       case 'columns-3':
       case 'columns-4':
-        return <ColumnsComponent component={component} inEditor={inEditor} />;
+        return <ColumnsComponent component={component} inEditor={true} />;
       
       // Feature Sections
       case 'feature-grid':
