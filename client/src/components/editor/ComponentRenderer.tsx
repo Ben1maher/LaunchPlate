@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Component } from '@shared/schema';
 import HeaderComponent from '../landing/HeaderComponent';
 import HeroComponent from '../landing/HeroComponent';
@@ -139,15 +139,75 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
   // Add debugging for header components
   if (component.type.includes('header')) {
     console.log('ComponentRenderer: Rendering header component with style:', component.style);
-    if (component.style.backgroundType === 'color') {
-      console.log('ComponentRenderer: Header has color background:', component.style.backgroundColor);
-    } else if (component.style.backgroundType === 'gradient') {
-      console.log('ComponentRenderer: Header has gradient background:', 
-        component.style.gradientStartColor, 
-        component.style.gradientEndColor);
-    } else if (component.style.backgroundType === 'image') {
-      console.log('ComponentRenderer: Header has image background:', component.style.backgroundImage);
-    }
+    
+    // Add a dynamic style tag to the document head for this specific component
+    // This ensures the styling has the highest specificity possible
+    useEffect(() => {
+      // Only do this for header components
+      if (!component.type.includes('header')) return;
+      
+      // Create a style element if it doesn't exist
+      let styleEl = document.getElementById(`header-style-${component.id}`);
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = `header-style-${component.id}`;
+        document.head.appendChild(styleEl);
+      }
+      
+      // Create CSS content based on the style type
+      let cssContent = '';
+      
+      if (component.style.backgroundType === 'color') {
+        console.log('ComponentRenderer: Applying header color style:', component.style.backgroundColor);
+        cssContent = `
+          [data-component-id="${component.id}"] > nav {
+            background-color: ${component.style.backgroundColor || '#ffffff'} !important;
+            background: none !important;
+            background-image: none !important;
+          }
+        `;
+      } else if (component.style.backgroundType === 'gradient' && 
+                component.style.gradientStartColor && 
+                component.style.gradientEndColor) {
+        console.log('ComponentRenderer: Applying header gradient style:', 
+                   component.style.gradientStartColor, component.style.gradientEndColor);
+        const gradient = `linear-gradient(${component.style.gradientDirection || 'to right'}, ${component.style.gradientStartColor}, ${component.style.gradientEndColor})`;
+        cssContent = `
+          [data-component-id="${component.id}"] > nav {
+            background: ${gradient} !important;
+            background-image: ${gradient} !important;
+            background-color: transparent !important;
+          }
+        `;
+      } else if (component.style.backgroundType === 'image' && component.style.backgroundImage) {
+        console.log('ComponentRenderer: Applying header image style:', component.style.backgroundImage);
+        const imageUrl = component.style.backgroundImage.startsWith('url(') 
+              ? component.style.backgroundImage 
+              : `url(${component.style.backgroundImage})`;
+        cssContent = `
+          [data-component-id="${component.id}"] > nav {
+            background-image: ${imageUrl} !important;
+            background-size: ${component.style.backgroundSize || 'cover'} !important;
+            background-position: ${component.style.backgroundPosition || 'center'} !important;
+            background-repeat: ${component.style.backgroundRepeat || 'no-repeat'} !important;
+            background-color: transparent !important;
+          }
+        `;
+      }
+      
+      // Set the CSS content
+      if (cssContent) {
+        styleEl.textContent = cssContent;
+        console.log('ComponentRenderer: Added CSS style tag with content:', cssContent);
+      }
+      
+      // Cleanup on unmount
+      return () => {
+        if (styleEl && document.head.contains(styleEl)) {
+          document.head.removeChild(styleEl);
+        }
+      };
+    }, [component.id, component.type, component.style]);
   }
 
   return (
