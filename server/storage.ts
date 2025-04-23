@@ -257,6 +257,233 @@ export class MemStorage implements IStorage {
   private initDefaultTemplates() {
     const defaultTemplates: InsertTemplate[] = [
       {
+        userId: 0,
+        name: "Music Distribution",
+        description: "A striking dark-themed template perfect for music distribution and media services",
+        thumbnail: "",
+        components: [
+          {
+            id: "header-dark",
+            type: "header-1",
+            content: {
+              logo: "CDBaby",
+              menuItems: [
+                { text: "Home", url: "#" },
+                { text: "Features", url: "#features" },
+                { text: "Pricing", url: "#pricing" },
+                { text: "Artists", url: "#artists" },
+                { text: "Blog", url: "#blog" }
+              ],
+              ctaText: "Sign Up",
+              ctaUrl: "#signup"
+            },
+            style: {
+              backgroundColor: "#2D0A31",
+              color: "#ffffff",
+              padding: "16px 24px",
+              fontFamily: "'Montserrat', sans-serif",
+              borderBottom: "none",
+              boxShadow: "none"
+            }
+          },
+          {
+            id: "hero-music",
+            type: "hero-split",
+            content: {
+              heading: "Distribute your music on Spotify, Apple Music, Amazon, and more.",
+              subheading: "Get your music on more than 150 of the most popular streaming sites worldwide. That's more than any other music distributor.",
+              primaryButtonText: "Sign up for a free account",
+              primaryButtonUrl: "#signup",
+              imageUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819"
+            },
+            style: {
+              backgroundColor: "#2D0A31",
+              color: "#ffffff",
+              padding: "80px 40px",
+              minHeight: "600px",
+              fontFamily: "'Montserrat', sans-serif",
+              backgroundImage: "radial-gradient(circle at 70% 50%, rgba(252, 128, 25, 0.2), transparent 40%), radial-gradient(circle at 30% 70%, rgba(249, 78, 155, 0.2), transparent 40%)"
+            }
+          },
+          {
+            id: "features-columns",
+            type: "text-block",
+            content: {
+              text: "<div class='bg-white py-16'><div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-3 gap-8'><div class='flex flex-col items-center text-center'><div class='mb-6 text-orange-500'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-12 h-12'><path d='M8.25 4.5a3.75 3.75 0 117.5 0v8.25a3.75 3.75 0 11-7.5 0V4.5z' /><path d='M6 10.5a.75.75 0 01.75.75v1.5a5.25 5.25 0 1010.5 0v-1.5a.75.75 0 011.5 0v1.5a6.751 6.751 0 01-6 6.709v2.291h3a.75.75 0 010 1.5h-7.5a.75.75 0 010-1.5h3v-2.291a6.751 6.751 0 01-6-6.709v-1.5A.75.75 0 016 10.5z' /></svg></div><h3 class='text-xl font-bold mb-3'>Your music everywhere for one price</h3><p class='text-gray-600'>Relax. Unlike some services, we don't charge you annually to keep your music online. Just a simple one-time fee. And whenever we add a partner, your music automatically gets delivered there too.</p></div><div class='flex flex-col items-center text-center'><div class='mb-6 text-orange-500'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-12 h-12'><path d='M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z' /><path fill-rule='evenodd' d='M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM18.75 9a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V9.75a.75.75 0 00-.75-.75h-.008zM4.5 9.75A.75.75 0 015.25 9h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75V9.75z' clip-rule='evenodd' /><path d='M2.25 18a.75.75 0 000 1.5c5.4 0 10.63.722 15.6 2.075 1.19.324 2.4-.558 2.4-1.82V18.75a.75.75 0 00-.75-.75H2.25z' /></svg></div><h3 class='text-xl font-bold mb-3'>Collect all your royalties</h3><p class='text-gray-600'>Every stream generates money for you. We help you collect your mechanical royalties from hundreds of other sources for songwriting royalties around the world.</p></div><div class='flex flex-col items-center text-center'><div class='mb-6 text-orange-500'><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' class='w-12 h-12'><path fill-rule='evenodd' d='M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z' clip-rule='evenodd' /></svg></div><h3 class='text-xl font-bold mb-3'>Monetize on social media</h3><p class='text-gray-600'>Collect money every time a video streams with your music. Social media platforms like TikTok and Instagram help you collect royalties where your music is used.</p></div></div></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "pricing-section",
+            type: "text-block",
+            content: {
+              text: "<div class='py-16 bg-gray-50'><div class='max-w-6xl mx-auto px-4'><h2 class='text-3xl font-bold text-center mb-12'>Simple, transparent pricing</h2><div class='grid md:grid-cols-3 gap-8'><div class='bg-white rounded-xl shadow-lg p-8 border-t-4 border-orange-500 hover:transform hover:scale-105 transition-all duration-300'><div class='text-center mb-6'><h3 class='text-2xl font-bold mb-2'>Single</h3><p class='text-gray-500 mb-4'>Perfect for a single release</p><div class='text-4xl font-bold'>$9.95</div><div class='text-sm text-gray-500'>one-time fee</div></div><ul class='space-y-3 mb-8'><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Distribution to 150+ platforms</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Keep 100% of your rights</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Spotify & Apple Music Pre-save</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Basic analytics</span></li></ul><a href='#signup' class='block text-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 px-4 rounded-lg font-medium hover:from-orange-600 hover:to-pink-600 transition-all'>Choose Plan</a></div><div class='bg-white rounded-xl shadow-xl p-8 border-t-4 border-pink-500 relative hover:transform hover:scale-105 transition-all duration-300'><div class='absolute -top-4 right-4 bg-gradient-to-r from-orange-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-medium'>Most Popular</div><div class='text-center mb-6'><h3 class='text-2xl font-bold mb-2'>Album</h3><p class='text-gray-500 mb-4'>Perfect for a full album</p><div class='text-4xl font-bold'>$29.95</div><div class='text-sm text-gray-500'>one-time fee</div></div><ul class='space-y-3 mb-8'><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Up to 10 tracks per album</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Everything in the Single plan</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Advanced analytics dashboard</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Automatic royalty collection</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Social media monetization</span></li></ul><a href='#signup' class='block text-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 px-4 rounded-lg font-medium hover:from-orange-600 hover:to-pink-600 transition-all'>Choose Plan</a></div><div class='bg-white rounded-xl shadow-lg p-8 border-t-4 border-purple-500 hover:transform hover:scale-105 transition-all duration-300'><div class='text-center mb-6'><h3 class='text-2xl font-bold mb-2'>Pro</h3><p class='text-gray-500 mb-4'>For serious musicians</p><div class='text-4xl font-bold'>$49.95</div><div class='text-sm text-gray-500'>one-time fee</div></div><ul class='space-y-3 mb-8'><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Unlimited tracks</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Everything in the Album plan</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Priority support</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Dedicated account manager</span></li><li class='flex items-start'><svg class='h-6 w-6 mr-2 text-green-500' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg><span>Promotional opportunities</span></li></ul><a href='#signup' class='block text-center bg-gradient-to-r from-orange-500 to-pink-500 text-white py-3 px-4 rounded-lg font-medium hover:from-orange-600 hover:to-pink-600 transition-all'>Choose Plan</a></div></div></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "cta-section",
+            type: "email-signup",
+            content: {
+              title: "Ready to share your music with the world?",
+              description: "Join thousands of independent artists who trust us with their music distribution. Get started today and reach millions of listeners worldwide.",
+              buttonText: "Sign up for free",
+              placeholder: "Enter your email"
+            },
+            style: {
+              backgroundType: "gradient",
+              gradientDirection: "to right",
+              gradientStartColor: "#FF5E3A",
+              gradientEndColor: "#FF2A68",
+              backgroundImage: "linear-gradient(to right, #FF5E3A, #FF2A68)",
+              color: "#ffffff",
+              padding: "80px 24px",
+              borderRadius: "0",
+              margin: "0",
+              fontFamily: "'Montserrat', sans-serif",
+              textAlign: "center"
+            }
+          },
+          {
+            id: "footer-simple",
+            type: "text-block",
+            content: {
+              text: "<footer class='bg-gray-900 text-gray-400 py-16'><div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-4 gap-8'><div class='col-span-2 md:col-span-1'><img src='https://via.placeholder.com/120x40' alt='CDBaby Logo' class='mb-6'><p class='mb-4 text-sm'>The leading digital music distribution platform for independent artists.</p><div class='flex space-x-4'><a href='#' class='text-gray-400 hover:text-orange-500 transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z'/></svg></a><a href='#' class='text-gray-400 hover:text-orange-500 transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z'/></svg></a><a href='#' class='text-gray-400 hover:text-orange-500 transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z'/></svg></a></div></div><div><h3 class='text-lg font-semibold text-white mb-4'>Services</h3><ul class='space-y-2 text-sm'><li><a href='#' class='hover:text-orange-500 transition-colors'>Music Distribution</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Royalty Collection</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Promotion</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Analytics</a></li></ul></div><div><h3 class='text-lg font-semibold text-white mb-4'>Resources</h3><ul class='space-y-2 text-sm'><li><a href='#' class='hover:text-orange-500 transition-colors'>Artist Resources</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Blog</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Help Center</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Success Stories</a></li></ul></div><div><h3 class='text-lg font-semibold text-white mb-4'>Company</h3><ul class='space-y-2 text-sm'><li><a href='#' class='hover:text-orange-500 transition-colors'>About Us</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Careers</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Contact</a></li><li><a href='#' class='hover:text-orange-500 transition-colors'>Terms & Privacy</a></li></ul></div></div><div class='border-t border-gray-800 mt-12 pt-8 text-sm text-center'>© 2025 CDBaby. All rights reserved.</div></div></footer>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          }
+        ],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        userId: 0,
+        name: "Premium Membership",
+        description: "A professional, clean template ideal for premium subscription services and membership sites",
+        thumbnail: "",
+        components: [
+          {
+            id: "header-premium",
+            type: "header-1",
+            content: {
+              logo: "LinkedIn Premium",
+              menuItems: [
+                { text: "Home", url: "#" },
+                { text: "Features", url: "#features" },
+                { text: "Pricing", url: "#pricing" },
+                { text: "For Business", url: "#business" }
+              ],
+              ctaText: "Start My Free Trial",
+              ctaUrl: "#trial"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              color: "#0077B5",
+              padding: "16px 24px",
+              fontFamily: "'Inter', sans-serif",
+              borderBottom: "1px solid #f0f0f0",
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)"
+            }
+          },
+          {
+            id: "hero-premium",
+            type: "hero-split",
+            content: {
+              heading: "Discover how Premium can help you",
+              subheading: "Unlock exclusive features and tools that will help you advance your career or grow your business.",
+              primaryButtonText: "Upgrade for 1 month",
+              primaryButtonUrl: "#upgrade",
+              imageUrl: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3"
+            },
+            style: {
+              backgroundColor: "#f5f5f5",
+              color: "#333333",
+              padding: "80px 24px",
+              minHeight: "500px",
+              fontFamily: "'Inter', sans-serif"
+            }
+          },
+          {
+            id: "divider-premium",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-4xl mx-auto px-4 py-8 text-center'><p class='text-sm text-gray-500'>*Free trial eligibility determined at sign-up.</p><p class='text-sm text-blue-600 hover:underline cursor-pointer'>Additional terms may apply.</p></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0",
+              backgroundColor: "#f5f5f5"
+            }
+          },
+          {
+            id: "categories-section",
+            type: "text-block",
+            content: {
+              text: "<div class='bg-white py-12'><div class='max-w-5xl mx-auto px-4'><div class='flex justify-center gap-12 mb-8'><button class='text-blue-600 font-semibold pb-2 border-b-2 border-blue-600'>Premium Career</button><button class='text-gray-500 font-semibold pb-2 border-b-2 border-transparent hover:text-blue-600 hover:border-blue-600 transition-all'>Premium Business</button></div><div class='w-32 h-1 bg-gray-300 mx-auto mb-14 relative'><div class='absolute h-1 w-16 bg-blue-600 top-0 left-0'></div></div><h2 class='text-3xl font-light text-center mb-16'>Grow professionally with Premium Career</h2><div class='grid md:grid-cols-4 gap-12'><div class='flex flex-col items-center text-center'><div class='w-16 h-16 flex items-center justify-center mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='w-12 h-12 text-blue-600' viewBox='0 0 24 24' fill='currentColor'><path d='M12 14l9-5-9-5-9 5 9 5z'/><path d='M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222'/></svg></div><h3 class='font-semibold mb-3'>On-Demand Learning</h3><p class='text-gray-600 text-sm'>Access 16,000+ expert-led courses to develop your skills and advance your career.</p></div><div class='flex flex-col items-center text-center'><div class='w-16 h-16 flex items-center justify-center mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='w-12 h-12 text-blue-600' viewBox='0 0 24 24' fill='currentColor'><path d='M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z'/></svg></div><h3 class='font-semibold mb-3'>Monthly InMail</h3><p class='text-gray-600 text-sm'>Send messages to anyone on LinkedIn, even if you're not connected to them.</p></div><div class='flex flex-col items-center text-center'><div class='w-16 h-16 flex items-center justify-center mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='w-12 h-12 text-blue-600' viewBox='0 0 24 24' fill='currentColor'><path fill-rule='evenodd' d='M12 1.5a.75.75 0 01.75.75V4.5a.75.75 0 01-1.5 0V2.25A.75.75 0 0112 1.5zM5.636 4.136a.75.75 0 011.06 0l1.592 1.591a.75.75 0 01-1.061 1.06l-1.591-1.59a.75.75 0 010-1.061zm12.728 0a.75.75 0 010 1.06l-1.591 1.592a.75.75 0 01-1.06-1.061l1.59-1.591a.75.75 0 011.061 0zm-6.816 4.496a.75.75 0 01.82.311l5.228 7.917a.75.75 0 01-.777 1.148l-2.097-.43 1.045 3.9a.75.75 0 01-1.45.388l-1.044-3.899-1.601 1.42a.75.75 0 01-1.247-.606l.569-9.47a.75.75 0 01.554-.68zM3 10.5a.75.75 0 01.75-.75H6a.75.75 0 010 1.5H3.75A.75.75 0 013 10.5zm14.25 0a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H18a.75.75 0 01-.75-.75zm-8.962 3.712a.75.75 0 010 1.061l-1.591 1.591a.75.75 0 11-1.061-1.06l1.591-1.592a.75.75 0 011.06 0z' clip-rule='evenodd'/></svg></div><h3 class='font-semibold mb-3'>Who's Viewed Your Profile</h3><p class='text-gray-600 text-sm'>See everyone who's viewed your profile in the last 90 days and their company details.</p></div><div class='flex flex-col items-center text-center'><div class='w-16 h-16 flex items-center justify-center mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='w-12 h-12 text-blue-600' viewBox='0 0 24 24' fill='currentColor'><path d='M18.375 2.25c-1.035 0-1.875.84-1.875 1.875v15.75c0 1.035.84 1.875 1.875 1.875h.75c1.035 0 1.875-.84 1.875-1.875V4.125c0-1.036-.84-1.875-1.875-1.875h-.75zM9.75 8.625c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-.75a1.875 1.875 0 01-1.875-1.875V8.625zM3 13.125c0-1.036.84-1.875 1.875-1.875h.75c1.036 0 1.875.84 1.875 1.875v6.75c0 1.035-.84 1.875-1.875 1.875h-.75A1.875 1.875 0 013 19.875v-6.75z'/></svg></div><h3 class='font-semibold mb-3'>Applicant Insights</h3><p class='text-gray-600 text-sm'>See how you compare to other job applicants, your skills match, and more when you apply on LinkedIn.</p></div></div></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "testimonials-section",
+            type: "text-block",
+            content: {
+              text: "<div class='bg-gray-50 py-16'><div class='max-w-5xl mx-auto px-4'><h2 class='text-2xl font-light text-center mb-12'>What members are saying about Premium</h2><div class='grid md:grid-cols-3 gap-8'><div class='bg-white p-6 rounded-lg shadow-sm'><div class='flex items-center mb-4'><img src='https://randomuser.me/api/portraits/women/45.jpg' alt='Testimonial' class='w-12 h-12 rounded-full mr-4'><div><h4 class='font-semibold'>Sarah Johnson</h4><p class='text-gray-500 text-sm'>Marketing Specialist</p></div></div><p class='text-gray-700 mb-4'>\"Premium helped me connect with the right people and land my dream job within just a few weeks!\"</p><div class='flex'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg></div></div><div class='bg-white p-6 rounded-lg shadow-sm'><div class='flex items-center mb-4'><img src='https://randomuser.me/api/portraits/men/32.jpg' alt='Testimonial' class='w-12 h-12 rounded-full mr-4'><div><h4 class='font-semibold'>David Chen</h4><p class='text-gray-500 text-sm'>Software Engineer</p></div></div><p class='text-gray-700 mb-4'>\"The courses on Premium were exactly what I needed to transition into a leadership role. Highly recommend!\"</p><div class='flex'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg></div></div><div class='bg-white p-6 rounded-lg shadow-sm'><div class='flex items-center mb-4'><img src='https://randomuser.me/api/portraits/women/68.jpg' alt='Testimonial' class='w-12 h-12 rounded-full mr-4'><div><h4 class='font-semibold'>Emma Rodriguez</h4><p class='text-gray-500 text-sm'>Business Consultant</p></div></div><p class='text-gray-700 mb-4'>\"The ability to send InMail messages to potential clients has completely transformed my business development process.\"</p><div class='flex'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-yellow-400' viewBox='0 0 20 20' fill='currentColor'><path d='M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z'/></svg></div></div></div></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "pricing-premium",
+            type: "text-block",
+            content: {
+              text: "<div class='bg-white py-16'><div class='max-w-5xl mx-auto px-4'><h2 class='text-3xl font-light text-center mb-12'>Choose the right Premium plan for you</h2><div class='grid md:grid-cols-3 gap-8'><div class='border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all'><div class='border-b pb-4 mb-4'><h3 class='text-xl font-semibold mb-1'>Premium Career</h3><p class='text-gray-500 text-sm mb-4'>For individuals looking to grow professionally</p><div class='flex items-baseline'><span class='text-3xl font-bold'>$29.99</span><span class='text-gray-500 ml-2'>/month</span></div></div><ul class='space-y-3 mb-6'><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>3 InMail messages per month</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>See who viewed your profile</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Applicant insights</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Access to on-demand learning</span></li></ul><a href='#' class='block w-full py-2 px-4 bg-blue-600 text-white text-center rounded font-medium hover:bg-blue-700 transition-colors'>Start my free month</a></div><div class='border-2 border-blue-600 rounded-lg p-6 shadow-lg relative'><div class='absolute top-0 right-6 transform -translate-y-1/2 bg-blue-600 text-white px-3 py-1 text-sm font-medium rounded-full'>Most Popular</div><div class='border-b pb-4 mb-4'><h3 class='text-xl font-semibold mb-1'>Premium Business</h3><p class='text-gray-500 text-sm mb-4'>For business professionals and small teams</p><div class='flex items-baseline'><span class='text-3xl font-bold'>$59.99</span><span class='text-gray-500 ml-2'>/month</span></div></div><ul class='space-y-3 mb-6'><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>15 InMail messages per month</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Advanced people search filters</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Competitive intelligence data</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Unlimited profile views</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Business insights and analytics</span></li></ul><a href='#' class='block w-full py-2 px-4 bg-blue-600 text-white text-center rounded font-medium hover:bg-blue-700 transition-colors'>Start my free month</a></div><div class='border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all'><div class='border-b pb-4 mb-4'><h3 class='text-xl font-semibold mb-1'>Premium Executive</h3><p class='text-gray-500 text-sm mb-4'>For senior leaders and executives</p><div class='flex items-baseline'><span class='text-3xl font-bold'>$99.99</span><span class='text-gray-500 ml-2'>/month</span></div></div><ul class='space-y-3 mb-6'><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>30 InMail messages per month</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Executive leadership content</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Premium executive network</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>All Business features</span></li><li class='flex items-start'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-blue-600 mr-2 mt-0.5' viewBox='0 0 20 20' fill='currentColor'><path fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/></svg><span>Dedicated account manager</span></li></ul><a href='#' class='block w-full py-2 px-4 bg-blue-600 text-white text-center rounded font-medium hover:bg-blue-700 transition-colors'>Start my free month</a></div></div></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "cta-premium",
+            type: "text-block",
+            content: {
+              text: "<div class='bg-blue-600 py-12 text-center text-white'><div class='max-w-4xl mx-auto px-4'><h2 class='text-2xl font-semibold mb-6'>Ready to unlock your career potential?</h2><p class='text-lg mb-8 opacity-90'>Join millions of professionals who trust our platform to advance their careers.</p><a href='#' class='inline-block bg-white text-blue-600 font-medium px-6 py-3 rounded-md hover:bg-blue-50 transition-colors'>Start My Free Trial</a><p class='text-sm mt-4 opacity-75'>No credit card required for trial. Cancel anytime.</p></div></div>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          },
+          {
+            id: "footer-premium",
+            type: "text-block",
+            content: {
+              text: "<footer class='bg-gray-100 py-12'><div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-4 gap-8 mb-8'><div><h3 class='font-semibold mb-4'>Premium</h3><ul class='space-y-2 text-sm text-gray-600'><li><a href='#' class='hover:text-blue-600'>Premium Career</a></li><li><a href='#' class='hover:text-blue-600'>Premium Business</a></li><li><a href='#' class='hover:text-blue-600'>Premium Executive</a></li><li><a href='#' class='hover:text-blue-600'>Pricing</a></li></ul></div><div><h3 class='font-semibold mb-4'>Resources</h3><ul class='space-y-2 text-sm text-gray-600'><li><a href='#' class='hover:text-blue-600'>Learning Center</a></li><li><a href='#' class='hover:text-blue-600'>Success Stories</a></li><li><a href='#' class='hover:text-blue-600'>FAQ</a></li><li><a href='#' class='hover:text-blue-600'>Blog</a></li></ul></div><div><h3 class='font-semibold mb-4'>Company</h3><ul class='space-y-2 text-sm text-gray-600'><li><a href='#' class='hover:text-blue-600'>About Us</a></li><li><a href='#' class='hover:text-blue-600'>Careers</a></li><li><a href='#' class='hover:text-blue-600'>Press</a></li><li><a href='#' class='hover:text-blue-600'>Contact</a></li></ul></div><div><h3 class='font-semibold mb-4'>Legal</h3><ul class='space-y-2 text-sm text-gray-600'><li><a href='#' class='hover:text-blue-600'>Privacy Policy</a></li><li><a href='#' class='hover:text-blue-600'>Terms of Service</a></li><li><a href='#' class='hover:text-blue-600'>Cookie Policy</a></li><li><a href='#' class='hover:text-blue-600'>Copyright</a></li></ul></div></div><div class='border-t border-gray-200 pt-8 text-sm text-gray-500 text-center'><p>© 2025 LinkedIn Premium. All rights reserved.</p></div></div></footer>"
+            },
+            style: {
+              margin: "0",
+              padding: "0"
+            }
+          }
+        ],
+        isPublic: true,
+        createdAt: new Date().toISOString()
+      },
+      {
         userId: 0, // System templates have userId 0
         name: "Basic Landing Page",
         description: "A simple, clean landing page with essential sections for any product or service",
