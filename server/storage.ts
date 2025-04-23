@@ -426,7 +426,7 @@ export class MemStorage implements IStorage {
       {
         userId: 0,
         name: "Professional Business",
-        description: "A professional business template with clean layout and corporate styling",
+        description: "A modern business template with professional styling and engaging sections",
         thumbnail: "",
         components: [
           {
@@ -446,23 +446,37 @@ export class MemStorage implements IStorage {
               backgroundColor: "#ffffff",
               padding: "20px 24px",
               borderBottom: "1px solid #e5e7eb",
-              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)"
+              boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+              color: "#333333",
+              fontFamily: "Poppins, sans-serif"
             }
           },
           {
-            id: "hero-centered",
-            type: "hero-centered",
+            id: "hero-gradient",
+            type: "hero-gradient",
             content: {
-              heading: "Trusted Business Solutions",
-              subheading: "We provide comprehensive business services to help your company grow and succeed in today's competitive market.",
-              buttonText: "Our Services",
-              buttonUrl: "#services"
+              heading: "Innovative Business Solutions",
+              subheading: "We help companies transform their operations and achieve sustainable growth in today's dynamic market.",
+              buttonText: "Get Started",
+              buttonUrl: "#contact",
+              secondaryButtonText: "Learn More",
+              secondaryButtonUrl: "#services"
             },
             style: {
-              backgroundColor: "#1e3a8a",
+              backgroundType: "gradient",
+              gradientDirection: "to right",
+              gradientStartColor: "#2563eb",
+              gradientEndColor: "#4f46e5",
+              backgroundImage: "linear-gradient(to right, #2563eb, #4f46e5)",
               color: "#ffffff",
-              padding: "80px 24px",
-              textAlign: "center"
+              padding: "100px 24px",
+              textAlign: "center",
+              fontFamily: "Poppins, sans-serif",
+              minHeight: "500px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center"
             }
           },
           {
@@ -476,15 +490,16 @@ export class MemStorage implements IStorage {
               textAlign: "center",
               fontSize: "2.5rem",
               fontWeight: "bold",
-              margin: "64px 0 24px",
-              color: "#1f2937"
+              margin: "84px 0 24px",
+              color: "#1f2937",
+              fontFamily: "Poppins, sans-serif"
             }
           },
           {
             id: "text-services",
             type: "text-block",
             content: {
-              text: "We offer a range of professional services designed to help your business thrive. Our expert team provides tailored solutions to meet your specific needs."
+              text: "We offer a comprehensive range of professional services designed to help your business grow and succeed. Our expert team delivers tailored solutions for your unique challenges."
             },
             style: {
               textAlign: "center",
@@ -492,7 +507,30 @@ export class MemStorage implements IStorage {
               margin: "0 auto 48px",
               fontSize: "1.1rem",
               lineHeight: "1.6",
-              color: "#4b5563"
+              color: "#4b5563",
+              fontFamily: "Poppins, sans-serif"
+            }
+          },
+          {
+            id: "services-cards",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-3 gap-8'><div class='bg-white p-8 rounded-lg shadow-lg border-l-4 border-blue-600 hover:transform hover:scale-105 transition-all duration-300'><div class='text-blue-600 mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='h-10 w-10' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' /></svg></div><h3 class='text-xl font-bold mb-3'>Business Strategy</h3><p class='text-gray-600 mb-4'>Develop comprehensive business strategies to achieve long-term goals and maximize growth potential.</p><a href='#contact' class='text-blue-600 font-medium hover:text-blue-700'>Learn more →</a></div><div class='bg-white p-8 rounded-lg shadow-lg border-l-4 border-indigo-600 hover:transform hover:scale-105 transition-all duration-300'><div class='text-indigo-600 mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='h-10 w-10' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg></div><h3 class='text-xl font-bold mb-3'>Financial Consulting</h3><p class='text-gray-600 mb-4'>Expert financial analysis and guidance to optimize cash flow, reduce costs, and increase profitability.</p><a href='#contact' class='text-indigo-600 font-medium hover:text-indigo-700'>Learn more →</a></div><div class='bg-white p-8 rounded-lg shadow-lg border-l-4 border-purple-600 hover:transform hover:scale-105 transition-all duration-300'><div class='text-purple-600 mb-4'><svg xmlns='http://www.w3.org/2000/svg' class='h-10 w-10' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z' /><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z' /></svg></div><h3 class='text-xl font-bold mb-3'>Market Analysis</h3><p class='text-gray-600 mb-4'>In-depth market research and competitor analysis to identify opportunities and inform strategic decisions.</p><a href='#contact' class='text-purple-600 font-medium hover:text-purple-700'>Learn more →</a></div></div></div>"
+            },
+            style: {
+              margin: "0 auto 64px",
+              padding: "0"
+            }
+          },
+          {
+            id: "about-section",
+            type: "text-block",
+            content: {
+              text: "<div class='max-w-6xl mx-auto px-4 py-12'><div class='grid md:grid-cols-2 gap-12 items-center'><div><h2 class='text-3xl font-bold mb-6'>About Our Company</h2><p class='text-gray-600 mb-6'>Founded in 2020, Acme Inc. has quickly established itself as a leader in business consulting and technological innovation. Our team of experts brings decades of combined experience to help businesses of all sizes achieve their goals.</p><div class='grid grid-cols-2 gap-4 mb-6'><div class='flex items-center'><div class='bg-blue-100 rounded-full p-2 mr-3'><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-blue-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg></div><span class='text-gray-700'>Industry Expertise</span></div><div class='flex items-center'><div class='bg-blue-100 rounded-full p-2 mr-3'><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-blue-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg></div><span class='text-gray-700'>Innovative Solutions</span></div><div class='flex items-center'><div class='bg-blue-100 rounded-full p-2 mr-3'><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-blue-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg></div><span class='text-gray-700'>Client Success Focus</span></div><div class='flex items-center'><div class='bg-blue-100 rounded-full p-2 mr-3'><svg xmlns='http://www.w3.org/2000/svg' class='h-6 w-6 text-blue-600' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7' /></svg></div><span class='text-gray-700'>Global Network</span></div></div><a href='#contact' class='inline-block bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium py-3 px-6 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all shadow-md'>Learn More About Us</a></div><div class='relative h-full min-h-[400px] rounded-xl overflow-hidden shadow-xl'><img src='https://images.unsplash.com/photo-1560179707-f14e90ef3623?ixlib=rb-4.0.3' alt='Office building' class='absolute inset-0 w-full h-full object-cover'/></div></div></div>"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              margin: "40px 0 80px"
             }
           },
           {
@@ -500,6 +538,7 @@ export class MemStorage implements IStorage {
             type: "form",
             content: {
               title: "Get in Touch",
+              description: "Have questions about our services? Fill out the form below and our team will get back to you shortly.",
               fields: [
                 { name: "name", label: "Your Name", type: "text", required: true },
                 { name: "email", label: "Email Address", type: "email", required: true },
@@ -509,13 +548,30 @@ export class MemStorage implements IStorage {
               submitText: "Send Message"
             },
             style: {
-              backgroundColor: "#f9fafb",
-              padding: "48px 24px",
+              backgroundType: "gradient",
+              gradientDirection: "to right",
+              gradientStartColor: "#2563eb",
+              gradientEndColor: "#4f46e5",
+              backgroundImage: "linear-gradient(to right, #2563eb, #4f46e5)",
+              color: "#ffffff",
+              padding: "64px 24px",
               margin: "64px 0",
-              borderRadius: "8px",
-              maxWidth: "720px",
+              borderRadius: "16px",
+              maxWidth: "960px",
               marginLeft: "auto",
-              marginRight: "auto"
+              marginRight: "auto",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+              fontFamily: "Poppins, sans-serif"
+            }
+          },
+          {
+            id: "footer-simple",
+            type: "text-block",
+            content: {
+              text: "<footer class='bg-gray-900 text-gray-300 py-12'><div class='max-w-6xl mx-auto px-4'><div class='grid md:grid-cols-4 gap-8'><div class='col-span-2 md:col-span-1'><div class='text-xl font-bold text-white mb-4'>Acme Inc.</div><p class='mb-4 text-sm'>Transforming businesses through innovative solutions and strategic expertise.</p><div class='flex space-x-4'><a href='#' class='text-gray-400 hover:text-white transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z'/></svg></a><a href='#' class='text-gray-400 hover:text-white transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z'/></svg></a><a href='#' class='text-gray-400 hover:text-white transition-colors'><svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5' fill='currentColor' viewBox='0 0 24 24'><path d='M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z'/></svg></a></div></div><div class='md:col-span-1'><h3 class='text-lg font-semibold text-white mb-4'>Services</h3><ul class='space-y-2 text-sm'><li><a href='#' class='hover:text-white transition-colors'>Business Strategy</a></li><li><a href='#' class='hover:text-white transition-colors'>Financial Consulting</a></li><li><a href='#' class='hover:text-white transition-colors'>Market Analysis</a></li><li><a href='#' class='hover:text-white transition-colors'>Digital Transformation</a></li></ul></div><div class='md:col-span-1'><h3 class='text-lg font-semibold text-white mb-4'>Company</h3><ul class='space-y-2 text-sm'><li><a href='#' class='hover:text-white transition-colors'>About Us</a></li><li><a href='#' class='hover:text-white transition-colors'>Careers</a></li><li><a href='#' class='hover:text-white transition-colors'>Blog</a></li><li><a href='#' class='hover:text-white transition-colors'>Contact</a></li></ul></div><div class='md:col-span-1'><h3 class='text-lg font-semibold text-white mb-4'>Contact Us</h3><address class='not-italic text-sm'><div class='mb-2'>123 Business Street<br/>Suite 100<br/>New York, NY 10001</div><div class='mb-2'>Email: <a href='mailto:info@example.com' class='hover:text-white transition-colors'>info@acmeinc.com</a></div><div>Phone: <a href='tel:+11234567890' class='hover:text-white transition-colors'>(123) 456-7890</a></div></address></div></div><div class='border-t border-gray-800 mt-8 pt-8 text-sm text-center'>© 2025 Acme Inc. All rights reserved.</div></div></footer>"
+            },
+            style: {
+              margin: "0"
             }
           }
         ],
