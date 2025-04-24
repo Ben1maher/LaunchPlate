@@ -258,108 +258,183 @@ export class MemStorage implements IStorage {
             content: {
               logoText: "Fit<span class='text-primary'>Zone</span>",
               menuItems: [
-                { text: "Services", url: "#services" },
-                { text: "About", url: "#about" },
-                { text: "Testimonials", url: "#testimonials" },
-                { text: "Contact", url: "#contact" }
+                { text: "Programs", url: "#programs" },
+                { text: "Methodology", url: "#methodology" },
+                { text: "Success Stories", url: "#success-stories" },
+                { text: "Book Now", url: "#booking" }
               ]
             },
             style: {
-              backgroundColor: "#1A1A1A",
-              textColor: "#ffffff",
-              accentColor: "#22C55E"
+              backgroundColor: "#111827",
+              textColor: "#F9FAFB",
+              accentColor: "#10B981"
             }
           },
           {
             id: "hero-section",
-            type: "hero-split",
+            type: "hero-gradient",
             content: {
-              heading: "Transform Your Body & Mind",
-              description: "Personalized fitness training designed to help you reach your goals and feel your best",
-              primaryButtonText: "Start Your Journey",
-              secondaryButtonText: "Free Consultation"
+              heading: "ELEVATE YOUR FITNESS JOURNEY",
+              description: "Science-backed training methods tailored to your unique body and goals. Transform beyond the physical.",
+              primaryButtonText: "Start 7-Day Trial",
+              secondaryButtonText: "View Training Methods"
             },
             style: {
-              backgroundColor: "#1A1A1A",
+              gradientStart: "#064E3B",
+              gradientEnd: "#10B981",
               headingColor: "#ffffff",
+              textColor: "#E5E7EB",
+              primaryButtonColor: "#F9FAFB",
+              primaryButtonTextColor: "#064E3B",
+              secondaryButtonColor: "transparent",
+              secondaryButtonTextColor: "#F9FAFB",
+              paddingTop: "100px",
+              paddingBottom: "100px"
+            }
+          },
+          {
+            id: "stats-section",
+            type: "stats-bar",
+            content: {
+              title: "Real Results",
+              stats: [
+                { value: "5,000+", label: "Workouts Completed" },
+                { value: "94%", label: "Client Success Rate" },
+                { value: "800+", label: "Weight Lost (kg)" }
+              ]
+            },
+            style: {
+              backgroundColor: "#111827",
+              headingColor: "#F9FAFB",
               textColor: "#D1D5DB",
-              paddingTop: "80px",
-              paddingBottom: "80px"
+              padding: "48px"
             }
           },
           {
             id: "services-section",
             type: "feature-cards",
             content: {
-              title: "Training Programs",
+              title: "SPECIALIZED TRAINING PROGRAMS",
               features: [
                 {
-                  title: "Personal Training",
-                  description: "One-on-one sessions tailored to your specific needs",
-                  icon: "ri-user-heart-line"
+                  title: "1:1 Elite Coaching",
+                  description: "Personalized training with biomechanical analysis and progressive overload principles",
+                  icon: "ri-user-star-line"
                 },
                 {
-                  title: "Group Fitness",
-                  description: "High-energy classes that motivate and inspire",
-                  icon: "ri-group-line"
+                  title: "HIIT Transformation",
+                  description: "High-intensity interval training for maximum fat loss and cardiovascular improvement",
+                  icon: "ri-heart-pulse-line"
                 },
                 {
-                  title: "Nutrition Planning",
-                  description: "Custom meal plans to complement your fitness routine",
-                  icon: "ri-restaurant-line"
+                  title: "Nutrition Mastery",
+                  description: "Macro-optimized nutrition plans with periodic adjustments based on your progress",
+                  icon: "ri-nutrients-line"
                 }
               ]
             },
             style: {
-              backgroundColor: "#F7FEF9",
-              headingColor: "#064E3B",
-              textColor: "#374151",
-              padding: "64px"
+              backgroundColor: "#0D9488",
+              headingColor: "#F0FDF4",
+              textColor: "#F0FDF4",
+              padding: "64px",
+              borderRadius: "0px"
+            }
+          },
+          {
+            id: "methodology-section",
+            type: "columns-2",
+            content: {
+              title: "THE FITZONE METHOD",
+              subtitle: "A holistic approach to fitness that combines strength, mobility, and recovery",
+              leftColumnContent: "<h3 class='text-xl font-bold mb-4'>Progressive Overload</h3><p class='mb-6'>Our scientifically-proven methodology gradually increases workout intensity to continuously challenge your body and prevent plateaus.</p><h3 class='text-xl font-bold mb-4'>Mind-Muscle Connection</h3><p>Learn techniques to maximize neuromuscular efficiency and achieve better results with proper form and execution.</p>",
+              rightColumnContent: "<h3 class='text-xl font-bold mb-4'>Recovery Optimization</h3><p class='mb-6'>Structured recovery protocols including mobility work, nutrition timing, and sleep optimization to enhance results.</p><h3 class='text-xl font-bold mb-4'>Data-Driven Progress</h3><p>Regular assessments and benchmarks to track progress and make evidence-based adjustments to your program.</p>"
+            },
+            style: {
+              backgroundColor: "#F0FDF4",
+              titleColor: "#064E3B",
+              textColor: "#1F2937",
+              padding: "80px"
             }
           },
           {
             id: "testimonial-section",
-            type: "testimonial-single",
+            type: "testimonial-carousel",
             content: {
-              quote: "Working with FitZone transformed not just my body, but my entire outlook on health and wellness. The personalized approach made all the difference.",
-              author: "Sarah Johnson",
-              role: "Lost 30lbs in 6 months"
+              testimonials: [
+                {
+                  quote: "FitZone's approach to strength training revolutionized how I view fitness. I've gained 12lbs of muscle while actually improving my mobility and reducing joint pain.",
+                  author: "James Rodriguez",
+                  role: "Software Engineer, 8 months with FitZone"
+                },
+                {
+                  quote: "After three failed attempts with other trainers, FitZone helped me lose 35lbs and keep it off. Their nutrition coaching was the game-changer I needed.",
+                  author: "Sarah Johnson",
+                  role: "Marketing Director, 1 year with FitZone"
+                },
+                {
+                  quote: "At 52, I never thought I could feel this strong and energetic. My metabolic health markers are better now than they were in my 30s!",
+                  author: "Michael Chen",
+                  role: "Business Owner, 14 months with FitZone"
+                }
+              ]
             },
             style: {
-              backgroundColor: "#E2FCEF",
-              quoteColor: "#064E3B",
-              textColor: "#374151",
-              padding: "64px"
+              backgroundColor: "#064E3B",
+              quoteColor: "#ECFDF5",
+              textColor: "#D1FAE5",
+              padding: "80px"
             }
           },
           {
             id: "cta-section",
             type: "email-signup",
             content: {
-              heading: "Ready to Get Started?",
-              description: "Sign up for a free consultation and take the first step toward a healthier you.",
+              heading: "START YOUR TRANSFORMATION TODAY",
+              description: "Sign up for a complimentary fitness assessment and personalized program recommendation.",
               inputPlaceholder: "Your email",
-              buttonText: "Book Now"
+              buttonText: "CLAIM FREE ASSESSMENT"
             },
             style: {
-              backgroundColor: "#22C55E",
+              backgroundColor: "#10B981",
               headingColor: "#ffffff",
-              textColor: "#F7FEF9",
-              padding: "64px"
+              textColor: "#F0FDF4",
+              buttonColor: "#111827",
+              buttonTextColor: "#ffffff",
+              padding: "80px"
             }
           },
           {
             id: "footer-section",
-            type: "footer-simple",
+            type: "footer-columns",
             content: {
               logoText: "Fit<span class='text-primary'>Zone</span>",
-              tagline: "Your journey to a better you starts here",
-              copyright: "© 2025 FitZone. All rights reserved."
+              description: "Science-backed fitness coaching for transformative results",
+              copyright: "© 2025 FitZone. All rights reserved.",
+              columns: [
+                {
+                  title: "Hours",
+                  links: [
+                    { text: "Mon-Fri: 5am - 10pm", url: "#" },
+                    { text: "Saturday: 7am - 8pm", url: "#" },
+                    { text: "Sunday: 8am - 6pm", url: "#" }
+                  ]
+                },
+                {
+                  title: "Connect",
+                  links: [
+                    { text: "Instagram", url: "#" },
+                    { text: "YouTube", url: "#" },
+                    { text: "Podcast", url: "#" }
+                  ]
+                }
+              ]
             },
             style: {
-              backgroundColor: "#1A1A1A",
+              backgroundColor: "#111827",
               textColor: "#D1D5DB",
-              padding: "48px"
+              headingColor: "#F9FAFB",
+              padding: "64px"
             }
           }
         ],
@@ -377,113 +452,187 @@ export class MemStorage implements IStorage {
             id: "header-1",
             type: "header-transparent",
             content: {
-              logoText: "Bloom<span class='text-primary'>& Petal</span>",
+              logoText: "Wild<span class='text-primary'>Bloom</span>",
               menuItems: [
                 { text: "Collections", url: "#collections" },
-                { text: "Services", url: "#services" },
-                { text: "About", url: "#about" },
+                { text: "Our Process", url: "#process" },
+                { text: "Studio", url: "#studio" },
                 { text: "Order", url: "#order" }
               ]
             },
             style: {
-              textColor: "#4B5563",
-              accentColor: "#EC4899"
+              textColor: "#4A5568",
+              accentColor: "#DB2777"
             }
           },
           {
             id: "hero-section",
-            type: "hero-centered",
+            type: "hero-split",
             content: {
-              heading: "Handcrafted Floral Arrangements",
-              description: "Beautiful, fresh flowers for every occasion, delivered with care and artistry",
-              primaryButtonText: "Shop Now",
-              secondaryButtonText: "Our Services"
+              heading: "Artisanal Floral Design",
+              description: "Botanical arrangements that tell a story, crafted with seasonal blooms and a touch of wild beauty",
+              primaryButtonText: "Shop Collections",
+              secondaryButtonText: "About Our Studio"
             },
             style: {
-              backgroundColor: "#FDF2F8",
-              headingColor: "#831843",
+              backgroundColor: "#FFFAF0",
+              headingColor: "#B45309",
               textColor: "#4B5563",
-              paddingTop: "100px",
-              paddingBottom: "100px"
+              primaryButtonColor: "#DB2777",
+              primaryButtonTextColor: "#ffffff",
+              secondaryButtonColor: "transparent",
+              secondaryButtonTextColor: "#B45309",
+              paddingTop: "120px",
+              paddingBottom: "120px"
+            }
+          },
+          {
+            id: "process-section",
+            type: "columns-3",
+            content: {
+              title: "Our Botanical Approach",
+              subtitle: "Every arrangement is thoughtfully designed with intention and care",
+              column1Content: "<div class='text-center'><div class='inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-100 mb-4'><span class='text-pink-600 text-xl font-semibold'>1</span></div><h3 class='text-lg font-medium mb-2'>Thoughtful Sourcing</h3><p>We partner with local farms that practice sustainable growing methods to source the finest seasonal blooms.</p></div>",
+              column2Content: "<div class='text-center'><div class='inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-100 mb-4'><span class='text-pink-600 text-xl font-semibold'>2</span></div><h3 class='text-lg font-medium mb-2'>Artistic Composition</h3><p>Each arrangement is hand-crafted with attention to color harmony, texture, and sculptural elements.</p></div>",
+              column3Content: "<div class='text-center'><div class='inline-flex items-center justify-center w-12 h-12 rounded-full bg-pink-100 mb-4'><span class='text-pink-600 text-xl font-semibold'>3</span></div><h3 class='text-lg font-medium mb-2'>Mindful Delivery</h3><p>Delivered with care in eco-friendly packaging to ensure your flowers arrive in perfect condition.</p></div>"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              titleColor: "#B45309",
+              textColor: "#4B5563",
+              padding: "80px"
             }
           },
           {
             id: "collections-section",
-            type: "feature-grid",
+            type: "gallery",
             content: {
-              title: "Our Collections",
+              title: "Seasonal Collections",
+              description: "Our arrangements reflect the changing beauty of nature throughout the year",
+              images: [
+                {
+                  src: "https://images.unsplash.com/photo-1566904809505-29025835a0fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                  alt: "Spring Collection",
+                  caption: "Spring Awakening"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80",
+                  alt: "Summer Collection",
+                  caption: "Summer Abundance"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80",
+                  alt: "Autumn Collection",
+                  caption: "Autumn Warmth"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1545165375-7c5a75c9aedf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                  alt: "Winter Collection",
+                  caption: "Winter Elegance"
+                }
+              ]
+            },
+            style: {
+              backgroundColor: "#FDF2F8",
+              titleColor: "#9D174D",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          {
+            id: "testimonial-section",
+            type: "testimonial-single",
+            content: {
+              quote: "WildBloom created the most exquisite arrangements for our wedding. Their attention to detail and understanding of our vision exceeded all expectations. The flowers were not just decorations—they were works of art that captured the essence of our special day.",
+              author: "Emily & Thomas",
+              role: "Wedding Clients"
+            },
+            style: {
+              backgroundColor: "#FCF8F1",
+              quoteColor: "#92400E",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          {
+            id: "services-section",
+            type: "feature-cards",
+            content: {
+              title: "Floral Services",
               features: [
                 {
-                  title: "Seasonal Bouquets",
-                  description: "Fresh arrangements showcasing the beauty of each season",
-                  icon: "ri-flower-line"
+                  title: "Bespoke Arrangements",
+                  description: "Custom designs created especially for your space and occasion",
+                  icon: "ri-scissors-cut-line"
                 },
                 {
-                  title: "Wedding Flowers",
-                  description: "Exquisite floral designs for your special day",
-                  icon: "ri-hearts-line"
+                  title: "Weddings & Events",
+                  description: "Full-service floral design for your most memorable celebrations",
+                  icon: "ri-calendar-event-line"
                 },
                 {
-                  title: "Plant Gifts",
-                  description: "Lasting green gifts that bring life to any space",
-                  icon: "ri-plant-line"
-                },
-                {
-                  title: "Custom Orders",
-                  description: "Personalized arrangements for unique occasions",
-                  icon: "ri-gift-line"
+                  title: "Floral Subscriptions",
+                  description: "Regular deliveries of seasonal blooms to brighten your home or office",
+                  icon: "ri-repeat-line"
                 }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
-              headingColor: "#831843",
+              headingColor: "#9D174D",
               textColor: "#4B5563",
-              padding: "64px"
-            }
-          },
-          {
-            id: "about-section",
-            type: "text-block",
-            content: {
-              title: "Our Story",
-              text: "Bloom & Petal was founded with a simple mission: to bring the beauty of nature into people's lives through thoughtfully crafted floral designs. Each arrangement is handcrafted with care and attention to detail, using only the freshest, most beautiful blooms sourced from local growers whenever possible."
-            },
-            style: {
-              backgroundColor: "#FFFAFD",
-              headingColor: "#831843",
-              textColor: "#4B5563",
-              padding: "64px"
+              padding: "80px"
             }
           },
           {
             id: "cta-section",
             type: "email-signup",
             content: {
-              heading: "Subscribe for Floral Inspiration",
-              description: "Join our newsletter for seasonal updates, special offers, and floral design tips.",
+              heading: "Join Our Botanical Community",
+              description: "Receive seasonal inspiration, early access to limited collections, and floral care tips.",
               inputPlaceholder: "Your email address",
               buttonText: "Subscribe"
             },
             style: {
-              backgroundColor: "#FCE7F3",
-              headingColor: "#831843",
+              backgroundColor: "#FBD1E3",
+              headingColor: "#9D174D",
               textColor: "#4B5563",
-              padding: "64px"
+              buttonColor: "#9D174D",
+              buttonTextColor: "#ffffff",
+              padding: "80px"
             }
           },
           {
             id: "footer-section",
-            type: "footer-simple",
+            type: "footer-columns",
             content: {
-              logoText: "Bloom<span class='text-primary'>& Petal</span>",
-              tagline: "Bringing natural beauty to life",
-              copyright: "© 2025 Bloom & Petal. All rights reserved."
+              logoText: "Wild<span class='text-primary'>Bloom</span>",
+              description: "Artisanal floral design with a wild and natural aesthetic",
+              copyright: "© 2025 WildBloom Studio. All rights reserved.",
+              columns: [
+                {
+                  title: "Visit Our Studio",
+                  links: [
+                    { text: "123 Botanical Lane", url: "#" },
+                    { text: "Bloom District", url: "#" },
+                    { text: "Open Wed-Sun, 10am-6pm", url: "#" }
+                  ]
+                },
+                {
+                  title: "Connect",
+                  links: [
+                    { text: "Instagram", url: "#" },
+                    { text: "Pinterest", url: "#" },
+                    { text: "Contact", url: "#" }
+                  ]
+                }
+              ]
             },
             style: {
-              backgroundColor: "#FFFAFD",
+              backgroundColor: "#FFFAF0",
               textColor: "#4B5563",
-              padding: "48px"
+              headingColor: "#92400E",
+              padding: "64px"
             }
           }
         ],
@@ -501,131 +650,201 @@ export class MemStorage implements IStorage {
             id: "header-1",
             type: "header-1",
             content: {
-              logoText: "Chic<span class='text-primary'>Cuts</span>",
+              logoText: "Luxe<span class='text-primary'>Style</span>",
               menuItems: [
-                { text: "Services", url: "#services" },
-                { text: "Gallery", url: "#gallery" },
-                { text: "Team", url: "#team" },
-                { text: "Book Now", url: "#booking" }
+                { text: "Experiences", url: "#experiences" },
+                { text: "Portfolio", url: "#portfolio" },
+                { text: "Stylists", url: "#stylists" },
+                { text: "Reserve", url: "#reserve" }
               ]
             },
             style: {
-              backgroundColor: "#ffffff",
-              textColor: "#1F2937",
-              accentColor: "#8B5CF6"
+              backgroundColor: "#0f172a",
+              textColor: "#f8fafc",
+              accentColor: "#a855f7"
             }
           },
           {
             id: "hero-section",
-            type: "hero-gradient",
+            type: "hero-video",
             content: {
-              heading: "Express Your Style",
-              description: "Expert hairstyling, coloring, and treatments in a relaxed, modern atmosphere",
-              primaryButtonText: "Book Appointment",
-              secondaryButtonText: "View Services"
+              heading: "REDEFINE YOUR SIGNATURE LOOK",
+              description: "An elevated salon experience where creativity, technique, and personalized consultation meet",
+              primaryButtonText: "Book Your Experience",
+              secondaryButtonText: "Explore Services",
+              videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hairdresser-washing-a-womans-hair-14993-large.mp4"
             },
             style: {
-              gradientStart: "#8B5CF6",
-              gradientEnd: "#EC4899",
+              overlay: "linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(88, 28, 135, 0.7))",
               headingColor: "#ffffff",
-              textColor: "#F3F4F6",
-              paddingTop: "100px",
-              paddingBottom: "100px"
+              textColor: "#e2e8f0",
+              primaryButtonColor: "#a855f7",
+              primaryButtonTextColor: "#ffffff",
+              secondaryButtonColor: "transparent",
+              secondaryButtonTextColor: "#e2e8f0",
+              secondaryButtonBorderColor: "#a855f7",
+              paddingTop: "140px",
+              paddingBottom: "140px"
             }
           },
           {
             id: "services-section",
+            type: "columns-3",
+            content: {
+              title: "SIGNATURE EXPERIENCES",
+              subtitle: "Customized hair services tailored to your unique style and texture",
+              column1Content: "<div class='p-6 border border-purple-200 rounded-lg transition-all hover:border-purple-500 hover:shadow-lg'><h3 class='text-xl font-bold mb-4 text-purple-900'>LUXE CUT & STYLE</h3><p class='mb-4 text-slate-700'>A transformative cut experience including in-depth consultation, precision cutting, and styling with premium products.</p><div class='text-sm font-medium text-purple-700'>From $95</div></div>",
+              column2Content: "<div class='p-6 border border-purple-200 rounded-lg transition-all hover:border-purple-500 hover:shadow-lg'><h3 class='text-xl font-bold mb-4 text-purple-900'>COLOR EVOLUTION</h3><p class='mb-4 text-slate-700'>Personalized color services from subtle dimension to complete transformation using innovative techniques.</p><div class='text-sm font-medium text-purple-700'>From $120</div></div>",
+              column3Content: "<div class='p-6 border border-purple-200 rounded-lg transition-all hover:border-purple-500 hover:shadow-lg'><h3 class='text-xl font-bold mb-4 text-purple-900'>HAIR TREATMENT RITUAL</h3><p class='mb-4 text-slate-700'>Restorative treatments that repair and rejuvenate damaged hair using our curated collection of luxury products.</p><div class='text-sm font-medium text-purple-700'>From $85</div></div>"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              titleColor: "#581c87",
+              textColor: "#334155",
+              padding: "80px"
+            }
+          },
+          {
+            id: "gallery-section",
+            type: "carousel",
+            content: {
+              title: "OUR PORTFOLIO",
+              description: "A selection of transformations created by our expert stylists",
+              slides: [
+                {
+                  imageUrl: "https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80",
+                  caption: "Modern Textured Bob"
+                },
+                {
+                  imageUrl: "https://images.unsplash.com/photo-1618097426722-ff7667cc7c4c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+                  caption: "Dimensional Balayage"
+                },
+                {
+                  imageUrl: "https://images.unsplash.com/photo-1621786030484-4c855eed6974?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+                  caption: "Statement Color"
+                },
+                {
+                  imageUrl: "https://images.unsplash.com/photo-1626954079747-4a0fda15cde7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+                  caption: "Effortless Waves"
+                }
+              ]
+            },
+            style: {
+              backgroundColor: "#f8f9fa",
+              titleColor: "#581c87",
+              textColor: "#334155",
+              padding: "80px"
+            }
+          },
+          {
+            id: "team-section",
             type: "feature-cards",
             content: {
-              title: "Our Services",
+              title: "MEET OUR MASTER STYLISTS",
               features: [
                 {
-                  title: "Precision Cuts",
-                  description: "Tailored haircuts that complement your unique features",
-                  icon: "ri-scissors-line"
+                  title: "Sophia Laurent",
+                  description: "Color specialist with 12+ years of experience and international training",
+                  icon: "ri-scissors-2-line"
                 },
                 {
-                  title: "Color & Highlights",
-                  description: "From subtle to bold, customized to your style",
-                  icon: "ri-palette-line"
+                  title: "Alexander Reed",
+                  description: "Expert in precision cutting and editorial styling for all hair types",
+                  icon: "ri-scissors-2-line"
                 },
                 {
-                  title: "Treatments & Styling",
-                  description: "Nourishing treatments and styling for all hair types",
-                  icon: "ri-award-line"
+                  title: "Isabella Chen",
+                  description: "Texture specialist focusing on curls, waves, and creative styling",
+                  icon: "ri-scissors-2-line"
                 }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
-              headingColor: "#1F2937",
-              textColor: "#4B5563",
-              padding: "64px"
+              headingColor: "#581c87",
+              textColor: "#334155",
+              padding: "80px"
             }
           },
           {
             id: "testimonial-section",
-            type: "testimonial-single",
+            type: "testimonial-carousel",
             content: {
-              quote: "The stylists at ChicCuts truly understand how to work with my hair type. I always leave feeling confident and beautiful.",
-              author: "Emma Thompson",
-              role: "Regular Client"
+              testimonials: [
+                {
+                  quote: "The level of attention and care I received at LuxeStyle was exceptional. My stylist took the time to understand exactly what I wanted and delivered beyond my expectations.",
+                  author: "Madison Taylor",
+                  role: "5-year client"
+                },
+                {
+                  quote: "After years of disappointing salon experiences, I've finally found my forever salon. The stylists truly understand modern techniques while keeping hair health as the priority.",
+                  author: "James Wilson",
+                  role: "First-time client"
+                },
+                {
+                  quote: "My color has never looked more natural and dimensional. The team's expertise and the tranquil environment make every visit feel like a luxury self-care retreat.",
+                  author: "Olivia Chen",
+                  role: "3-year client"
+                }
+              ]
             },
             style: {
-              backgroundColor: "#F5F3FF",
-              quoteColor: "#4C1D95",
-              textColor: "#4B5563",
-              padding: "64px"
+              backgroundColor: "#0f172a",
+              quoteColor: "#f8fafc",
+              textColor: "#cbd5e1",
+              padding: "80px"
             }
           },
           {
             id: "booking-section",
             type: "contact-details",
             content: {
-              title: "Book Your Appointment",
-              description: "We're ready to help you look and feel your best. Book online or give us a call.",
-              email: "appointments@chiccuts.com",
-              phone: "+1 (555) 123-4567",
-              address: "123 Style Street, Fashion District, FC 12345",
+              title: "RESERVE YOUR EXPERIENCE",
+              description: "We recommend booking 2-3 weeks in advance to secure your preferred time with your stylist of choice.",
+              email: "bookings@luxestyle.com",
+              phone: "+1 (555) 789-4321",
+              address: "520 Madison Avenue, Fashion District, New York, NY 10022",
               buttonText: "Book Online"
             },
             style: {
-              backgroundColor: "#ffffff",
-              headingColor: "#1F2937",
-              textColor: "#4B5563",
-              padding: "64px"
+              backgroundColor: "#f1f5f9",
+              headingColor: "#581c87",
+              textColor: "#334155",
+              buttonColor: "#a855f7",
+              buttonTextColor: "#ffffff",
+              padding: "80px"
             }
           },
           {
             id: "footer-section",
             type: "footer-columns",
             content: {
-              logoText: "Chic<span class='text-primary'>Cuts</span>",
-              description: "Where style meets expertise",
-              copyright: "© 2025 ChicCuts Salon. All rights reserved.",
+              logoText: "Luxe<span class='text-primary'>Style</span>",
+              description: "Elevating the art of hair through technical excellence and personalized service",
+              copyright: "© 2025 LuxeStyle. All rights reserved.",
               columns: [
                 {
-                  title: "Hours",
+                  title: "Opening Hours",
                   links: [
-                    { text: "Mon-Fri: 9am - 8pm", url: "#" },
+                    { text: "Tuesday - Friday: 10am - 8pm", url: "#" },
                     { text: "Saturday: 9am - 6pm", url: "#" },
-                    { text: "Sunday: 10am - 4pm", url: "#" }
+                    { text: "Sunday - Monday: Closed", url: "#" }
                   ]
                 },
                 {
                   title: "Connect",
                   links: [
                     { text: "Instagram", url: "#" },
-                    { text: "Facebook", url: "#" },
-                    { text: "Pinterest", url: "#" }
+                    { text: "Pinterest", url: "#" },
+                    { text: "Vogue Features", url: "#" }
                   ]
                 }
               ]
             },
             style: {
-              backgroundColor: "#1F2937",
-              textColor: "#F3F4F6",
-              headingColor: "#F9FAFB",
+              backgroundColor: "#0f172a",
+              textColor: "#e2e8f0",
+              headingColor: "#f8fafc",
               padding: "64px"
             }
           }
@@ -644,118 +863,174 @@ export class MemStorage implements IStorage {
             id: "header-1",
             type: "header-1",
             content: {
-              logoText: "Prime<span class='text-primary'>Properties</span>",
+              logoText: "Elite<span class='text-primary'>Estates</span>",
               menuItems: [
-                { text: "Listings", url: "#listings" },
-                { text: "Services", url: "#services" },
-                { text: "About", url: "#about" },
-                { text: "Contact", url: "#contact" }
+                { text: "Featured Properties", url: "#featured" },
+                { text: "Expertise", url: "#expertise" },
+                { text: "Success Stories", url: "#success" },
+                { text: "Work With Us", url: "#contact" }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
-              textColor: "#1E293B",
-              accentColor: "#0369A1"
+              textColor: "#0F172A",
+              accentColor: "#0284c7"
             }
           },
           {
             id: "hero-section",
             type: "hero-split",
             content: {
-              heading: "Find Your Dream Home",
-              description: "Expert guidance through every step of your real estate journey, whether buying, selling, or investing",
-              primaryButtonText: "View Listings",
-              secondaryButtonText: "Free Consultation"
+              heading: "Luxurious Homes, Exceptional Experience",
+              description: "Exclusive properties and white-glove service for the most discerning buyers and sellers in the premium real estate market",
+              primaryButtonText: "Explore Luxury Properties",
+              secondaryButtonText: "Schedule Consultation",
+              imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80"
             },
             style: {
-              backgroundColor: "#F0F9FF",
-              headingColor: "#0C4A6E",
-              textColor: "#1E293B",
+              backgroundColor: "#f8fafc",
+              headingColor: "#0c4a6e",
+              textColor: "#334155",
+              primaryButtonColor: "#0284c7",
+              primaryButtonTextColor: "#ffffff",
+              secondaryButtonColor: "transparent",
+              secondaryButtonTextColor: "#0284c7",
+              secondaryButtonBorderColor: "#0284c7",
               paddingTop: "80px",
               paddingBottom: "80px"
             }
           },
           {
-            id: "services-section",
-            type: "feature-grid",
+            id: "featured-section",
+            type: "gallery",
             content: {
-              title: "Comprehensive Real Estate Services",
-              features: [
+              title: "FEATURED PROPERTIES",
+              description: "Our handpicked selection of exceptional homes currently available",
+              images: [
                 {
-                  title: "Buyer Representation",
-                  description: "Expert guidance to find and secure your perfect property",
-                  icon: "ri-home-heart-line"
+                  src: "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                  alt: "Waterfront Modern Villa",
+                  caption: "Waterfront Modern Villa • $4,250,000"
                 },
                 {
-                  title: "Seller Services",
-                  description: "Strategic marketing and negotiation for maximum value",
-                  icon: "ri-funds-line"
+                  src: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                  alt: "Suburban Luxury Home",
+                  caption: "Hillside Estate • $3,875,000"
                 },
                 {
-                  title: "Investment Properties",
-                  description: "Analysis and acquisition of properties with growth potential",
-                  icon: "ri-bar-chart-line"
+                  src: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                  alt: "Contemporary Masterpiece",
+                  caption: "Contemporary Masterpiece • $5,200,000"
                 },
                 {
-                  title: "Property Management",
-                  description: "Complete management solutions for property owners",
-                  icon: "ri-building-line"
+                  src: "https://images.unsplash.com/photo-1613977257363-707ba9348227?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
+                  alt: "Downtown Penthouse",
+                  caption: "Downtown Penthouse • $7,800,000"
                 }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
-              headingColor: "#0C4A6E",
-              textColor: "#1E293B",
-              padding: "64px"
+              titleColor: "#0c4a6e",
+              textColor: "#334155",
+              padding: "80px"
+            }
+          },
+          {
+            id: "expertise-section",
+            type: "columns-2",
+            content: {
+              title: "WHITE GLOVE REAL ESTATE SERVICES",
+              subtitle: "Unparalleled expertise in the luxury property market",
+              leftColumnContent: "<div class='space-y-6'><div class='p-6 bg-blue-50 rounded-lg'><h3 class='text-xl font-semibold mb-2 text-blue-900'>Seller Representation</h3><p class='text-slate-700'>Our comprehensive marketing strategy includes professional staging, architectural photography, cinematic video tours, and exclusive networking within our global high-net-worth client database.</p></div><div class='p-6 bg-blue-50 rounded-lg'><h3 class='text-xl font-semibold mb-2 text-blue-900'>Investment Advisory</h3><p class='text-slate-700'>Leverage our proprietary market analytics and investment expertise to identify high-performing properties with exceptional appreciation potential.</p></div></div>",
+              rightColumnContent: "<div class='space-y-6'><div class='p-6 bg-blue-50 rounded-lg'><h3 class='text-xl font-semibold mb-2 text-blue-900'>Buyer Representation</h3><p class='text-slate-700'>Gain access to off-market properties, expert negotiations, and personalized property searches tailored to your unique lifestyle requirements and investment goals.</p></div><div class='p-6 bg-blue-50 rounded-lg'><h3 class='text-xl font-semibold mb-2 text-blue-900'>Relocation Concierge</h3><p class='text-slate-700'>Our full-service concierge handles every aspect of your relocation, from school placements to interior design services and local lifestyle integration.</p></div></div>"
+            },
+            style: {
+              backgroundColor: "#f8fafc",
+              titleColor: "#0c4a6e",
+              textColor: "#334155",
+              padding: "80px"
             }
           },
           {
             id: "stats-section",
             type: "stats-bar",
             content: {
-              title: "Proven Results",
+              title: "PROVEN EXCELLENCE",
               stats: [
-                { value: "150+", label: "Properties Sold" },
-                { value: "98%", label: "Asking Price Achieved" },
-                { value: "28", label: "Average Days on Market" }
+                { value: "$1.8B+", label: "Sales Volume (2024)" },
+                { value: "42", label: "Average Days on Market" },
+                { value: "99.2%", label: "Asking Price Achieved" },
+                { value: "250+", label: "Luxury Transactions" }
               ]
             },
             style: {
-              backgroundColor: "#0369A1",
-              headingColor: "#ffffff",
-              textColor: "#F0F9FF",
+              backgroundColor: "#0c4a6e",
+              headingColor: "#f0f9ff",
+              textColor: "#e0f2fe",
               padding: "64px"
             }
           },
           {
             id: "testimonial-section",
-            type: "testimonial-single",
+            type: "testimonial-carousel",
             content: {
-              quote: "Working with Prime Properties made selling our home incredibly smooth. Their market knowledge and attention to detail resulted in a quick sale above asking price.",
-              author: "Michael & Julia Chen",
-              role: "Sold their home in 10 days"
+              testimonials: [
+                {
+                  quote: "Elite Estates transformed what could have been a stressful selling process into a seamless experience. Their market insights and strategic approach resulted in multiple offers above asking price within the first week.",
+                  author: "Jonathan & Sarah Reynolds",
+                  role: "Sold their Waterfront Estate for $6.2M"
+                },
+                {
+                  quote: "After searching for our dream home for over a year with another agency, Elite Estates found us the perfect property in just three weeks. Their network of off-market properties is truly impressive.",
+                  author: "David Chen",
+                  role: "Purchased Hillside Estate for $4.8M"
+                },
+                {
+                  quote: "The level of service and attention to detail was impeccable. From the initial consultation to the closing and beyond, Elite Estates ensured every aspect of our transaction exceeded expectations.",
+                  author: "Alexandra Martinez",
+                  role: "Purchased Downtown Penthouse for $7.5M"
+                }
+              ]
             },
             style: {
-              backgroundColor: "#E0F2FE",
-              quoteColor: "#0C4A6E",
-              textColor: "#1E293B",
-              padding: "64px"
+              backgroundColor: "#ffffff",
+              quoteColor: "#0c4a6e",
+              textColor: "#475569",
+              padding: "80px"
+            }
+          },
+          {
+            id: "agent-section",
+            type: "columns-2",
+            content: {
+              title: "MEET YOUR ADVISOR",
+              subtitle: "Expert guidance from our principal real estate consultant",
+              leftColumnContent: "<div class='flex justify-center'><img src='https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80' alt='James Anderson' class='rounded-lg shadow-lg w-4/5 h-auto aspect-[3/4] object-cover' /></div>",
+              rightColumnContent: "<div class='space-y-4'><h3 class='text-2xl font-semibold text-blue-900'>James Anderson</h3><p class='text-blue-700 font-medium'>Principal Agent & Luxury Property Specialist</p><ul class='space-y-2 text-slate-700'><li class='flex items-center'><span class='mr-2 text-blue-500'>•</span> Over $500M in luxury property transactions</li><li class='flex items-center'><span class='mr-2 text-blue-500'>•</span> Certified Luxury Home Marketing Specialist</li><li class='flex items-center'><span class='mr-2 text-blue-500'>•</span> Wall Street Journal Top 100 Agent</li><li class='flex items-center'><span class='mr-2 text-blue-500'>•</span> Former Investment Banker with Financial Expertise</li></ul><p class='mt-4 text-slate-700'>\"My approach combines deep market knowledge with an understanding of each client's unique lifestyle needs. Every property transaction should not only be financially sound but also enhance your quality of life.\"</p><div class='mt-6'><a href='#contact' class='inline-flex items-center justify-center px-6 py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors'><span>Schedule a Consultation</span></a></div></div>"
+            },
+            style: {
+              backgroundColor: "#f0f9ff",
+              titleColor: "#0c4a6e",
+              textColor: "#334155",
+              padding: "80px"
             }
           },
           {
             id: "cta-section",
             type: "email-signup",
             content: {
-              heading: "Stay Updated on New Listings",
-              description: "Be the first to know about properties that match your criteria before they hit the market.",
+              heading: "GAIN EXCLUSIVE ACCESS",
+              description: "Join our VIP client list for early access to off-market properties and exclusive market insights.",
               inputPlaceholder: "Your email address",
               buttonText: "Subscribe"
             },
             style: {
-              backgroundColor: "#F8FAFC",
-              headingColor: "#0C4A6E",
-              textColor: "#1E293B",
+              backgroundColor: "#0284c7",
+              headingColor: "#ffffff",
+              textColor: "#f0f9ff",
+              buttonColor: "#0c4a6e",
+              buttonTextColor: "#ffffff",
               padding: "64px"
             }
           },
@@ -763,32 +1038,32 @@ export class MemStorage implements IStorage {
             id: "footer-section",
             type: "footer-columns",
             content: {
-              logoText: "Prime<span class='text-primary'>Properties</span>",
-              description: "Your trusted partner in real estate",
-              copyright: "© 2025 Prime Properties Realty. All rights reserved. License #ABC123456",
+              logoText: "Elite<span class='text-primary'>Estates</span>",
+              description: "Exceptional properties for extraordinary lives",
+              copyright: "© 2025 Elite Estates Luxury Properties. All rights reserved. DRE Lic# 01234567",
               columns: [
                 {
-                  title: "Contact",
+                  title: "Visit Our Office",
                   links: [
-                    { text: "123 Main Street, Suite 200", url: "#" },
-                    { text: "Cityville, ST 12345", url: "#" },
-                    { text: "(555) 123-4567", url: "#" }
+                    { text: "One International Plaza, Suite 1500", url: "#" },
+                    { text: "Financial District", url: "#" },
+                    { text: "By appointment only", url: "#" }
                   ]
                 },
                 {
-                  title: "Resources",
+                  title: "Connect",
                   links: [
-                    { text: "Mortgage Calculator", url: "#" },
-                    { text: "Home Valuation", url: "#" },
-                    { text: "Buyer's Guide", url: "#" }
+                    { text: "info@eliteestates.com", url: "#" },
+                    { text: "(555) 987-6543", url: "#" },
+                    { text: "LinkedIn & Instagram", url: "#" }
                   ]
                 }
               ]
             },
             style: {
-              backgroundColor: "#0F172A",
-              textColor: "#E2E8F0",
-              headingColor: "#F8FAFC",
+              backgroundColor: "#0f172a",
+              textColor: "#e2e8f0",
+              headingColor: "#f8fafc",
               padding: "64px"
             }
           }
