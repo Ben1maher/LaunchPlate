@@ -342,7 +342,7 @@ export default function Editor() {
           },
           // CTA section
           {
-            id: generateId(),
+            id: generateUniqueId(),
             type: "hero-centered",
             content: {
               heading: "Ready to Transform Your Business?",
@@ -360,7 +360,7 @@ export default function Editor() {
           },
           // Footer
           {
-            id: generateId(),
+            id: generateUniqueId(),
             type: "footer-columns",
             content: {
               logoText: "BusinessPro",
