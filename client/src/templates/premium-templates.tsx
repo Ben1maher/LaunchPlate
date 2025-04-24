@@ -6,15 +6,62 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 
+// Props interface for premium templates
+interface PremiumTemplateProps {
+  content?: Record<string, any>;
+  onSectionEdit?: (sectionId: string, e: React.MouseEvent) => void;
+  inEditor?: boolean;
+  editableSection?: string | null;
+}
+
 // Modern Business Pro Template (Stripe-Inspired)
-export const PremiumBusinessTemplate = () => {
+export const PremiumBusinessTemplate = ({ 
+  content = {}, 
+  onSectionEdit,
+  inEditor = false,
+  editableSection = null
+}: PremiumTemplateProps) => {
+  
+  // Get section content or use defaults
+  const headerLogo = content.headerLogo?.text || 'Business<span class="text-gray-800">Pro</span>';
+  const heroTag = content.heroTag?.text || 'Launching Q2 2025';
+  const heroTitle = content.heroTitle?.text || 'Elevate Your Business<br />With <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Professional</span> Solutions';
+  const heroDescription = content.heroDescription?.text || 'Streamline operations, enhance customer experiences, and drive growth with our enterprise-grade platform designed for modern businesses.';
+  const cta1Text = content.cta1Text?.text || 'Start Free Trial';
+  const cta2Text = content.cta2Text?.text || 'Schedule Demo';
+  
+  // Define editable sections
+  const makeEditable = (sectionId: string, element: JSX.Element) => {
+    if (!inEditor) return element;
+    
+    return (
+      <div 
+        onClick={(e) => onSectionEdit && onSectionEdit(sectionId, e)}
+        className={`relative cursor-pointer group ${editableSection === sectionId ? 'ring-2 ring-blue-500' : ''}`}
+      >
+        {element}
+        <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        {inEditor && (
+          <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-blue-500 text-white text-xs py-1 px-2 pointer-events-none">
+            Edit
+          </div>
+        )}
+      </div>
+    );
+  };
+  
   return (
     <div className="font-sans antialiased">
       {/* Navigation */}
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6 md:gap-10">
-            <div className="font-bold text-xl text-blue-600">Business<span className="text-gray-800">Pro</span></div>
+            {makeEditable('headerLogo', 
+              <div 
+                className="font-bold text-xl text-blue-600"
+                dangerouslySetInnerHTML={{ __html: headerLogo }} 
+              />
+            )}
             <nav className="hidden md:flex gap-6">
               <a href="#" className="text-sm font-medium transition-colors hover:text-blue-600">Features</a>
               <a href="#" className="text-sm font-medium transition-colors hover:text-blue-600">Solutions</a>
@@ -37,18 +84,35 @@ export const PremiumBusinessTemplate = () => {
         
         <div className="container relative pt-24 pb-20 md:pt-32 md:pb-24">
           <div className="flex flex-col gap-4 items-center text-center">
-            <Badge className="mb-4 rounded-full px-4 py-1 text-sm" variant="outline">Launching Q2 2025</Badge>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tighter text-gray-900 md:text-center">
-              Elevate Your Business<br />With <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Professional</span> Solutions
-            </h1>
-            <p className="mt-4 text-xl text-muted-foreground max-w-2xl md:text-center leading-relaxed">
-              Streamline operations, enhance customer experiences, and drive growth with our enterprise-grade platform designed for modern businesses.
-            </p>
+            {makeEditable('heroTag',
+              <Badge className="mb-4 rounded-full px-4 py-1 text-sm" variant="outline">
+                {heroTag}
+              </Badge>
+            )}
+            
+            {makeEditable('heroTitle',
+              <h1 
+                className="text-4xl md:text-6xl font-bold leading-tight tracking-tighter text-gray-900 md:text-center"
+                dangerouslySetInnerHTML={{ __html: heroTitle }}
+              />
+            )}
+            
+            {makeEditable('heroDescription',
+              <p className="mt-4 text-xl text-muted-foreground max-w-2xl md:text-center leading-relaxed">
+                {heroDescription}
+              </p>
+            )}
+            
             <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button size="lg" className="rounded-full px-8">Start Free Trial</Button>
-              <Button size="lg" variant="outline" className="rounded-full px-8 gap-2">
-                Schedule Demo <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 ml-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </Button>
+              {makeEditable('cta1Text',
+                <Button size="lg" className="rounded-full px-8">{cta1Text}</Button>
+              )}
+              
+              {makeEditable('cta2Text',
+                <Button size="lg" variant="outline" className="rounded-full px-8 gap-2">
+                  {cta2Text} <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 ml-1"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </Button>
+              )}
             </div>
             <p className="mt-4 text-sm text-gray-500">No credit card required. 14-day free trial.</p>
           </div>
@@ -190,7 +254,39 @@ export const PremiumBusinessTemplate = () => {
 };
 
 // Modern E-Commerce Template (Shopify-Inspired)
-export const PremiumEcommerceTemplate = () => {
+export const PremiumEcommerceTemplate = ({ 
+  content = {}, 
+  onSectionEdit,
+  inEditor = false,
+  editableSection = null
+}: PremiumTemplateProps) => {
+  
+  // Get section content or use defaults
+  const storeName = content.storeName?.text || 'Shop<span class="text-violet-600">Wave</span>';
+  const heroTitle = content.heroTitle?.text || 'Summer Collection 2025';
+  const heroSubtitle = content.heroSubtitle?.text || 'Discover the latest trends for the season';
+  const heroButtonText = content.heroButtonText?.text || 'Shop Now';
+  
+  // Define editable sections
+  const makeEditable = (sectionId: string, element: JSX.Element) => {
+    if (!inEditor) return element;
+    
+    return (
+      <div 
+        onClick={(e) => onSectionEdit && onSectionEdit(sectionId, e)}
+        className={`relative cursor-pointer group ${editableSection === sectionId ? 'ring-2 ring-violet-500' : ''}`}
+      >
+        {element}
+        <div className="absolute inset-0 bg-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+        {inEditor && (
+          <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-violet-500 text-white text-xs py-1 px-2 pointer-events-none">
+            Edit
+          </div>
+        )}
+      </div>
+    );
+  };
+  
   return (
     <div className="font-sans antialiased">
       {/* Navigation */}
@@ -199,7 +295,12 @@ export const PremiumEcommerceTemplate = () => {
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
               <a href="#" className="mr-6 flex">
-                <span className="text-xl font-bold">Shop<span className="text-violet-600">Wave</span></span>
+                {makeEditable('storeName',
+                  <span 
+                    className="text-xl font-bold"
+                    dangerouslySetInnerHTML={{ __html: storeName }}
+                  />
+                )}
               </a>
               <nav className="hidden md:flex space-x-6">
                 <a href="#" className="text-sm font-medium text-gray-700 hover:text-violet-600 transition-colors">New In</a>
@@ -237,18 +338,29 @@ export const PremiumEcommerceTemplate = () => {
         <div className="container mx-auto py-20 px-4 sm:px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="inline-block bg-violet-100 text-violet-800 font-medium text-sm px-3 py-1 rounded-full mb-6">New Collection</span>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6">
-                Discover Summer<br />
-                <span className="text-violet-600">Essential Styles</span>
-              </h1>
-              <p className="text-lg text-gray-600 mb-8 max-w-lg">
-                Refresh your wardrobe with our latest collection of lightweight, breathable pieces perfect for summer days and warm evenings.
-              </p>
+              {makeEditable('heroTag',
+                <span className="inline-block bg-violet-100 text-violet-800 font-medium text-sm px-3 py-1 rounded-full mb-6">New Collection</span>
+              )}
+              
+              {makeEditable('heroTitle',
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-6">
+                  {heroTitle}<br />
+                  <span className="text-violet-600">Essential Styles</span>
+                </h1>
+              )}
+              
+              {makeEditable('heroSubtitle',
+                <p className="text-lg text-gray-600 mb-8 max-w-lg">
+                  {heroSubtitle}
+                </p>
+              )}
+              
               <div className="flex flex-wrap gap-4">
-                <Button className="rounded-md bg-violet-600 hover:bg-violet-700">
-                  Shop Women
-                </Button>
+                {makeEditable('heroButtonText',
+                  <Button className="rounded-md bg-violet-600 hover:bg-violet-700">
+                    {heroButtonText}
+                  </Button>
+                )}
                 <Button variant="outline" className="rounded-md border-gray-300">
                   Shop Men
                 </Button>
