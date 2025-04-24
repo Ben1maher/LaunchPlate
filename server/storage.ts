@@ -675,13 +675,13 @@ export class MemStorage implements IStorage {
               videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-hairdresser-washing-a-womans-hair-14993-large.mp4"
             },
             style: {
-              overlay: "linear-gradient(to right, rgba(15, 23, 42, 0.8), rgba(88, 28, 135, 0.7))",
+              overlay: "linear-gradient(to right, rgba(0, 0, 0, 0.85), rgba(88, 28, 135, 0.8))",
               headingColor: "#ffffff",
-              textColor: "#e2e8f0",
+              textColor: "#ffffff",
               primaryButtonColor: "#a855f7",
               primaryButtonTextColor: "#ffffff",
               secondaryButtonColor: "transparent",
-              secondaryButtonTextColor: "#e2e8f0",
+              secondaryButtonTextColor: "#ffffff",
               secondaryButtonBorderColor: "#a855f7",
               paddingTop: "140px",
               paddingBottom: "140px"
