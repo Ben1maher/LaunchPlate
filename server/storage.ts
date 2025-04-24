@@ -310,48 +310,10 @@ export class MemStorage implements IStorage {
         thumbnail: "",
         components: [
           {
-            id: "header-business",
-            type: "header-1",
-            content: {
-              logo: "BusinessPro",
-              menuItems: [
-                { text: "Home", url: "#" },
-                { text: "Services", url: "#services" },
-                { text: "About", url: "#about" },
-                { text: "Team", url: "#team" },
-                { text: "Contact", url: "#contact" }
-              ],
-              ctaText: "Get Started",
-              ctaUrl: "#contact"
-            },
-            style: {
-              backgroundColor: "#ffffff",
-              padding: "16px 24px",
-              color: "#1e293b",
-              borderBottom: "1px solid #f1f5f9",
-              boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
-              fontFamily: "Inter, sans-serif"
-            }
-          },
-          {
-            id: "hero-business",
-            type: "hero-centered",
-            content: {
-              heading: "Professional Business Solutions",
-              subheading: "We provide strategic consulting services to help your business grow and succeed in today's competitive market.",
-              primaryButtonText: "Our Services",
-              primaryButtonUrl: "#services",
-              secondaryButtonText: "Contact Us",
-              secondaryButtonUrl: "#contact",
-              backgroundImage: ""
-            },
-            style: {
-              backgroundColor: "#f8fafc",
-              padding: "100px 24px",
-              color: "#1e293b",
-              textAlign: "center",
-              fontFamily: "Inter, sans-serif"
-            }
+            id: "premium-business",
+            type: "custom-business-template",
+            content: {},
+            style: {}
           }
         ],
         isPublic: true,
@@ -365,45 +327,10 @@ export class MemStorage implements IStorage {
         thumbnail: "",
         components: [
           {
-            id: "header-ecommerce",
-            type: "header-1",
-            content: {
-              logo: "ShopWave",
-              menuItems: [
-                { text: "Home", url: "#" },
-                { text: "Shop", url: "#shop" },
-                { text: "Collections", url: "#collections" },
-                { text: "Sale", url: "#sale" },
-                { text: "About", url: "#about" }
-              ],
-              ctaText: "Cart (0)",
-              ctaUrl: "#cart"
-            },
-            style: {
-              backgroundColor: "#ffffff",
-              padding: "16px 24px",
-              color: "#334155",
-              borderBottom: "1px solid #f1f5f9",
-              fontFamily: "Inter, sans-serif"
-            }
-          },
-          {
-            id: "hero-ecommerce",
-            type: "hero-split",
-            content: {
-              heading: "Summer Collection 2025",
-              subheading: "Discover our latest styles perfect for the summer season. High-quality materials with exceptional comfort.",
-              buttonText: "Shop Now",
-              buttonUrl: "#shop",
-              imageUrl: "",
-              imageAlt: "Summer collection showcase"
-            },
-            style: {
-              backgroundColor: "#f8fafc",
-              padding: "80px 24px",
-              color: "#334155",
-              fontFamily: "Inter, sans-serif"
-            }
+            id: "premium-ecommerce",
+            type: "custom-ecommerce-template",
+            content: {},
+            style: {}
           }
         ],
         isPublic: true,
@@ -417,51 +344,10 @@ export class MemStorage implements IStorage {
         thumbnail: "",
         components: [
           {
-            id: "header-membership",
-            type: "header-1",
-            content: {
-              logo: "MemberHub",
-              menuItems: [
-                { text: "Home", url: "#" },
-                { text: "Features", url: "#features" },
-                { text: "Pricing", url: "#pricing" },
-                { text: "Testimonials", url: "#testimonials" },
-                { text: "FAQ", url: "#faq" }
-              ],
-              ctaText: "Sign In",
-              ctaUrl: "#signin"
-            },
-            style: {
-              backgroundColor: "#111827",
-              padding: "16px 24px",
-              color: "#ffffff",
-              borderBottom: "1px solid #1f2937",
-              fontFamily: "Inter, sans-serif"
-            }
-          },
-          {
-            id: "hero-membership",
-            type: "hero-centered",
-            content: {
-              heading: "Premium Membership For Premium Results",
-              subheading: "Join thousands of members who are transforming their lives with exclusive access to premium content, tools, and community.",
-              primaryButtonText: "Start Free Trial",
-              primaryButtonUrl: "#signup",
-              secondaryButtonText: "View Pricing",
-              secondaryButtonUrl: "#pricing",
-              backgroundImage: ""
-            },
-            style: {
-              backgroundType: "gradient",
-              gradientDirection: "to bottom right",
-              gradientStartColor: "#111827",
-              gradientEndColor: "#374151",
-              backgroundImage: "linear-gradient(to bottom right, #111827, #374151)",
-              color: "#ffffff",
-              padding: "100px 24px",
-              textAlign: "center",
-              fontFamily: "Inter, sans-serif"
-            }
+            id: "premium-membership",
+            type: "custom-membership-template",
+            content: {},
+            style: {}
           }
         ],
         isPublic: true,
@@ -475,51 +361,10 @@ export class MemStorage implements IStorage {
         thumbnail: "",
         components: [
           {
-            id: "header-startup",
-            type: "header-1",
-            content: {
-              logo: "RocketStart",
-              menuItems: [
-                { text: "Home", url: "#" },
-                { text: "Product", url: "#product" },
-                { text: "Features", url: "#features" },
-                { text: "Testimonials", url: "#testimonials" },
-                { text: "Pricing", url: "#pricing" }
-              ],
-              ctaText: "Early Access",
-              ctaUrl: "#signup"
-            },
-            style: {
-              backgroundType: "gradient",
-              gradientDirection: "to right",
-              gradientStartColor: "#7c3aed",
-              gradientEndColor: "#9333ea",
-              backgroundImage: "linear-gradient(to right, #7c3aed, #9333ea)",
-              color: "#ffffff",
-              padding: "16px 24px",
-              fontFamily: "Inter, sans-serif"
-            }
-          },
-          {
-            id: "hero-startup",
-            type: "hero-centered",
-            content: {
-              heading: "Launch Your Idea Faster",
-              subheading: "The all-in-one platform for modern startups. Build, launch, and grow with tools designed for today's entrepreneurs.",
-              primaryButtonText: "Get Early Access",
-              primaryButtonUrl: "#signup",
-              secondaryButtonText: "Watch Demo",
-              secondaryButtonUrl: "#demo",
-              backgroundImage: ""
-            },
-            style: {
-              backgroundColor: "#f8fafc",
-              padding: "120px 24px",
-              color: "#1e293b",
-              textAlign: "center",
-              fontFamily: "Inter, sans-serif",
-              position: "relative"
-            }
+            id: "premium-startup",
+            type: "custom-startup-template",
+            content: {},
+            style: {}
           }
         ],
         isPublic: true,
