@@ -5,7 +5,7 @@ import { useEditor } from "../context/EditorContext";
 // Helper function to generate unique IDs for components
 const generateUniqueId = () => crypto.randomUUID();
 import { useQuery } from "@tanstack/react-query";
-import { Template, Component, ComponentType } from "@shared/schema";
+import { Template, Component, ComponentType, PageSettings } from "@shared/schema";
 import ComponentLibrary from "../components/editor/ComponentLibrary";
 import Canvas from "../components/editor/Canvas";
 import PropertiesPanel from "../components/editor/PropertiesPanel";
@@ -58,7 +58,8 @@ export default function Editor() {
     canUndo,
     canRedo,
     viewportMode,
-    setViewportMode
+    setViewportMode,
+    updatePageSettings
   } = useEditor();
   
   const [isSaveDialogOpen, setIsSaveDialogOpen] = useState(false);
@@ -415,8 +416,8 @@ export default function Editor() {
         return;
       }
       
-      // Special case for template ID 1 (E-commerce)
-      else if (templateId === '1') {
+      // Special case for template ID 3 (E-commerce)
+      else if (templateId === '3') {
         // Use the modular approach with standard components
         const template = {
           id: 1,
@@ -426,189 +427,158 @@ export default function Editor() {
           components: []
         };
         
-        // For the e-commerce template, we'll create a collection of standard components
-        // that make up an e-commerce template page
+        // For the e-commerce template, we'll create a simplified collection of standard components
+        // following the same approach as the business template
         const ecommerceComponents: Component[] = [
           // Header component
           {
             id: generateUniqueId(),
             type: "header-1",
             content: {
-              logoText: "Shop<span>Hive</span>",
+              logoText: "Shop<span class='text-primary'>Swift</span>",
               menuItems: [
-                { text: "Shop", url: "#shop" },
+                { text: "Products", url: "#products" },
                 { text: "Collections", url: "#collections" },
-                { text: "New Arrivals", url: "#new" },
-                { text: "Sale", url: "#sale" }
+                { text: "About", url: "#about" },
+                { text: "Contact", url: "#contact" }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
               backgroundType: "color",
-              textColor: "#1F2937",
-              accentColor: "#7C3AED"
+              textColor: "#1E293B",
+              accentColor: "#6366F1"
             }
           },
-          // Hero section
+          // Hero section with clean design
           {
             id: generateUniqueId(),
-            type: "hero-centered",
+            type: "hero-split",
             content: {
-              heading: "Shop the Latest Trends",
-              description: "Premium quality clothing and accessories for any style.",
-              primaryButtonText: "Shop Women",
-              secondaryButtonText: "Shop Men",
-              backgroundImageUrl: ""
+              heading: "Quality Products for Everyone",
+              description: "Discover our curated collection of premium products designed to enhance your lifestyle.",
+              primaryButtonText: "Shop Now",
+              secondaryButtonText: "Learn More",
+              imageUrl: ""
             },
             style: {
               paddingTop: "80px",
               paddingBottom: "80px",
-              backgroundColor: "#f9fafb",
+              backgroundColor: "#F8FAFC",
               backgroundType: "color",
-              headingColor: "#111827",
-              textColor: "#4B5563"
+              headingColor: "#0F172A",
+              textColor: "#334155"
             }
           },
-          // Featured Products section
+          // Product Features
           {
             id: generateUniqueId(),
             type: "feature-cards",
             content: {
-              heading: "Featured Products",
+              title: "Featured Products",
               features: [
                 {
-                  title: "Premium T-Shirt",
-                  description: "Casual Wear • $49.99"
+                  title: "Premium Watch",
+                  description: "Elegant design • $199",
+                  icon: "ri-time-line"
                 },
                 {
-                  title: "Designer Jeans",
-                  description: "Denim • $89.99"
+                  title: "Leather Wallet",
+                  description: "Handcrafted • $59",
+                  icon: "ri-wallet-3-line"
                 },
                 {
-                  title: "Summer Dress",
-                  description: "Fashion • $59.99"
-                },
-                {
-                  title: "Leather Jacket",
-                  description: "Outerwear • $199.99"
+                  title: "Wireless Earbuds",
+                  description: "HD Audio • $129",
+                  icon: "ri-headphone-line"
                 }
               ]
             },
             style: {
               backgroundColor: "#ffffff",
               backgroundType: "color",
-              cardBackgroundColor: "#f9fafb",
-              headingColor: "#111827",
-              textColor: "#4B5563",
-              padding: "80px"
+              padding: "64px",
+              headingColor: "#0F172A",
+              textColor: "#334155"
             }
           },
-          // Collections Banner
+          // Testimonial
           {
             id: generateUniqueId(),
-            type: "columns-3",
+            type: "testimonial-single",
             content: {
-              heading: "Shop by Collection",
-              columns: [
-                {
-                  title: "Summer Collection",
-                  content: "Light & breathable styles for the season.",
-                  ctaText: "Explore",
-                  ctaUrl: "#summer"
-                },
-                {
-                  title: "New Arrivals",
-                  content: "Fresh styles added every week.",
-                  ctaText: "Explore",
-                  ctaUrl: "#new"
-                },
-                {
-                  title: "Clearance",
-                  content: "Up to 70% off selected items.",
-                  ctaText: "Explore",
-                  ctaUrl: "#clearance"
-                }
-              ]
+              quote: "ShopSwift offers the highest quality products I've found online. Their customer service is exceptional!",
+              author: "Sarah Johnson",
+              role: "Verified Customer",
+              avatarUrl: ""
             },
             style: {
-              backgroundColor: "#f9fafb",
+              backgroundColor: "#F1F5F9",
               backgroundType: "color",
-              headingColor: "#111827",
-              textColor: "#4B5563",
-              padding: "80px"
+              padding: "64px",
+              textColor: "#334155",
+              quoteColor: "#0F172A"
             }
           },
-          // Newsletter section
+          // Call to action
           {
             id: generateUniqueId(),
             type: "email-signup",
             content: {
-              heading: "Subscribe to Our Newsletter",
-              description: "Get updates on new arrivals, special offers, and exclusive discounts.",
-              inputPlaceholder: "Enter your email",
+              heading: "Join Our Community",
+              description: "Sign up for our newsletter to receive exclusive offers and updates on new products.",
+              inputPlaceholder: "Your email address",
               buttonText: "Subscribe"
             },
             style: {
               backgroundColor: "#ffffff",
               backgroundType: "color",
-              borderColor: "#e5e7eb",
-              headingColor: "#111827",
-              textColor: "#4B5563",
-              padding: "80px"
+              padding: "64px",
+              headingColor: "#0F172A",
+              textColor: "#334155"
             }
           },
-          // Footer
+          // Simple footer
           {
             id: generateUniqueId(),
-            type: "footer-columns",
+            type: "footer-simple",
             content: {
-              logoText: "ShopHive",
-              description: "Premium quality clothing and accessories for any style.",
-              columns: [
-                {
-                  title: "Shop",
-                  links: [
-                    { text: "All Products", url: "#" },
-                    { text: "New Arrivals", url: "#" },
-                    { text: "Best Sellers", url: "#" },
-                    { text: "Sale", url: "#" }
-                  ]
-                },
-                {
-                  title: "Company",
-                  links: [
-                    { text: "About Us", url: "#" },
-                    { text: "Careers", url: "#" },
-                    { text: "Contact", url: "#" },
-                    { text: "Blog", url: "#" }
-                  ]
-                },
-                {
-                  title: "Support",
-                  links: [
-                    { text: "Help Center", url: "#" },
-                    { text: "Shipping", url: "#" },
-                    { text: "Returns", url: "#" },
-                    { text: "FAQs", url: "#" }
-                  ]
-                }
-              ],
-              copyright: "© 2025 ShopHive. All rights reserved."
+              logoText: "Shop<span class='text-primary'>Swift</span>",
+              tagline: "Quality products for everyone",
+              copyright: "© 2025 ShopSwift. All rights reserved.",
+              links: [
+                { text: "Privacy Policy", url: "#" },
+                { text: "Terms of Service", url: "#" },
+                { text: "Contact Us", url: "#" }
+              ]
             },
             style: {
-              backgroundColor: "#ffffff",
+              backgroundColor: "#0F172A",
               backgroundType: "color",
-              textColor: "#4B5563",
-              headingColor: "#111827",
-              padding: "64px"
+              textColor: "#F1F5F9",
+              padding: "48px"
             }
           }
         ];
         
+        // Set a gradient in the page settings
         setComponents(ecommerceComponents);
+        
+        // Update the page settings with a gradient background
+        updatePageSettings({
+          background: {
+            type: 'gradient',
+            gradientStart: '#4F46E5',
+            gradientEnd: '#7C3AED'
+          },
+          width: 'full',
+          maxWidth: 1200,
+          fontFamily: 'Inter, sans-serif'
+        });
+        
         toast({
           title: "Premium template loaded",
-          description: "E-commerce Shop template loaded successfully. Customize it to fit your needs.",
+          description: "Simplified E-commerce template loaded successfully with gradient background.",
         });
         
         setProjectName(`My ${template.name}`);
