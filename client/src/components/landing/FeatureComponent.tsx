@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from '@shared/schema';
 import { Button } from '@/components/ui/button';
-import { Trash, PlusCircle } from 'lucide-react';
+import { Trash } from 'lucide-react';
 import { useEditor } from '../../context/EditorContext';
 import { useToast } from '@/hooks/use-toast';
 
@@ -60,29 +60,6 @@ export default function FeatureComponent({ component }: FeatureComponentProps) {
       duration: 2000
     });
   };
-  
-  // Function to add a new feature
-  const handleAddFeature = () => {
-    const updatedFeatures = [...features];
-    updatedFeatures.push({
-      title: `New Feature ${features.length + 1}`,
-      description: 'Description of this feature',
-      icon: 'ri-check-line'
-    });
-    
-    updateComponent(component.id, {
-      content: {
-        ...component.content,
-        features: updatedFeatures
-      }
-    });
-    
-    toast({
-      title: "Feature added",
-      description: "A new feature has been added",
-      duration: 2000
-    });
-  };
 
   switch (component.type) {
     case 'feature-grid':
@@ -90,20 +67,6 @@ export default function FeatureComponent({ component }: FeatureComponentProps) {
         <div className="w-full py-12" style={component.style}>
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-6">{component.content.title || 'Key Features'}</h2>
-            
-            {/* Add feature button */}
-            <div className="flex justify-center mb-8">
-              <Button
-                onClick={handleAddFeature}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <PlusCircle className="h-4 w-4" />
-                Add Feature
-              </Button>
-            </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {features.map((feature: Feature, index: number) => (
                 <div key={index} className="p-6 bg-white rounded-lg shadow-sm border border-gray-100 text-center relative group">
@@ -134,20 +97,6 @@ export default function FeatureComponent({ component }: FeatureComponentProps) {
         <div className="w-full py-12" style={component.style}>
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold mb-6">{component.content.title || 'Our Features'}</h2>
-            
-            {/* Add feature button */}
-            <div className="mb-8">
-              <Button
-                onClick={handleAddFeature}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <PlusCircle className="h-4 w-4" />
-                Add Feature
-              </Button>
-            </div>
-            
             <div className="space-y-6">
               {features.map((feature: Feature, index: number) => (
                 <div key={index} className="flex items-start p-4 bg-white rounded-lg border border-gray-100 relative group">
@@ -180,20 +129,6 @@ export default function FeatureComponent({ component }: FeatureComponentProps) {
         <div className="w-full py-12" style={component.style}>
           <div className="container mx-auto px-4">
             <h2 className="text-3xl font-bold text-center mb-6">{component.content.title || 'Feature Cards'}</h2>
-            
-            {/* Add feature button */}
-            <div className="flex justify-center mb-8">
-              <Button
-                onClick={handleAddFeature}
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-1"
-              >
-                <PlusCircle className="h-4 w-4" />
-                Add Feature
-              </Button>
-            </div>
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {features.map((feature: Feature, index: number) => (
                 <div key={index} className="p-6 bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-300 relative group">
