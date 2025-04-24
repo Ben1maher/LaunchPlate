@@ -13,6 +13,7 @@ import FeatureComponent from '../landing/FeatureComponent';
 import TestimonialComponent from '../landing/TestimonialComponent';
 import MarketingComponent from '../landing/MarketingComponent';
 import FooterComponent from '../landing/FooterComponent';
+import CustomTemplateRenderer from '../premium/CustomTemplateRenderer';
 import { useEditor } from '../../context/EditorContext';
 import { Button } from '@/components/ui/button';
 import { Settings, Copy, Trash, Move } from 'lucide-react';
@@ -47,10 +48,14 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
 
   // Render the actual component based on its type
   const renderComponent = () => {
-    // Check if this is a custom component with a React component
-    if (component.type === 'custom-business-template' && component.content.component) {
-      const CustomComponent = component.content.component;
-      return <CustomComponent />;
+    // Handle custom premium templates
+    if (component.type === 'custom-business-template' || component.type === 'custom-ecommerce-template') {
+      return <CustomTemplateRenderer 
+        component={component} 
+        onClick={onClick} 
+        isSelected={isSelected} 
+        inEditor={inEditor} 
+      />;
     }
     
     switch (component.type) {

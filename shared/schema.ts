@@ -164,7 +164,8 @@ export type ComponentType =
   | 'footer-columns'
   
   // Custom templates
-  | 'custom-business-template';
+  | 'custom-business-template'
+  | 'custom-ecommerce-template';
 
 export interface Component {
   id: string;
