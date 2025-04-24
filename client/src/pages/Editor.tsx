@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "wouter";
 import { useEditor } from "../context/EditorContext";
+
+// Helper function to generate unique IDs for components
+const generateUniqueId = () => crypto.randomUUID();
 import { useQuery } from "@tanstack/react-query";
 import { Template, Component, ComponentType } from "@shared/schema";
 import ComponentLibrary from "../components/editor/ComponentLibrary";
@@ -264,20 +267,144 @@ export default function Editor() {
           </div>
         `;
         
-        // Create business template component using the proper custom component type
-        const businessTemplateRenderer: Component = {
-          id: "premium-business-template",
-          type: "custom-business-template",
-          content: {
-            // Content will be provided by the PremiumBusinessTemplate component
+        // For the business template, we'll create a collection of standard components
+        // that make up a business template page
+        const businessComponents: Component[] = [
+          // Header component
+          {
+            id: crypto.randomUUID(),
+            type: "header-1",
+            content: {
+              logoText: "Business<span>Pro</span>",
+              menuItems: [
+                { text: "Features", url: "#features" },
+                { text: "Solutions", url: "#solutions" },
+                { text: "Pricing", url: "#pricing" },
+                { text: "Resources", url: "#resources" }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              textColor: "#1E3A8A",
+              accentColor: "#3B82F6"
+            }
           },
-          style: {
-            margin: "0",
-            padding: "0"
+          // Hero section
+          {
+            id: generateUniqueId(),
+            type: "hero-gradient",
+            content: {
+              tagline: "Launching Q2 2025",
+              heading: "Elevate Your Business With Professional Solutions",
+              description: "Streamline operations, enhance customer experiences, and drive growth with our enterprise-grade platform designed for modern businesses.",
+              primaryButtonText: "Start Free Trial",
+              secondaryButtonText: "Schedule Demo"
+            },
+            style: {
+              paddingTop: "80px",
+              paddingBottom: "80px",
+              gradientStartColor: "#eef2ff",
+              gradientEndColor: "#ffffff",
+              headingColor: "#111827",
+              textColor: "#4B5563"
+            }
+          },
+          // Features section
+          {
+            id: generateUniqueId(),
+            type: "feature-cards",
+            content: {
+              heading: "Why Choose BusinessPro",
+              features: [
+                {
+                  title: "Enterprise Security",
+                  description: "Bank-level encryption and comprehensive compliance standards keep your data secure."
+                },
+                {
+                  title: "Lightning Performance",
+                  description: "Engineered for speed with globally distributed infrastructure for optimal response times."
+                },
+                {
+                  title: "Advanced Analytics",
+                  description: "Gain actionable insights with real-time data visualization and customizable reporting."
+                }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              cardBackgroundColor: "#f7f9fc",
+              headingColor: "#111827",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          // CTA section
+          {
+            id: generateId(),
+            type: "hero-centered",
+            content: {
+              heading: "Ready to Transform Your Business?",
+              description: "Join thousands of companies that are streamlining operations and driving growth with our platform.",
+              primaryButtonText: "Start Free Trial",
+              secondaryButtonText: "Schedule Demo"
+            },
+            style: {
+              backgroundType: "gradient",
+              gradientStartColor: "#2563EB",
+              gradientEndColor: "#4F46E5",
+              textColor: "#ffffff",
+              padding: "80px"
+            }
+          },
+          // Footer
+          {
+            id: generateId(),
+            type: "footer-columns",
+            content: {
+              logoText: "BusinessPro",
+              description: "Comprehensive business solutions designed to streamline operations and drive growth.",
+              columns: [
+                {
+                  title: "Product",
+                  links: [
+                    { text: "Features", url: "#" },
+                    { text: "Pricing", url: "#" },
+                    { text: "Case Studies", url: "#" }
+                  ]
+                },
+                {
+                  title: "Company",
+                  links: [
+                    { text: "About", url: "#" },
+                    { text: "Careers", url: "#" },
+                    { text: "Contact", url: "#" }
+                  ]
+                },
+                {
+                  title: "Resources",
+                  links: [
+                    { text: "Blog", url: "#" },
+                    { text: "Documentation", url: "#" },
+                    { text: "Help Center", url: "#" }
+                  ]
+                }
+              ],
+              copyright: "© 2025 BusinessPro. All rights reserved."
+            },
+            style: {
+              backgroundColor: "#18181B",
+              textColor: "#9CA3AF",
+              headingColor: "#FFFFFF",
+              padding: "64px"
+            }
           }
-        };
+        ];
         
-        setComponents([businessTemplateRenderer]);
+        
+        
+        setComponents(businessComponents);
         toast({
           title: "Premium template loaded",
           description: "Professional Business template loaded successfully. Customize it to fit your needs.",
