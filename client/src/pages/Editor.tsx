@@ -9,6 +9,7 @@ import PropertiesPanel from "../components/editor/PropertiesPanel";
 import TutorialOverlay from "../components/editor/TutorialOverlay";
 import InteractiveTour from "../components/editor/InteractiveTour";
 import { BusinessTemplate } from "../templates/business";
+import { EcommerceTemplate } from "../templates/ecommerce";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -79,26 +80,208 @@ export default function Editor() {
         // Use the new BusinessTemplate component
         const template = {
           id: 2,
-          name: "Professional Business",
-          description: "A modern business template with clean, modern design using Tailwind CSS",
+          name: "Premium Business Pro",
+          description: "A high-end business template with premium design, inspired by Stripe's enterprise aesthetic",
           thumbnail: "",
           components: []
         };
         
-        // Create a custom renderer for our BusinessTemplate
+        // Create a component that directly embeds our premium template HTML
+        const premiumTemplateContent = `
+          <div class="premium-template">
+            <!-- Navigation -->
+            <header class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+              <div class="container flex h-16 items-center justify-between">
+                <div class="flex items-center gap-6 md:gap-10">
+                  <div class="font-bold text-xl text-blue-600">Business<span class="text-gray-800">Pro</span></div>
+                  <nav class="hidden md:flex gap-6">
+                    <a href="#" class="text-sm font-medium transition-colors hover:text-blue-600">Features</a>
+                    <a href="#" class="text-sm font-medium transition-colors hover:text-blue-600">Solutions</a>
+                    <a href="#" class="text-sm font-medium transition-colors hover:text-blue-600">Pricing</a>
+                    <a href="#" class="text-sm font-medium transition-colors hover:text-blue-600">Resources</a>
+                  </nav>
+                </div>
+                <div class="flex items-center gap-4">
+                  <a href="#" class="text-sm font-medium hover:underline underline-offset-4">Sign In</a>
+                  <button class="inline-flex items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-blue-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-blue-600">Get Started</button>
+                </div>
+              </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section class="relative overflow-hidden">
+              <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBzdHJva2U9IiNkZGQiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSI+PHBhdGggZD0iTTAgMGg2MHY2MEgweiIvPjwvZz48L3N2Zz4=')] bg-center border-b"></div>
+              <div class="absolute top-0 right-0 -z-10 h-full w-full bg-gradient-to-b from-white via-white/90 to-white"></div>
+              
+              <div class="container relative pt-24 pb-20 md:pt-32 md:pb-24">
+                <div class="flex flex-col gap-4 items-center text-center">
+                  <div class="inline-flex items-center rounded-full border px-4 py-1 text-sm font-semibold mb-4">Launching Q2 2025</div>
+                  <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tighter text-gray-900 md:text-center">
+                    Elevate Your Business<br />With <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">Professional</span> Solutions
+                  </h1>
+                  <p class="mt-4 text-xl text-gray-500 max-w-2xl md:text-center leading-relaxed">
+                    Streamline operations, enhance customer experiences, and drive growth with our enterprise-grade platform designed for modern businesses.
+                  </p>
+                  <div class="mt-8 flex flex-wrap items-center gap-4">
+                    <button class="inline-flex items-center justify-center rounded-full bg-blue-600 h-11 px-8 text-sm font-medium text-white shadow transition-colors hover:bg-blue-500">Start Free Trial</button>
+                    <button class="inline-flex items-center justify-center rounded-full border border-gray-200 bg-white h-11 px-8 text-sm font-medium shadow-sm transition-colors hover:bg-gray-50">
+                      Schedule Demo <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2"><path d="M3.13523 6.15803C3.3241 5.95657 3.64052 5.94637 3.84197 6.13523L7.5 9.56464L11.158 6.13523C11.3595 5.94637 11.6759 5.95657 11.8648 6.15803C12.0536 6.35949 12.0434 6.67591 11.842 6.86477L7.84197 10.6148C7.64964 10.7951 7.35036 10.7951 7.15803 10.6148L3.15803 6.86477C2.95657 6.67591 2.94637 6.35949 3.13523 6.15803Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                  </div>
+                  <p class="mt-4 text-sm text-gray-500">No credit card required. 14-day free trial.</p>
+                </div>
+              </div>
+
+              <!-- Logos section -->
+              <div class="container pb-16">
+                <div class="flex flex-col items-center">
+                  <p class="text-sm text-gray-500 mb-8 uppercase tracking-wide">Trusted by leading companies</p>
+                  <div class="flex flex-wrap justify-center gap-8 md:gap-16 grayscale opacity-70">
+                    <div class="h-8 w-32 bg-gray-200 rounded"></div>
+                    <div class="h-8 w-32 bg-gray-200 rounded"></div>
+                    <div class="h-8 w-32 bg-gray-200 rounded"></div>
+                    <div class="h-8 w-32 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="container py-20">
+              <div class="grid gap-8 lg:grid-cols-3 md:gap-12">
+                <div class="relative overflow-hidden rounded-lg border bg-gradient-to-b from-blue-50 to-white p-8">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-blue-600"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                  </div>
+                  <h3 class="mb-3 text-xl font-bold">Enterprise Security</h3>
+                  <p class="text-gray-500">
+                    Bank-level encryption and comprehensive compliance standards keep your data secure and your business protected.
+                  </p>
+                </div>
+                <div class="relative overflow-hidden rounded-lg border bg-gradient-to-b from-blue-50 to-white p-8">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-blue-600"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                  </div>
+                  <h3 class="mb-3 text-xl font-bold">Lightning Performance</h3>
+                  <p class="text-gray-500">
+                    Engineered for speed with globally distributed infrastructure and intelligent caching for optimal response times.
+                  </p>
+                </div>
+                <div class="relative overflow-hidden rounded-lg border bg-gradient-to-b from-blue-50 to-white p-8">
+                  <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6 text-blue-600"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 7h10v2H7z"/><path d="M7 13h4v2H7z"/></svg>
+                  </div>
+                  <h3 class="mb-3 text-xl font-bold">Advanced Analytics</h3>
+                  <p class="text-gray-500">
+                    Gain actionable insights with real-time data visualization and customizable reporting dashboards.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="bg-gradient-to-r from-blue-600 to-indigo-700 py-20 text-white">
+              <div class="container text-center">
+                <h2 class="text-3xl font-bold tracking-tight sm:text-4xl mb-4">Ready to Transform Your Business?</h2>
+                <p class="mx-auto max-w-2xl text-lg mb-8">
+                  Join thousands of companies that are streamlining operations and driving growth with our platform.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                  <button class="inline-flex items-center justify-center rounded-full bg-white px-4 py-2 text-sm font-medium text-blue-600 shadow transition-colors hover:bg-gray-100">
+                    Start Free Trial
+                  </button>
+                  <button class="inline-flex items-center justify-center rounded-full border border-white px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-white/20">
+                    Schedule Demo
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="bg-gray-900 text-gray-300 py-12">
+              <div class="container">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
+                  <div class="col-span-2">
+                    <div class="font-bold text-xl text-white mb-4">Business<span class="text-blue-400">Pro</span></div>
+                    <p class="text-sm text-gray-400 mb-4 max-w-md">
+                      Comprehensive business solutions designed to streamline operations, enhance customer experiences, and drive sustainable growth.
+                    </p>
+                    <div class="flex space-x-4">
+                      <a href="#" class="text-gray-400 hover:text-white">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                        </svg>
+                      </a>
+                      <a href="#" class="text-gray-400 hover:text-white">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Product</h3>
+                    <ul class="space-y-2 text-sm">
+                      <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Case Studies</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Reviews</a></li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Company</h3>
+                    <ul class="space-y-2 text-sm">
+                      <li><a href="#" class="hover:text-white transition-colors">About</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Press</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 class="text-white font-semibold mb-3">Resources</h3>
+                    <ul class="space-y-2 text-sm">
+                      <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                      <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="mt-12 pt-8 border-t border-gray-800 text-sm text-gray-400">
+                  <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p>© 2025 BusinessPro. All rights reserved.</p>
+                    <div class="flex gap-6 mt-4 md:mt-0">
+                      <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                      <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </footer>
+          </div>
+        `;
+        
+        // Create HTML text block component
         const businessTemplateRenderer: Component = {
-          id: "business-template",
-          type: "custom-business-template" as ComponentType,
+          id: "premium-business-template",
+          type: "text-block",
           content: {
-            component: BusinessTemplate
+            text: premiumTemplateContent
           },
-          style: {}
+          style: {
+            margin: "0",
+            padding: "0"
+          }
         };
         
         setComponents([businessTemplateRenderer]);
         toast({
-          title: "Template loaded",
-          description: "Modern Business template loaded successfully. Customize it to fit your needs.",
+          title: "Premium template loaded",
+          description: "Professional Business template loaded successfully. Customize it to fit your needs.",
         });
         
         setProjectName(`My ${template.name}`);
