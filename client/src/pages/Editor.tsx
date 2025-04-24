@@ -415,6 +415,207 @@ export default function Editor() {
         return;
       }
       
+      // Special case for template ID 1 (E-commerce)
+      else if (templateId === '1') {
+        // Use the modular approach with standard components
+        const template = {
+          id: 1,
+          name: "Premium E-commerce",
+          description: "A high-end e-commerce template for product showcasing",
+          thumbnail: "",
+          components: []
+        };
+        
+        // For the e-commerce template, we'll create a collection of standard components
+        // that make up an e-commerce template page
+        const ecommerceComponents: Component[] = [
+          // Header component
+          {
+            id: generateUniqueId(),
+            type: "header-1",
+            content: {
+              logoText: "Shop<span>Hive</span>",
+              menuItems: [
+                { text: "Shop", url: "#shop" },
+                { text: "Collections", url: "#collections" },
+                { text: "New Arrivals", url: "#new" },
+                { text: "Sale", url: "#sale" }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              textColor: "#1F2937",
+              accentColor: "#7C3AED"
+            }
+          },
+          // Hero section
+          {
+            id: generateUniqueId(),
+            type: "hero-centered",
+            content: {
+              heading: "Shop the Latest Trends",
+              description: "Premium quality clothing and accessories for any style.",
+              primaryButtonText: "Shop Women",
+              secondaryButtonText: "Shop Men",
+              backgroundImageUrl: ""
+            },
+            style: {
+              paddingTop: "80px",
+              paddingBottom: "80px",
+              backgroundColor: "#f9fafb",
+              backgroundType: "color",
+              headingColor: "#111827",
+              textColor: "#4B5563"
+            }
+          },
+          // Featured Products section
+          {
+            id: generateUniqueId(),
+            type: "feature-cards",
+            content: {
+              heading: "Featured Products",
+              features: [
+                {
+                  title: "Premium T-Shirt",
+                  description: "Casual Wear • $49.99"
+                },
+                {
+                  title: "Designer Jeans",
+                  description: "Denim • $89.99"
+                },
+                {
+                  title: "Summer Dress",
+                  description: "Fashion • $59.99"
+                },
+                {
+                  title: "Leather Jacket",
+                  description: "Outerwear • $199.99"
+                }
+              ]
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              cardBackgroundColor: "#f9fafb",
+              headingColor: "#111827",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          // Collections Banner
+          {
+            id: generateUniqueId(),
+            type: "columns-3",
+            content: {
+              heading: "Shop by Collection",
+              columns: [
+                {
+                  title: "Summer Collection",
+                  content: "Light & breathable styles for the season.",
+                  ctaText: "Explore",
+                  ctaUrl: "#summer"
+                },
+                {
+                  title: "New Arrivals",
+                  content: "Fresh styles added every week.",
+                  ctaText: "Explore",
+                  ctaUrl: "#new"
+                },
+                {
+                  title: "Clearance",
+                  content: "Up to 70% off selected items.",
+                  ctaText: "Explore",
+                  ctaUrl: "#clearance"
+                }
+              ]
+            },
+            style: {
+              backgroundColor: "#f9fafb",
+              backgroundType: "color",
+              headingColor: "#111827",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          // Newsletter section
+          {
+            id: generateUniqueId(),
+            type: "email-signup",
+            content: {
+              heading: "Subscribe to Our Newsletter",
+              description: "Get updates on new arrivals, special offers, and exclusive discounts.",
+              inputPlaceholder: "Enter your email",
+              buttonText: "Subscribe"
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              borderColor: "#e5e7eb",
+              headingColor: "#111827",
+              textColor: "#4B5563",
+              padding: "80px"
+            }
+          },
+          // Footer
+          {
+            id: generateUniqueId(),
+            type: "footer-columns",
+            content: {
+              logoText: "ShopHive",
+              description: "Premium quality clothing and accessories for any style.",
+              columns: [
+                {
+                  title: "Shop",
+                  links: [
+                    { text: "All Products", url: "#" },
+                    { text: "New Arrivals", url: "#" },
+                    { text: "Best Sellers", url: "#" },
+                    { text: "Sale", url: "#" }
+                  ]
+                },
+                {
+                  title: "Company",
+                  links: [
+                    { text: "About Us", url: "#" },
+                    { text: "Careers", url: "#" },
+                    { text: "Contact", url: "#" },
+                    { text: "Blog", url: "#" }
+                  ]
+                },
+                {
+                  title: "Support",
+                  links: [
+                    { text: "Help Center", url: "#" },
+                    { text: "Shipping", url: "#" },
+                    { text: "Returns", url: "#" },
+                    { text: "FAQs", url: "#" }
+                  ]
+                }
+              ],
+              copyright: "© 2025 ShopHive. All rights reserved."
+            },
+            style: {
+              backgroundColor: "#ffffff",
+              backgroundType: "color",
+              textColor: "#4B5563",
+              headingColor: "#111827",
+              padding: "64px"
+            }
+          }
+        ];
+        
+        setComponents(ecommerceComponents);
+        toast({
+          title: "Premium template loaded",
+          description: "E-commerce Shop template loaded successfully. Customize it to fit your needs.",
+        });
+        
+        setProjectName(`My ${template.name}`);
+        setProjectDescription(template.description || "");
+        return;
+      }
+      
       // Regular template loading for other templates
       const response = await fetch(`/api/templates/${templateId}`);
       if (!response.ok) {
