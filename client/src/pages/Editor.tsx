@@ -264,12 +264,12 @@ export default function Editor() {
           </div>
         `;
         
-        // Create HTML text block component
+        // Create business template component using the proper custom component type
         const businessTemplateRenderer: Component = {
           id: "premium-business-template",
-          type: "text-block",
+          type: "custom-business-template",
           content: {
-            text: premiumTemplateContent
+            // Content will be provided by the PremiumBusinessTemplate component
           },
           style: {
             margin: "0",
