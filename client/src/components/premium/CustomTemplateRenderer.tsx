@@ -33,6 +33,12 @@ export default function CustomTemplateRenderer({
         return <PremiumBusinessTemplate />;
       case 'custom-ecommerce-template':
         return <PremiumEcommerceTemplate />;
+      case 'custom-membership-template':
+        // If we don't have a dedicated membership template yet, use business template as fallback
+        return <PremiumBusinessTemplate />; 
+      case 'custom-startup-template':
+        // If we don't have a dedicated startup template yet, use business template as fallback
+        return <PremiumBusinessTemplate />;
       default:
         return <div>Unknown template type: {component.type}</div>;
     }

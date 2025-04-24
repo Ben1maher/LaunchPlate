@@ -49,7 +49,12 @@ export default function ComponentRenderer({ component, isSelected = false, onCli
   // Render the actual component based on its type
   const renderComponent = () => {
     // Handle custom premium templates
-    if (component.type === 'custom-business-template' || component.type === 'custom-ecommerce-template') {
+    if (
+      component.type === 'custom-business-template' || 
+      component.type === 'custom-ecommerce-template' || 
+      component.type === 'custom-membership-template' || 
+      component.type === 'custom-startup-template'
+    ) {
       return <CustomTemplateRenderer 
         component={component} 
         onClick={onClick} 

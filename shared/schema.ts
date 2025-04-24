@@ -165,7 +165,9 @@ export type ComponentType =
   
   // Custom templates
   | 'custom-business-template'
-  | 'custom-ecommerce-template';
+  | 'custom-ecommerce-template'
+  | 'custom-membership-template'
+  | 'custom-startup-template';
 
 export interface Component {
   id: string;
